@@ -24,16 +24,11 @@ export type datasource = {
   url: string;
 };
 
-type simpleTrace = {
-  traceId: string;
-  spanId: string;
-  timestamp: string;
-  name: string;
-};
+type simpleTrace = components['schemas']['Trace'];
+type rootTracesResponse = components['schemas']['Traces'];
+type getTracesRequest = components['schemas']['GetTracesRequest'];
 
-type rootTracesResponse = {
-  traces: simpleTrace[];
-};
+const baseUrl = `/api/plugins/${plugin.id}/resources`;
 
 function TraceOverview() {
   const queryClient = useQueryClient();
@@ -65,16 +60,16 @@ function TraceOverview() {
         throw new Error(`Datasource with id ${sourceId} not found`);
       }
       const response = getBackendSrv().fetch<rootTracesResponse>({
-        url: `/api/plugins/${plugin.id}/resources/traces`,
+        url: `${baseUrl}/${ApiPaths.getTraces}`,
         method: 'POST',
         data: {
           url: datasource.url,
           database: datasource.jsonData.database,
           timeField: datasource.jsonData.timeField,
-        },
+        } satisfies getTracesRequest,
       });
       const value = await lastValueFrom(response);
-      return value.data.traces;
+      return value.data.traces || [];
     },
   });
 

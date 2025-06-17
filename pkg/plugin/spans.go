@@ -12,6 +12,12 @@ import (
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )
 
+type OpenSearchRequest struct {
+	Url       string `json:"url"`
+	Database  string `json:"database"`
+	TimeField string `json:"timeField"`
+}
+
 type AdditionalSpansRequest struct {
 	ChildrenLimit int `json:"childrenLimit"`
 	Depth         int `json:"depth"`

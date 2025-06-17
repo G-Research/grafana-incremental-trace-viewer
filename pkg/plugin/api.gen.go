@@ -11,6 +11,13 @@ import (
 	"time"
 )
 
+// GetTracesRequest defines model for GetTracesRequest.
+type GetTracesRequest struct {
+	Database  *string `json:"database,omitempty"`
+	TimeField *string `json:"timeField,omitempty"`
+	URL       *string `json:"url,omitempty"`
+}
+
 // Trace defines model for Trace.
 type Trace struct {
 	Name      *string    `json:"name,omitempty"`
@@ -24,10 +31,13 @@ type Traces struct {
 	Traces *[]Trace `json:"traces,omitempty"`
 }
 
+// GetTracesJSONRequestBody defines body for GetTraces for application/json ContentType.
+type GetTracesJSONRequestBody = GetTracesRequest
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Get traces
-	// (GET /traces)
+	// Get traces from a given datasource
+	// (POST /traces)
 	GetTraces(w http.ResponseWriter, r *http.Request)
 }
 
@@ -174,7 +184,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc("GET "+options.BaseURL+"/traces", wrapper.GetTraces)
+	m.HandleFunc("POST "+options.BaseURL+"/traces", wrapper.GetTraces)
 
 	return m
 }

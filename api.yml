@@ -7,9 +7,14 @@ servers:
     description: Local server
 paths:
   /traces:
-    get:
-      summary: Get traces
+    post:
+      summary: Get traces from a given datasource
       operationId: getTraces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTracesRequest'
       responses:
         200:
           description: A list of traces
@@ -20,6 +25,15 @@ paths:
 
 components:
   schemas:
+    GetTracesRequest:
+      type: object
+      properties:
+        url:
+          type: string
+        database:
+          type: string
+        timeField:
+          type: string
     Traces:
       type: object
       properties:

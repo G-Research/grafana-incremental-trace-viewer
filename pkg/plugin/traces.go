@@ -11,12 +11,6 @@ import (
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )
 
-type OpenSearchRequest struct {
-	Url       string `json:"url"`
-	Database  string `json:"database"`
-	TimeField string `json:"timeField"`
-}
-
 func PtrTo[T any](v T) *T {
 	return &v
 }
@@ -24,14 +18,14 @@ func PtrTo[T any](v T) *T {
 func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request) {
 	log.Println("Processing root traces request")
 
-	var request OpenSearchRequest
+	var request GetTracesRequest
 	if err := json.NewDecoder(req.Body).Decode(&request); err != nil {
 		log.Printf("Failed to decode request: %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	client, err := getOpenSearchClient(request.Url)
+	client, err := getOpenSearchClient(*request.URL)
 	if err != nil {
 		log.Printf("Failed to create OpenSearch client: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -66,7 +60,7 @@ func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request
   }`, maxSize, request.TimeField, request.TimeField))
 
 	search := opensearchapi.SearchRequest{
-		Index: []string{request.Database},
+		Index: []string{*request.Database},
 		Body:  content,
 	}
 
