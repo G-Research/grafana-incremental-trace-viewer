@@ -7,23 +7,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )
-
-// Simplified trace structure for API response
-type SimpleTrace struct {
-	TraceID   string    `json:"traceId"`
-	SpanID    string    `json:"spanId"`
-	Timestamp time.Time `json:"@timestamp"`
-	Name      string    `json:"name"`
-}
-
-// Response structure for root traces endpoint
-type RootTracesResponse struct {
-	Traces []SimpleTrace `json:"traces"`
-}
 
 type OpenSearchRequest struct {
 	Url       string `json:"url"`
@@ -31,7 +17,11 @@ type OpenSearchRequest struct {
 	TimeField string `json:"timeField"`
 }
 
-func (a *App) handleTraces(w http.ResponseWriter, req *http.Request) {
+func PtrTo[T any](v T) *T {
+	return &v
+}
+
+func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request) {
 	log.Println("Processing root traces request")
 
 	var request OpenSearchRequest
@@ -100,19 +90,19 @@ func (a *App) handleTraces(w http.ResponseWriter, req *http.Request) {
 	log.Printf("OpenSearch returned %d hits (total: %d)", len(osResponse.Hits.Hits), osResponse.Hits.Total.Value)
 
 	// Transform to simplified response format
-	traces := make([]SimpleTrace, 0)
+	traces := make([]Trace, 0)
 	for _, hit := range osResponse.Hits.Hits {
-		trace := SimpleTrace{
-			TraceID:   hit.Source.TraceID,
-			SpanID:    hit.Source.SpanID,
-			Timestamp: hit.Source.Timestamp,
-			Name:      hit.Source.Name,
+		trace := Trace{
+			TraceID:   PtrTo(hit.Source.TraceID),
+			SpanID:    PtrTo(hit.Source.SpanID),
+			Timestamp: PtrTo(hit.Source.Timestamp),
+			Name:      PtrTo(hit.Source.Name),
 		}
 		traces = append(traces, trace)
 	}
 
-	response := RootTracesResponse{
-		Traces: traces,
+	response := Traces{
+		Traces: PtrTo(traces),
 	}
 
 	w.Header().Add("Content-Type", "application/json")

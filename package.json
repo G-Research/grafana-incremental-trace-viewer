@@ -13,7 +13,8 @@
     "server": "docker compose up --build",
     "sign": "bunx --yes @grafana/sign-plugin@latest",
     "fmt": "prettier --write --list-different .",
-    "fmt:check": "prettier --check ."
+    "fmt:check": "prettier --check . && go fmt ./pkg/...",
+    "generate-api": "go tool oapi-codegen --config pkg/plugin/apiconfig.yml ./api.yml > pkg/plugin/api.gen.go"
   },
   "author": "G research",
   "license": "Apache-2.0",

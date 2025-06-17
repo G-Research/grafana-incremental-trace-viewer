@@ -32,7 +32,9 @@ func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Inst
 	// to use a *http.ServeMux for resource calls, so we can map multiple routes
 	// to CallResource without having to implement extra logic.
 	mux := http.NewServeMux()
-	app.registerRoutes(mux)
+	server := mkServerInterface()
+	HandlerFromMux(server, mux)
+	// app.registerRoutes(mux)
 	app.CallResourceHandler = httpadapter.New(mux)
 
 	return &app, nil
