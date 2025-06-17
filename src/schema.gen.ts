@@ -21,24 +21,88 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/trace/{traceId}/span/{spanId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Get the root span from a given trace */
+    post: operations['getInitialTraceDetail'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/trace/{traceId}/span/{spanId}/children': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Get additional spans for a given span id */
+    post: operations['getAdditionalSpans'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     GetTracesRequest: {
-      url?: string;
-      database?: string;
-      timeField?: string;
+      url: string;
+      database: string;
+      timeField: string;
     };
     Traces: {
-      traces?: components['schemas']['Trace'][];
+      traces: components['schemas']['Trace'][];
     };
     Trace: {
-      traceId?: string;
-      spanId?: string;
+      traceId: string;
+      spanId: string;
       /** Format: date-time */
-      timestamp?: string;
-      name?: string;
+      timestamp: string;
+      name: string;
+    };
+    GetInitialTraceDetailRequest: {
+      url: string;
+      database: string;
+      timeField: string;
+      depth?: number;
+      childrenLimit?: number;
+    };
+    SpanNode: {
+      traceId: string;
+      spanId: string;
+      name: string;
+      /** Format: date-time */
+      startTime: string;
+      /** Format: date-time */
+      endTime: string;
+      parentSpanId: string;
+      level: number;
+      currentChildrenCount: number;
+      totalChildrenCount: number;
+    };
+    GetAdditionalSpansRequest: {
+      url: string;
+      database: string;
+      timeField: string;
+      depth: number;
+      childrenLimit: number;
+      level: number;
+      skip: number;
+      take: number;
     };
   };
   responses: never;
@@ -73,7 +137,63 @@ export interface operations {
       };
     };
   };
+  getInitialTraceDetail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        traceId: string;
+        spanId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['GetInitialTraceDetailRequest'];
+      };
+    };
+    responses: {
+      /** @description A list of spans */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SpanNode'][];
+        };
+      };
+    };
+  };
+  getAdditionalSpans: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        traceId: string;
+        spanId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['GetAdditionalSpansRequest'];
+      };
+    };
+    responses: {
+      /** @description A list of spans */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SpanNode'][];
+        };
+      };
+    };
+  };
 }
 export enum ApiPaths {
   getTraces = '/traces',
+  getInitialTraceDetail = '/trace/{traceId}/span/{spanId}',
+  getAdditionalSpans = '/trace/{traceId}/span/{spanId}/children',
 }

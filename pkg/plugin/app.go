@@ -34,7 +34,6 @@ func NewApp(_ context.Context, _ backend.AppInstanceSettings) (instancemgmt.Inst
 	mux := http.NewServeMux()
 	server := mkServerInterface()
 	HandlerFromMux(server, mux)
-	// app.registerRoutes(mux)
 	app.CallResourceHandler = httpadapter.New(mux)
 
 	return &app, nil

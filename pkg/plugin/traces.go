@@ -11,11 +11,7 @@ import (
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )
 
-func PtrTo[T any](v T) *T {
-	return &v
-}
-
-func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request) {
+func (siw *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request) {
 	log.Println("Processing root traces request")
 
 	var request GetTracesRequest
@@ -25,7 +21,7 @@ func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request
 		return
 	}
 
-	client, err := getOpenSearchClient(*request.URL)
+	client, err := getOpenSearchClient(request.URL)
 	if err != nil {
 		log.Printf("Failed to create OpenSearch client: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -60,7 +56,7 @@ func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request
   }`, maxSize, request.TimeField, request.TimeField))
 
 	search := opensearchapi.SearchRequest{
-		Index: []string{*request.Database},
+		Index: []string{request.Database},
 		Body:  content,
 	}
 
@@ -87,16 +83,16 @@ func (s *ServerInterfaceImpl) GetTraces(w http.ResponseWriter, req *http.Request
 	traces := make([]Trace, 0)
 	for _, hit := range osResponse.Hits.Hits {
 		trace := Trace{
-			TraceID:   PtrTo(hit.Source.TraceID),
-			SpanID:    PtrTo(hit.Source.SpanID),
-			Timestamp: PtrTo(hit.Source.Timestamp),
-			Name:      PtrTo(hit.Source.Name),
+			TraceID:   hit.Source.TraceID,
+			SpanID:    hit.Source.SpanID,
+			Timestamp: hit.Source.Timestamp,
+			Name:      hit.Source.Name,
 		}
 		traces = append(traces, trace)
 	}
 
 	response := Traces{
-		Traces: PtrTo(traces),
+		Traces: traces,
 	}
 
 	w.Header().Add("Content-Type", "application/json")
