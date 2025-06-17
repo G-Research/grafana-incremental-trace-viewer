@@ -7,6 +7,7 @@ import { PluginPage, getBackendSrv } from '@grafana/runtime';
 import { Combobox } from '@grafana/ui';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { type components, ApiPaths } from '../schema.gen';
 import plugin from '../plugin.json';
 
 export type datasource = {
