@@ -36,19 +36,19 @@ function getMillisecondsDifferenceNative(startTime: ISODateString, endTime: ISOD
 const Span = (props: SpanNodeProps) => {
   return (
     <div
-      className="border-l-2 border-gray-200 pl-4 mb-4 transition-colors duration-200 hover:bg-gray-100"
-      style={{ marginLeft: `calc(1rem * var(--indent-level, 0))` } as React.CSSProperties}
+      className="border-l-2 border-gray-200 pl-4 transition-colors duration-200 hover:bg-gray-700 h-full"
+      style={{ marginLeft: `calc(1rem * var(--indent-level, ${props.level}))` } as React.CSSProperties}
     >
-      <div className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded">
+      <div className="flex items-center gap-4 px-4 py-2 border border-gray-200 h-full">
         <div className="text-sm">
-          <strong className="text-gray-900 mr-2">Name:</strong> {props.name}
+          <strong className="mr-2">Name:</strong> {props.name}
         </div>
         <div className="text-sm">
-          <strong className="text-gray-900 mr-2">ID:</strong> {props.spanId}
+          <strong className="mr-2">ID:</strong> {props.spanId}
         </div>
         <div className="text-sm">
-          <strong className="text-gray-900 mr-2">Duration:</strong>{' '}
-          {getMillisecondsDifferenceNative(props.startTime, props.endTime)}ms
+          <strong className="mr-2">Duration:</strong> {getMillisecondsDifferenceNative(props.startTime, props.endTime)}
+          ms
         </div>
         <div className="text-sm">
           <span>
@@ -245,7 +245,7 @@ function TraceDetail() {
               return (
                 <div
                   key={virtualItem.key}
-                  className="absolute top-0 left-0 w-full"
+                  className="absolute top-0 left-0 bottom-0 right-0 w-full my-0"
                   style={{
                     height: `${virtualItem.size}px`,
                     transform: `translateY(${virtualItem.start}px)`,
