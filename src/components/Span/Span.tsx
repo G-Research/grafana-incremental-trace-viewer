@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Icon } from '@grafana/ui';
+import { Icon } from '@grafana/ui';
 import { type components } from '../../schema.gen';
 import { getMillisecondsDifferenceNative } from '../../utils/utils.timeline';
 
 type SpanNode = components['schemas']['SpanNode'];
 
-export type SpanNodeProps = SpanNode & {
+type SpanNodeProps = SpanNode & {
   index: number;
   loadMore: (index: number, spanId: string, currentLevel: number, skip: number) => void;
   traceStartTime: number;
@@ -34,7 +34,25 @@ export const Span = (props: SpanNodeProps) => {
           {hasChildren ? <Icon name="angle-down" /> : <span style={{ display: 'inline-block', width: '16px' }}></span>}
           <span>{props.name}</span>
         </div>
-        {props.totalChildrenCount > 0 && <span className="text-xs text-gray-500">{props.totalChildrenCount}</span>}
+        {/* add load more icon */}
+        <div className="flex items-center gap-1">
+          {canLoadMore && (
+            <Icon
+              name="plus"
+              className="text-xs"
+              title="Load more"
+              onClick={(e) => {
+                e.stopPropagation();
+                props.loadMore(props.index, props.spanId, props.level, props.currentChildrenCount);
+              }}
+            />
+          )}
+          {props.totalChildrenCount > 0 && (
+            <span className="text-xs text-gray-500">
+              {props.currentChildrenCount}/{props.totalChildrenCount}
+            </span>
+          )}
+        </div>
       </div>
       <div className="w-2/3 h-full relative border-l border-gray-600">
         <div className="h-full relative mx-4">
@@ -45,18 +63,6 @@ export const Span = (props: SpanNodeProps) => {
           ></div>
         </div>
       </div>
-      {canLoadMore && (
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={(e) => {
-            e.stopPropagation();
-            props.loadMore(props.index, props.spanId, props.level, props.currentChildrenCount);
-          }}
-        >
-          Load more
-        </Button>
-      )}
     </div>
   );
 };
