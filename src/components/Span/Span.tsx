@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from '@grafana/ui';
 import { type components } from '../../schema.gen';
-import { getMillisecondsDifferenceNative } from '../../utils/utils.timeline';
+import { calculateCollorBySpanId, getMillisecondsDifferenceNative } from '../../utils/utils.timeline';
 
 type SpanNode = components['schemas']['SpanNode'];
 
@@ -39,8 +39,8 @@ export const Span = (props: SpanNodeProps) => {
           {canLoadMore && (
             <Icon
               name="plus"
-              className="text-xs"
-              title="Load more"
+              className="text-xs cursor-pointer"
+              title="Load more traces"
               onClick={(e) => {
                 e.stopPropagation();
                 props.loadMore(props.index, props.spanId, props.level, props.currentChildrenCount);
@@ -54,7 +54,13 @@ export const Span = (props: SpanNodeProps) => {
           )}
         </div>
       </div>
-      <div className="w-2/3 h-full relative border-l border-gray-600">
+      <div
+        className="w-2/3 h-full relative border-l"
+        style={{
+          borderColor: calculateCollorBySpanId(props.level > 2 ? props.parentSpanId : props.spanId),
+          borderLeftWidth: '3px',
+        }}
+      >
         <div className="h-full relative mx-4">
           <div
             className="bg-blue-500 h-3/4 absolute my-auto top-0 bottom-0 rounded-sm"
