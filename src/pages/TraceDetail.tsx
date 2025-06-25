@@ -172,23 +172,19 @@ function TraceDetail() {
 
   return (
     <PluginPage>
-      <div className="flex" style={{ height: 'calc(100vh - 120px)' }}>
+      <div className="flex h-[calc(100vh-120px)]">
         <div className="flex-grow flex flex-col">
           <div className="flex bg-gray-800 p-2 border-b border-gray-700">
             <div className="w-1/3 font-bold">Span</div>
             <div className="w-2/3 font-bold px-4">
-              <div style={{ width: '100%', position: 'relative' }}>
+              <div className="w-full relative">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div
                     key={i}
+                    className="absolute border-l border-gray-500 h-2 pl-1 text-xs"
                     style={{
-                      position: 'absolute',
                       left: `${(i / 4) * 100}%`,
-                      borderLeft: '1px solid #888',
-                      height: '10px',
-                      paddingLeft: '4px',
-                      fontSize: '10px',
-                    }}
+                    }} // Limitation in tailwind dynamic class construction: Check README.md for more details
                   >
                     {((traceDuration / 1000 / 4) * i).toFixed(2)}s
                   </div>
@@ -200,18 +196,11 @@ function TraceDetail() {
             {result.isLoading && <div>Loading...</div>}
             {result.isError && <div>Error: {result.error.message}</div>}
             {result.isSuccess && (
-              <div
-                ref={parentRef}
-                style={{
-                  height: `100%`,
-                  overflow: 'auto',
-                }}
-              >
+              <div ref={parentRef} className="h-full overflow-auto">
                 <div
                   style={{
                     height: `${rowVirtualizer.getTotalSize()}px`,
-                    position: 'relative',
-                  }}
+                  }} // Limitation in tailwind dynamic class construction: Check README.md for more details
                   className="w-full relative"
                 >
                   {rowVirtualizer.getVirtualItems().map((virtualItem) => {
@@ -219,12 +208,11 @@ function TraceDetail() {
                     return (
                       <div
                         key={virtualItem.key}
-                        className="absolute top-0 left-0 w-full"
+                        className="absolute top-0 left-0 w-full border-b border-[#2d2d2d]"
                         style={{
                           height: `${virtualItem.size}px`,
                           transform: `translateY(${virtualItem.start}px)`,
-                          borderBottom: '1px solid #2d2d2d',
-                        }}
+                        }} // Limitation in tailwind dynamic class construction: Check README.md for more details
                       >
                         <Span
                           key={span.spanId}
@@ -244,7 +232,7 @@ function TraceDetail() {
           </div>
         </div>
         {selectedSpan && (
-          <div className="w-1/3 border-l border-gray-700" style={{ minWidth: '300px' }}>
+          <div className="w-1/3 border-l border-gray-700 min-w-[300px]">
             <SpanDetailPanel span={selectedSpan} onClose={() => setSelectedSpan(null)} />
           </div>
         )}
