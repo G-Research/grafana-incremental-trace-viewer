@@ -167,6 +167,7 @@ function TraceDetail() {
               ...oldData.slice(index + currentSpan.currentChildrenCount + 1),
             ];
       });
+      rowVirtualizer.measure();
     });
   };
 
@@ -192,7 +193,7 @@ function TraceDetail() {
               </div>
             </div>
           </div>
-          <div className="flex-grow" data-testid={testIds.pageThree.container}>
+          <div className="flex-grow overflow-scroll" data-testid={testIds.pageThree.container}>
             {result.isLoading && <div>Loading...</div>}
             {result.isError && <div>Error: {result.error.message}</div>}
             {result.isSuccess && (
