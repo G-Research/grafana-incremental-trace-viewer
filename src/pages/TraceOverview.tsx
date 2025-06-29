@@ -98,14 +98,14 @@ function TraceOverview() {
 
   const handleTimeRangeChange = (timeRange: TimeRange) => {
     updateFilters({
-      start: timeRange.from.toISOString(),
-      end: timeRange.to.toISOString(),
+      start: timeRange.from.unix().toString(),
+      end: timeRange.to.unix().toString(),
     });
   };
 
   const getTimeRangeValue = (): TimeRange => {
-    const from = filters.start ? dateTime(filters.start) : dateTime().subtract(1, 'hour');
-    const to = filters.end ? dateTime(filters.end) : dateTime();
+    const from = filters.start ? dateTime(parseInt(filters.start, 10)) : dateTime().subtract(1, 'hour');
+    const to = filters.end ? dateTime(parseInt(filters.end, 10)) : dateTime();
     return {
       from,
       to,
