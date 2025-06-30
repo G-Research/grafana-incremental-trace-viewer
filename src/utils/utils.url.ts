@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 export interface TraceFilters {
   start?: string;
   end?: string;
-  q?: string;
+  traceName?: string;
   datasource?: string;
 }
 
@@ -15,7 +15,7 @@ const defaultFilters = (): TraceFilters => {
   return {
     start: start.toString(),
     end: end.toString(),
-    q: undefined,
+    traceName: undefined,
   };
 };
 
@@ -25,7 +25,7 @@ export function useTraceFilters(): [TraceFilters, (filters: Partial<TraceFilters
   const filters: TraceFilters = {
     start: searchParams.get('start') || defaultFilters().start,
     end: searchParams.get('end') || defaultFilters().end,
-    q: searchParams.get('q') || defaultFilters().q,
+    traceName: searchParams.get('traceName') || defaultFilters().traceName,
     datasource: searchParams.get('datasource') || undefined,
   };
 

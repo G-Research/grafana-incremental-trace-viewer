@@ -60,7 +60,7 @@ function TraceOverview() {
       if (!datasource) {
         throw new Error(`Datasource with id ${sourceId} not found`);
       }
-      const q = encodeURIComponent(filters.q || '{}');
+      const q = encodeURIComponent(filters.traceName ? `{name='${filters.traceName}'}` : '{}');
 
       const start = filters.start ? parseInt(filters.start, 10) : new Date().getTime() / 1000;
       const end = filters.end ? parseInt(filters.end, 10) : new Date().getTime() / 1000;
@@ -92,12 +92,12 @@ function TraceOverview() {
     updateFilters({
       start: undefined,
       end: undefined,
-      q: undefined,
+      traceName: undefined,
       datasource: undefined,
     });
   };
 
-  const hasActiveFilters = filters.q || filters.datasource;
+  const hasActiveFilters = filters.traceName || filters.datasource;
 
   const handleTimeRangeChange = (timeRange: TimeRange) => {
     updateFilters({
@@ -164,8 +164,8 @@ function TraceOverview() {
                 {/* Name Filter */}
                 <Field label="Trace Name Filter">
                   <Input
-                    value={filters.q || ''}
-                    onChange={(e) => updateFilters({ q: e.currentTarget.value })}
+                    value={filters.traceName || ''}
+                    onChange={(e) => updateFilters({ traceName: e.currentTarget.value })}
                     placeholder="Filter by trace name..."
                     prefix={<Icon name="search" />}
                   />
