@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { prefixRoute } from '../utils/utils.routing';
 import { useTraceFilters } from '../utils/utils.url';
 import { BASE_URL, ROUTES } from '../constants';
@@ -45,7 +45,7 @@ function TraceOverview() {
     },
   });
 
-  const [selectedSource, setSelectedSource] = useState<number | null>(null);
+  const selectedSource = filters.datasource ? parseInt(filters.datasource, 10) : null;
 
   const result = useQuery<TempoTrace[]>({
     queryKey: ['datasource', selectedSource, 'traces', filters],
@@ -93,10 +93,11 @@ function TraceOverview() {
       start: undefined,
       end: undefined,
       q: undefined,
+      datasource: undefined,
     });
   };
 
-  const hasActiveFilters = filters.start || filters.end || filters.q;
+  const hasActiveFilters = filters.q || filters.datasource;
 
   const handleTimeRangeChange = (timeRange: TimeRange) => {
     updateFilters({
@@ -131,11 +132,12 @@ function TraceOverview() {
                 <Combobox
                   options={options}
                   placeholder="Select a datasource"
+                  value={selectedSource ? options.find((o) => o.value === selectedSource) : undefined}
                   onChange={(o) => {
                     const datasource = datasources.data.find((d) => d.id === o.value);
                     if (datasource) {
                       queryClient.setQueryData<datasource[]>(['datasource', o.value], datasources.data, {});
-                      setSelectedSource(o.value);
+                      updateFilters({ datasource: o.value.toString() });
                     }
                   }}
                 />
@@ -205,11 +207,11 @@ function TraceOverview() {
                   {result.data.map((r) => {
                     return (
                       <Link key={r.traceID} to={prefixRoute(`${selectedSource}/${ROUTES.TraceDetails}/${r.traceID}`)}>
-                        <li className="p-3 hover:bg-gray-50 transition-colors">
+                        <li className="p-3 hover:bg-gray-500 transition-colors">
                           <div className="flex items-center justify-between">
                             <div>
                               <span className="font-medium">
-                                {r.rootTraceName}({r.rootServiceName})
+                                {r.rootTraceName} ({r.rootServiceName})
                               </span>
                             </div>
                             {r.startTime && (

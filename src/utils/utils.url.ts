@@ -4,6 +4,7 @@ export interface TraceFilters {
   start?: string;
   end?: string;
   q?: string;
+  datasource?: string;
 }
 
 const ONE_WEEK = 604800;
@@ -25,6 +26,7 @@ export function useTraceFilters(): [TraceFilters, (filters: Partial<TraceFilters
     start: searchParams.get('start') || defaultFilters().start,
     end: searchParams.get('end') || defaultFilters().end,
     q: searchParams.get('q') || defaultFilters().q,
+    datasource: searchParams.get('datasource') || undefined,
   };
 
   const updateFilters = (newFilters: Partial<TraceFilters>) => {
