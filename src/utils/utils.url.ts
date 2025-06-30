@@ -6,13 +6,25 @@ export interface TraceFilters {
   q?: string;
 }
 
+const ONE_WEEK = 604800;
+
+const defaultFilters = (): TraceFilters => {
+  const start = Math.floor(Date.now() / 1000) - ONE_WEEK;
+  const end = Math.floor(Date.now() / 1000);
+  return {
+    start: start.toString(),
+    end: end.toString(),
+    q: undefined,
+  };
+};
+
 export function useTraceFilters(): [TraceFilters, (filters: Partial<TraceFilters>) => void] {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const filters: TraceFilters = {
-    start: searchParams.get('start') || undefined,
-    end: searchParams.get('end') || undefined,
-    q: searchParams.get('q') || undefined,
+    start: searchParams.get('start') || defaultFilters().start,
+    end: searchParams.get('end') || defaultFilters().end,
+    q: searchParams.get('q') || defaultFilters().q,
   };
 
   const updateFilters = (newFilters: Partial<TraceFilters>) => {

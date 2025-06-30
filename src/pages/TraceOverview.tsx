@@ -61,8 +61,10 @@ function TraceOverview() {
         throw new Error(`Datasource with id ${sourceId} not found`);
       }
       const q = encodeURIComponent(filters.q || '{}');
-      const start = Math.floor(new Date(filters.start || '').getTime() / 1000);
-      const end = Math.floor(new Date(filters.end || '').getTime() / 1000);
+
+      const start = filters.start ? parseInt(filters.start, 10) : new Date().getTime() / 1000;
+      const end = filters.end ? parseInt(filters.end, 10) : new Date().getTime() / 1000;
+
       const response = getBackendSrv().fetch<SearchResponse>({
         url: `${BASE_URL}${ApiPaths.search}?q=${q}&start=${start}&end=${end}`,
         method: 'POST',
@@ -104,8 +106,8 @@ function TraceOverview() {
   };
 
   const getTimeRangeValue = (): TimeRange => {
-    const from = filters.start ? dateTime(parseInt(filters.start, 10)) : dateTime().subtract(1, 'hour');
-    const to = filters.end ? dateTime(parseInt(filters.end, 10)) : dateTime();
+    const from = filters.start ? dateTime(parseInt(filters.start, 10) * 1000) : dateTime().subtract(1, 'hour');
+    const to = filters.end ? dateTime(parseInt(filters.end, 10) * 1000) : dateTime();
     return {
       from,
       to,
@@ -203,7 +205,7 @@ function TraceOverview() {
                   {result.data.map((r) => {
                     return (
                       <Link key={r.traceID} to={prefixRoute(`${selectedSource}/${ROUTES.TraceDetails}/${r.traceID}`)}>
-                        <li className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <li className="p-3 hover:bg-gray-50 transition-colors">
                           <div className="flex items-center justify-between">
                             <div>
                               <span className="font-medium">
