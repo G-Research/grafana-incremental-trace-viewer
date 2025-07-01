@@ -4,9 +4,10 @@ import { useTraceFilters } from '../utils/utils.url';
 import { BASE_URL, ROUTES } from '../constants';
 import { testIds } from '../components/testIds';
 import { lastValueFrom } from 'rxjs';
-import { PluginPage, getBackendSrv } from '@grafana/runtime';
-import { Combobox, Input, Field, Stack, Button, Icon, TimeRangeInput } from '@grafana/ui';
-import { dateTime, TimeRange } from '@grafana/data';
+import { PluginPage, getBackendSrv, getDataSourceSrv } from '@grafana/runtime';
+import { Combobox, Field, Stack, Button, Icon, TimeRangeInput } from '@grafana/ui';
+import { DataSourceApi, DataSourceJsonData, dateTime, TimeRange } from '@grafana/data';
+import { DataQuery } from '@grafana/schema';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { type components, ApiPaths } from '../schema.gen';
@@ -29,9 +30,26 @@ type DataSourceInfo = components['schemas']['DataSourceInfo'];
 type SearchResponse = components['schemas']['TempoV1Response'];
 type TempoTrace = components['schemas']['TempoTrace'];
 
+const debounce = <T extends (...args: any[]) => void>(func: T, delay: number) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+};
+
 function TraceOverview() {
   const queryClient = useQueryClient();
   const [filters, updateFilters] = useTraceFilters();
+  const updateTraceQL = debounce(function (query: string) {
+    updateFilters({ query });
+  }, 500);
+  const [selectedDatasource, setSelectedDatasource] = React.useState<DataSourceApi<
+    DataQuery,
+    DataSourceJsonData
+  > | null>(null);
+  const [query, setQuery] = React.useState<DataQuery>({ refId: 'A' });
 
   const datasources = useSuspenseQuery<datasource[]>({
     queryKey: ['datasources'],
@@ -46,6 +64,21 @@ function TraceOverview() {
   });
 
   const selectedSource = filters.datasource ? parseInt(filters.datasource, 10) : null;
+  React.useEffect(() => {
+    if (selectedSource) {
+      new Promise(async () => {
+        const datasource = datasources.data.find((d) => d.id === selectedSource);
+        if (datasource) {
+          try {
+            const datasourceInstance = await getDataSourceSrv().get(datasource.uid);
+            setSelectedDatasource(datasourceInstance);
+          } catch (error) {
+            console.error('Failed to get datasource instance:', error);
+          }
+        }
+      });
+    }
+  }, [selectedSource, datasources.data]);
 
   const result = useQuery<TempoTrace[]>({
     queryKey: ['datasource', selectedSource, 'traces', filters],
@@ -60,8 +93,7 @@ function TraceOverview() {
       if (!datasource) {
         throw new Error(`Datasource with id ${sourceId} not found`);
       }
-      const q = encodeURIComponent(filters.traceName ? `{name='${filters.traceName}'}` : '{}');
-
+      const q = encodeURIComponent(filters.query || '{}');
       const start = filters.start ? parseInt(filters.start, 10) : new Date().getTime() / 1000;
       const end = filters.end ? parseInt(filters.end, 10) : new Date().getTime() / 1000;
 
@@ -92,12 +124,12 @@ function TraceOverview() {
     updateFilters({
       start: undefined,
       end: undefined,
-      traceName: undefined,
+      query: undefined,
       datasource: undefined,
     });
   };
 
-  const hasActiveFilters = filters.traceName || filters.datasource;
+  const hasActiveFilters = filters.query || filters.datasource;
 
   const handleTimeRangeChange = (timeRange: TimeRange) => {
     updateFilters({
@@ -133,7 +165,7 @@ function TraceOverview() {
                   options={options}
                   placeholder="Select a datasource"
                   value={selectedSource ? options.find((o) => o.value === selectedSource) : undefined}
-                  onChange={(o) => {
+                  onChange={async (o) => {
                     const datasource = datasources.data.find((d) => d.id === o.value);
                     if (datasource) {
                       queryClient.setQueryData<datasource[]>(['datasource', o.value], datasources.data, {});
@@ -155,21 +187,45 @@ function TraceOverview() {
                 )}
               </div>
 
-              <Stack direction="row">
+              <Stack direction="column">
                 {/* Time Range Filter */}
-                <Field label="Time Range">
+                <Field label="Time Range" className="self-start">
                   <TimeRangeInput value={getTimeRangeValue()} onChange={handleTimeRangeChange} showIcon />
                 </Field>
 
-                {/* Name Filter */}
-                <Field label="Trace Name Filter">
-                  <Input
-                    value={filters.traceName || ''}
-                    onChange={(e) => updateFilters({ traceName: e.currentTarget.value })}
-                    placeholder="Filter by trace name..."
-                    prefix={<Icon name="search" />}
-                  />
-                </Field>
+                {/* Query Editor - dynamically loaded */}
+                {selectedDatasource &&
+                  selectedDatasource.type === 'tempo' &&
+                  selectedDatasource.components?.QueryEditor && (
+                    <Field label="Query" className="query-editor">
+                      {(() => {
+                        try {
+                          const QueryEditor = selectedDatasource.components.QueryEditor;
+                          return (
+                            <QueryEditor
+                              datasource={selectedDatasource}
+                              query={query}
+                              onChange={(newQuery: DataQuery) => {
+                                setQuery(newQuery);
+                                // query is a TempoQuery, but I'm not sure where that type should come from.
+                                const tempoQuery = newQuery as any;
+                                if (tempoQuery.query) {
+                                  updateTraceQL(tempoQuery.query);
+                                }
+                                console.log('Query changed:', newQuery);
+                              }}
+                              onRunQuery={() => {
+                                console.log('Run query requested');
+                              }}
+                            />
+                          );
+                        } catch (error) {
+                          console.error('Failed to render QueryEditor:', error);
+                          return <div>Unable to load query editor</div>;
+                        }
+                      })()}
+                    </Field>
+                  )}
               </Stack>
             </div>
           </Stack>
