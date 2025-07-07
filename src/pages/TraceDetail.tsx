@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { testIds } from '../components/testIds';
 import { getBackendSrv, PluginPage } from '@grafana/runtime';
@@ -90,6 +90,7 @@ function TraceDetail() {
   const parentRef = React.useRef(null);
   const queryKey = ['datasource', datasourceId, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<Span | null>(null);
+  const [expandedSpans, setExpandedSpans] = React.useState<Set<string>>(new Set());
 
   const idToLevelMap = React.useRef(new Map<string, number>());
 
@@ -133,6 +134,14 @@ function TraceDetail() {
     queryClient
   );
 
+  // Auto-expand root span when data is loaded
+  useEffect(() => {
+    if (result.isSuccess && result.data.length > 0) {
+      const rootSpan = result.data[0]; // First span is the root
+      setExpandedSpans((prev) => new Set([...prev, rootSpan.spanId]));
+    }
+  }, [result.isSuccess, result.data]);
+
   const traceDurationInMiliseconds = React.useMemo(() => {
     if (!result.isSuccess || result.data.length === 0) {
       return 0;
@@ -160,7 +169,7 @@ function TraceDetail() {
     // rangeExtractor: (range) => {}
   });
 
-  const loadMore = (index: number, spanId: string) => {
+  const loadMore = (index: number, spanId: string, currentLevel: number) => {
     if (!result.isSuccess) {
       return;
     }
@@ -226,6 +235,54 @@ function TraceDetail() {
 
         return nextSpans;
       });
+
+      // Mark the span as expanded
+      setExpandedSpans((prev) => new Set([...prev, spanId]));
+    });
+  };
+
+  const collapse = (spanId: string) => {
+    if (!result.isSuccess) {
+      return;
+    }
+
+    queryClient.setQueryData<Span[]>(queryKey, (oldData) => {
+      if (!oldData) {
+        return oldData;
+      }
+
+      // Find the index of the span to collapse
+      const spanIndex = oldData.findIndex((span) => span.spanId === spanId);
+      if (spanIndex === -1) {
+        return oldData;
+      }
+
+      // Find all children of this span (spans that have this span as parent)
+      const childrenToRemove = new Set<string>();
+      const findChildren = (parentId: string) => {
+        for (let i = 0; i < oldData.length; i++) {
+          if (oldData[i].parentSpanId === parentId) {
+            childrenToRemove.add(oldData[i].spanId);
+            findChildren(oldData[i].spanId); // Recursively find nested children
+          }
+        }
+      };
+      findChildren(spanId);
+
+      // Filter out all children
+      const filteredSpans = oldData.filter((span) => !childrenToRemove.has(span.spanId));
+
+      // Update hasMore flag for the collapsed span
+      const updatedSpans = filteredSpans.map((span) => (span.spanId === spanId ? { ...span, hasMore: true } : span));
+
+      return updatedSpans;
+    });
+
+    // Remove from expanded spans
+    setExpandedSpans((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(spanId);
+      return newSet;
     });
   };
 
@@ -275,12 +332,15 @@ function TraceDetail() {
                           height: `${virtualItem.size}px`,
                           transform: `translateY(${virtualItem.start}px)`,
                         }} // Limitation in tailwind dynamic class construction: Check README.md for more details
+                        data-testid={virtualItem.key}
                       >
                         <SpanComponent
                           key={span.spanId}
                           {...span}
                           index={virtualItem.index}
                           loadMore={loadMore}
+                          collapse={collapse}
+                          isExpanded={expandedSpans.has(span.spanId)}
                           traceStartTimeInMiliseconds={traceStartTimeInMiliseconds}
                           traceDurationInMiliseconds={traceDurationInMiliseconds}
                           onSelect={setSelectedSpan}

@@ -6,6 +6,8 @@ import type { Span as SpanType } from '../../pages/TraceDetail';
 type SpanNodeProps = SpanType & {
   index: number;
   loadMore: (index: number, spanId: string, currentLevel: number) => void;
+  collapse: (spanId: string) => void;
+  isExpanded: boolean;
   hasChildren: boolean;
   traceStartTimeInMiliseconds: number;
   traceDurationInMiliseconds: number;
@@ -34,11 +36,25 @@ export const Span = (props: SpanNodeProps) => {
         style={{ paddingLeft: `calc(0.5rem * ${props.level})` }} // Limitation in tailwind dynamic class construction: Check README.md for more details
       >
         <div className="flex items-center gap-1 truncate">
-          {props.hasChildren ? <Icon name="angle-down" /> : <span className="inline-block w-4"></span>}
+          {(canLoadMore || props.hasChildren) && (
+            <Icon
+              name={props.isExpanded ? 'angle-down' : 'angle-right'}
+              className="text-xs cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (props.isExpanded) {
+                  props.collapse(props.spanId);
+                } else {
+                  props.loadMore(props.index, props.spanId, props.level);
+                }
+              }}
+            />
+          )}
+          {!props.hasChildren && <span className="inline-block w-4"></span>}
           <span>{props.name}</span>
         </div>
         <div className="flex items-center gap-1">
-          {canLoadMore && (
+          {canLoadMore && !props.isExpanded && (
             <Icon
               name="plus"
               className="text-xs cursor-pointer"
@@ -49,11 +65,23 @@ export const Span = (props: SpanNodeProps) => {
               }}
             />
           )}
+          {props.isExpanded && (
+            <Icon
+              name="minus"
+              className="text-xs cursor-pointer"
+              title="Collapse"
+              onClick={(e) => {
+                e.stopPropagation();
+                props.collapse(props.spanId);
+              }}
+            />
+          )}
         </div>
       </div>
       <div
         className="w-2/3 h-full relative border-l-3"
-        style={{ borderColor: calculateColourBySpanId(props.level > 2 ? props.parentSpanId || '' : props.spanId) }} // Limitation in tailwind dynamic class construction: Check README.md for more details
+        data-testid={props.parentSpanId}
+        style={{ borderColor: calculateColourBySpanId(props.parentSpanId || props.spanId) }} // Limitation in tailwind dynamic class construction: Check README.md for more details
       >
         <div className="h-full relative mx-4">
           <div
