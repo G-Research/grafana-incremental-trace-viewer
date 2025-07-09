@@ -58,8 +58,7 @@ export const TraceViewerPanel: React.FC<Props> = ({ options, data, width, height
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
-        Plugin panel here.
+      <div className="relative overflow-y-scroll max-h-full">
         {queries.map((queryInfo) => {
           return <TraceDetail key={queryInfo.traceId} {...queryInfo} />;
         })}

@@ -11,6 +11,7 @@ import {
 } from '../utils/utils.timeline';
 import { search, SearchResponse, Span } from '../utils/utils.api';
 import type { QueryInfo as TraceDetailProps } from './TraceViewerPanel';
+import { Drawer } from '@grafana/ui';
 
 export type SpanInfo = {
   spanId: string;
@@ -288,9 +289,9 @@ function TraceDetail({ traceId, datasourceUid, startTimeInMs }: TraceDetailProps
         </div>
       </div>
       {selectedSpan && (
-        <div className="w-1/3 border-l border-gray-700 min-w-[300px]">
+        <Drawer title="Span Details" onClose={() => setSelectedSpan(null)}>
           <SpanDetailPanel span={selectedSpan} onClose={() => setSelectedSpan(null)} datasourceUid={datasourceUid} />
-        </div>
+        </Drawer>
       )}
     </div>
   );
