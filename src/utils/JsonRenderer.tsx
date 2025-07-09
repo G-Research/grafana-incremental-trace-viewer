@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface JsonRendererProps {
   data: any;
@@ -15,52 +15,39 @@ interface JsonValueProps {
 }
 
 const JsonValue: React.FC<JsonValueProps> = ({ value, key, level, maxDepth }) => {
-  const [isExpanded, setIsExpanded] = useState(level < 2); // Auto-expand first 2 levels
-
+  const codeBlockStyle = 'block w-full p-2 border border-gray-600 rounded font-mono text-sm overflow-x-auto';
   if (value === null) {
-    return <span className="text-gray-500 italic">null</span>;
+    return <div className={`${codeBlockStyle} text-gray-500 italic`}>null</div>;
   }
 
   if (value === undefined) {
-    return <span className="text-gray-500 italic">undefined</span>;
+    return <div className={`${codeBlockStyle} text-gray-500 italic`}>undefined</div>;
   }
 
   if (typeof value === 'boolean') {
-    return <span className="text-blue-600">{value.toString()}</span>;
+    return <div className={`${codeBlockStyle} text-blue-600`}>{value.toString()}</div>;
   }
 
   if (typeof value === 'number') {
-    return <span className="text-green-600">{value}</span>;
+    return <div className={`${codeBlockStyle} text-green-600`}>{value}</div>;
   }
 
   if (typeof value === 'string') {
-    return <span className="text-orange-600">&quot;{value}&quot;</span>;
+    return <div className={`${codeBlockStyle} text-orange-200`}>&quot;{value}&quot;</div>;
   }
 
   if (Array.isArray(value)) {
     if (level >= maxDepth) {
-      return <span className="text-gray-500 italic">[...] ({value.length} items)</span>;
+      return <pre className="text-gray-500 italic">[...] ({value.length} items)</pre>;
     }
 
     return (
-      <div className="ml-4">
-        <div
-          className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-1 rounded"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <span className="text-gray-400 text-sm">{isExpanded ? '▼' : '▶'}</span>
-          <span className="text-purple-600 font-medium">Array ({value.length} items)</span>
-        </div>
-        {isExpanded && (
-          <div className="ml-4 mt-1">
-            {value.map((item, index) => (
-              <div key={index} className="mb-1">
-                <span className="text-gray-500 text-sm">[{index}]: </span>
-                <JsonValue value={item} level={level + 1} maxDepth={maxDepth} />
-              </div>
-            ))}
+      <div className="">
+        {value.map((item, index) => (
+          <div key={index} className="">
+            <JsonValue value={item} level={level + 1} maxDepth={maxDepth} />
           </div>
-        )}
+        ))}
       </div>
     );
   }
@@ -78,28 +65,19 @@ const JsonValue: React.FC<JsonValueProps> = ({ value, key, level, maxDepth }) =>
     const keys = Object.keys(value);
 
     return (
-      <div className="ml-4">
-        <div
-          className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-1 rounded"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <span className="text-gray-400 text-sm">{isExpanded ? '▼' : '▶'}</span>
-          <span className="text-blue-600 font-medium">Object ({keys.length} properties)</span>
-        </div>
-        {isExpanded && (
-          <div className="ml-4 mt-1">
-            {keys.map((k) => (
-              <div key={k} className="mb-2">
-                <div className="flex items-start gap-2">
-                  <span className="text-gray-700 font-medium min-w-0 flex-shrink-0">{k}:</span>
-                  <div className="flex-1 min-w-0">
-                    <JsonValue value={value[k]} key={k} level={level + 1} maxDepth={maxDepth} />
-                  </div>
+      <div className="">
+        <div className="mt-1">
+          {keys.map((k) => (
+            <div key={k} className="mb-2">
+              <div className="flex flex-col gap-2">
+                <div className="ml-4">
+                  <strong className="min-w-0 flex-shrink-0">{k}:</strong>
+                  <JsonValue value={value[k]} key={k} level={level + 1} maxDepth={maxDepth} />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -109,8 +87,8 @@ const JsonValue: React.FC<JsonValueProps> = ({ value, key, level, maxDepth }) =>
 
 export const JsonRenderer: React.FC<JsonRendererProps> = ({ data, title, level = 0, maxDepth = 5 }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
-      {title && <h3 className="text-lg font-semibold text-gray-800 mb-3">{title}</h3>}
+    <div className="rounded-lg">
+      <strong className="mt-4">{title}:</strong>
       <div className="font-mono text-sm">
         <JsonValue value={data} level={level} maxDepth={maxDepth} />
       </div>

@@ -30,3 +30,28 @@ export function mkUnixEpochFromNanoSeconds(nanoSeconds: number) {
 export function mkUnixEpochFromMiliseconds(miliseconds: number) {
   return Math.floor(miliseconds / 1000);
 }
+
+export function formatUnixNanoToDateTime(nanoSeconds: number, timeZone = 'UTC'): string {
+  // Convert nano seconds to milliseconds
+  const milliseconds = mkMilisecondsFromNanoSeconds(nanoSeconds);
+
+  // Create Date object from milliseconds
+  const date = new Date(milliseconds);
+
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+    fractionalSecondDigits: 3,
+    timeZoneName: 'short',
+    timeZone: timeZone,
+  } as Intl.DateTimeFormatOptions;
+
+  const formattedDate = new Intl.DateTimeFormat('en-UK', options).format(date);
+
+  return formattedDate;
+}
