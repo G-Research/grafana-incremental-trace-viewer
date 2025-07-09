@@ -4,6 +4,7 @@ import type { SpanInfo } from '../TraceDetail';
 import { mkUnixEpochFromNanoSeconds } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
 import { searchTags, search } from 'utils/utils.api';
+import { JsonRenderer } from 'utils/JsonRenderer';
 
 export const SpanDetailPanel = ({
   span,
@@ -56,7 +57,11 @@ export const SpanDetailPanel = ({
         <div>
           <strong>Duration:</strong> <pre>{span.endTimeUnixNano - span.startTimeUnixNano}ms</pre>
         </div>
-        {JSON.stringify(result.data)}
+        {result.data && Object.keys(result.data).length > 0 && (
+          <div className="mt-4">
+            <JsonRenderer data={result.data} title="Span Attributes" maxDepth={3} />
+          </div>
+        )}
       </div>
     </div>
   );
