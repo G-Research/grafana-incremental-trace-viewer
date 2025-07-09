@@ -27,7 +27,7 @@ export const SpanDetailPanel = ({
         .map((t) => `span.${t}`)
         .join(', ')})`;
       const data = await search(datasourceUid, q, start, end, 1);
-      if (data.traces?.[0]?.spanSets?.[0]?.spans?.[0]) {
+      if (data?.traces?.[0]?.spanSets?.[0]?.spans?.[0]?.attributes) {
         return data.traces[0].spanSets[0].spans[0].attributes;
       }
 
