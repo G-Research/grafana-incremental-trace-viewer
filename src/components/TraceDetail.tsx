@@ -289,7 +289,7 @@ function TraceDetail({ traceId, datasourceUid, startTimeInMs }: TraceDetailProps
         </div>
       </div>
       {selectedSpan && (
-        <Drawer title="Span Details" onClose={() => setSelectedSpan(null)}>
+        <Drawer title="Span Details" onClose={() => setSelectedSpan(null)} size="sm">
           <SpanDetailPanel span={selectedSpan} onClose={() => setSelectedSpan(null)} datasourceUid={datasourceUid} />
         </Drawer>
       )}
