@@ -1,10 +1,38 @@
 import React from 'react';
+import clsx from 'clsx';
 
 import type { SpanInfo } from '../TraceDetail';
-import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime } from 'utils/utils.timeline';
+import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
 import { searchTags, search } from 'utils/utils.api';
-import { JsonRenderer } from 'utils/JsonRenderer';
+
+const flattenObject = (obj: any, prefix = ''): Record<string, any> => {
+  const flattened: Record<string, any> = {};
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+
+      if (Array.isArray(obj[key])) {
+        // Handle arrays with bracket notation
+        obj[key].forEach((item: any, index: number) => {
+          const arrayKey = prefix ? `${prefix}[${index}]` : `[${index}]`;
+          if (typeof item === 'object' && item !== null) {
+            Object.assign(flattened, flattenObject(item, arrayKey));
+          } else {
+            flattened[arrayKey] = item;
+          }
+        });
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+        Object.assign(flattened, flattenObject(obj[key], newKey));
+      } else {
+        flattened[newKey] = obj[key];
+      }
+    }
+  }
+
+  return flattened;
+};
 
 export const SpanDetailPanel = ({
   span,
@@ -35,54 +63,74 @@ export const SpanDetailPanel = ({
     },
   });
 
-  const formattedOutput = (value: any) => {
-    const codeBlockStyle = 'block w-full p-2 border border-gray-600 rounded font-mono text-sm overflow-x-auto';
-
+  const formatValue = (value: any): string => {
     switch (typeof value) {
       case 'string':
-        return <div className={`${codeBlockStyle} text-orange-200`}>{value}</div>;
+        return value;
       case 'number':
-        return <div className={`${codeBlockStyle} text-green-600`}>{value}</div>;
+        return value.toString();
       case 'boolean':
-        return <div className={`${codeBlockStyle} text-blue-600`}>{value.toString()}</div>;
+        return value.toString();
       case 'object':
-        return <div className={`${codeBlockStyle} text-gray-200 italic`}>{JSON.stringify(value)}</div>;
+        return JSON.stringify(value);
       default:
-        return <div className={`${codeBlockStyle} text-gray-200 italic`}>{JSON.stringify(value)}</div>;
+        return JSON.stringify(value);
     }
   };
 
+  const basicSpanData = [
+    { key: 'Name', value: span.name },
+    { key: 'ID', value: span.spanId },
+    { key: 'Trace ID', value: span.traceId },
+    { key: 'Start Time', value: formatUnixNanoToDateTime(span.startTimeUnixNano) },
+    { key: 'End Time', value: formatUnixNanoToDateTime(span.endTimeUnixNano) },
+    { key: 'Duration', value: formatDuration(span.endTimeUnixNano - span.startTimeUnixNano) },
+  ];
+
+  const rowClassName = (index: number) => {
+    return clsx('leading-7', index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700');
+  };
+
+  const flattenedAttributes = result.data ? flattenObject(result.data) : {};
+
   return (
-    <div className="p-4 z-10">
-      <div className="flex flex-col gap-2">
-        <div>
-          <strong>Name:</strong> {formattedOutput(span.name)}
-        </div>
-        <div>
-          <strong>ID:</strong> {formattedOutput(span.spanId)}
-        </div>
-        <div>
-          <strong>Trace ID:</strong>
-          {formattedOutput(span.traceId)}
-        </div>
-        <div>
-          <strong>Start Time:</strong> {formattedOutput(formatUnixNanoToDateTime(span.startTimeUnixNano))}
-        </div>
-        <div>
-          <strong>End Time:</strong> {formattedOutput(formatUnixNanoToDateTime(span.endTimeUnixNano))}
-        </div>
-        <div>
-          <strong>Duration (nanoseconds):</strong> {formattedOutput(span.endTimeUnixNano - span.startTimeUnixNano)}
-        </div>
-        {result.data && Object.keys(result.data).length > 0 && (
+    <div className="z-10">
+      <div className="overflow-hidden font-thin text-sm">
+        <table className="w-full">
+          <tbody>
+            {basicSpanData.map((item, index) => (
+              <tr key={item.key} className={rowClassName(index)}>
+                <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3 mx-4">
+                  <span className="px-2 py-2">{item.key}</span>{' '}
+                  {/* TODO: padding & margins are overriden to 0 by the global CSS and it is not possible to set it on the td tag */}
+                </td>
+                <td>
+                  <span className="px-2 py-2">{formatValue(item.value)}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {Object.keys(flattenedAttributes).length > 0 && (
           <>
-            <div className="mt-4">
-              <JsonRenderer data={result.data} title="Span Attributes" maxDepth={3} />
-            </div>
-            <div className="mt-4">
-              <strong>Raw JSON:</strong>
-              <pre>{JSON.stringify(result.data)}</pre> {/* TODO: This is for debugging only. Remove later. */}
-            </div>
+            <div className="mt-4 mb-2 text-sm font-semibold text-gray-300">Additional Span Data</div>
+            <table className="w-full">
+              <tbody>
+                {Object.entries(flattenedAttributes).map(([key, value], index) => (
+                  <tr
+                    key={key}
+                    className={rowClassName(basicSpanData.length + Object.keys(flattenedAttributes).length + index)}
+                  >
+                    <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
+                      <span className="px-2 py-2">{key}</span>
+                    </td>
+                    <td>
+                      <span className="px-2 py-2">{formatValue(value)}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </>
         )}
       </div>

@@ -15,6 +15,7 @@ export type QueryInfo = {
   traceName: string;
   startTimeInMs: number;
   durationInMs: number;
+  panelWidth?: number;
 };
 
 export const TraceViewerPanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
@@ -76,7 +77,7 @@ export const TraceViewerPanel: React.FC<Props> = ({ options, data, width, height
     <QueryClientProvider client={queryClient}>
       <div className="relative overflow-y-scroll max-h-full">
         {queries.map((queryInfo) => {
-          return <TraceDetail key={queryInfo.traceId} {...queryInfo} />;
+          return <TraceDetail key={queryInfo.traceId} {...queryInfo} panelWidth={width} />;
         })}
       </div>
     </QueryClientProvider>

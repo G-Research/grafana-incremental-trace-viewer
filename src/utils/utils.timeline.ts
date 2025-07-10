@@ -55,3 +55,28 @@ export function formatUnixNanoToDateTime(nanoSeconds: number, timeZone = 'UTC'):
 
   return formattedDate;
 }
+
+export const formatDuration = (nanoseconds: number): string => {
+  const microseconds = nanoseconds / 1000;
+  const milliseconds = microseconds / 1000;
+  const seconds = milliseconds / 1000;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+
+  if (days >= 1) {
+    return `${days.toFixed(2)} days`;
+  } else if (hours >= 1) {
+    return `${hours.toFixed(2)} hours`;
+  } else if (minutes >= 1) {
+    return `${minutes.toFixed(2)} minutes`;
+  } else if (seconds >= 1) {
+    return `${seconds.toFixed(2)} seconds`;
+  } else if (milliseconds >= 1) {
+    return `${milliseconds.toFixed(2)} ms`;
+  } else if (microseconds >= 1) {
+    return `${microseconds.toFixed(2)} μs`;
+  } else {
+    return `${nanoseconds} ns`;
+  }
+};
