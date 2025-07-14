@@ -18,6 +18,7 @@ const flattenObject = (obj: any, prefix = ''): Record<string, any> => {
 
         // Extract the actual value based on the type
         let actualValue: any = null;
+        // typeof null === 'object' in JS, so we need explicit null check to avoid accessing properties on null
         if (typeof value === 'object' && value !== null) {
           // Check for type-specific value fields
           if ('intValue' in value) {

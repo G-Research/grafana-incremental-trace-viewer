@@ -10,6 +10,7 @@ type SpanNodeProps = SpanInfo & {
   traceStartTimeInMiliseconds: number;
   traceDurationInMiliseconds: number;
   onSelect: (span: SpanInfo) => void;
+  isSelected?: boolean;
 };
 
 export const Span = (props: SpanNodeProps) => {
@@ -26,7 +27,9 @@ export const Span = (props: SpanNodeProps) => {
 
   return (
     <div
-      className="flex items-center hover:bg-gray-700 cursor-pointer h-full text-sm"
+      className={`flex items-center hover:bg-gray-700 cursor-pointer h-full text-sm ${
+        props.isSelected ? 'bg-gray-600 hover:bg-gray-700' : ''
+      }`}
       onClick={() => props.onSelect(props)}
     >
       <div
