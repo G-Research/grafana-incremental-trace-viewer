@@ -3,6 +3,15 @@ services:
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      # Optional: Enable plugin development mode if needed
+      # - GF_DEFAULT_APP_MODE=development
+      # - GF_LOG_LEVEL=debug
+    depends_on:
+      - tempo
 
   tempo:
     image: grafana/tempo:latest # Or a specific version e.g., grafana/tempo:2.4.1
