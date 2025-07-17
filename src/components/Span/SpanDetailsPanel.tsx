@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import type { SpanInfo } from '../TraceDetail';
 import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
-import { flattenObject, searchTags, search } from 'utils/utils.api';
 import { searchTags, search, KeyValue, AnyValue } from 'utils/utils.api';
 
 async function getTagAttributes(
