@@ -17,6 +17,7 @@ docker-compose up -d
 ```
 
 This will start:
+
 - **Grafana** on `http://localhost:3000` (admin/admin)
 - **Tempo** on `http://localhost:3200`
 - **OpenTelemetry Collector** on various ports (4317, 4318, 55679, 9464)
@@ -72,6 +73,7 @@ grafana:
 ### Tempo Configuration
 
 Tempo is configured with:
+
 - **Config**: `tempo-config.yaml`
 - **Ports**: 3200 (API), 9095 (metrics)
 - **Storage**: Local storage (configurable for production)
@@ -159,10 +161,12 @@ bun run scripts/create-large-trace.js
 ### Common Issues
 
 1. **Dashboard not appearing**:
+
    - Check that provisioning files are mounted correctly
    - Restart Grafana container: `docker-compose restart grafana`
 
 2. **No trace data**:
+
    - Verify Tempo is running: `docker-compose ps`
    - Check Tempo logs: `docker-compose logs tempo`
    - Ensure traces are being sent to the collector
@@ -194,20 +198,20 @@ graph LR
     B --> C[Tempo]
     C --> D[Grafana]
     D --> E[GR Incremental Trace Viewer Dashboard]
-    
+
     subgraph "Data Flow"
         A -->|Traces| B
         B -->|Processed Traces| C
         C -->|Stored Traces| D
         D -->|Query Traces| E
     end
-    
+
     subgraph "Services"
         B[OTEL Collector<br/>Ports: 4317, 4318, 55679, 9464]
         C[Tempo<br/>Port: 3200]
         D[Grafana<br/>Port: 3000]
     end
-    
+
     style A fill:#e1f5fe
     style B fill:#fff3e0
     style C fill:#f3e5f5
@@ -224,4 +228,4 @@ graph LR
 
 ## 📝 License
 
-This project is licensed under the same terms as the main project. See [LICENSE](LICENSE) for details. 
+This project is licensed under the same terms as the main project. See [LICENSE](LICENSE) for details.
