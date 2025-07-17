@@ -60,8 +60,11 @@ export const Span = (props: SpanNodeProps) => {
       >
         <div className="h-full relative mx-4">
           <div
-            className="bg-blue-500 h-3/4 absolute my-auto top-0 bottom-0 rounded-sm min-[2px]"
-            style={{ left: `${offset}%`, width: `${Math.max(width, 0.1)}%` }} // Limitation in tailwind dynamic class construction: Check README.md for more details
+            className="bg-blue-500 h-3/4 absolute my-auto top-0 bottom-0 rounded-sm min-w-[2px]"
+            style={{
+              left: `${offset}%`,
+              width: `${Math.max(width, 0.1)}%`,
+            }} // Limitation in tailwind dynamic class construction: Check README.md for more details
             title={`Duration: ${props.endTimeUnixNano - props.startTimeUnixNano}ns`}
           ></div>
         </div>
