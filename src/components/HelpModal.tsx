@@ -14,22 +14,22 @@ interface HelpModalProps {
 const HELP_CONFIG = {
   'panel-too-small': {
     title: 'Panel Too Small',
-    icon: 'angle-down',
-    color: 'text-orange-500',
+    icon: 'expand-arrows-alt',
+    color: 'text-white',
     bgColor: 'bg-orange-500',
     file: 'panel-too-small.md',
   },
   'no-data': {
     title: 'No Trace Data Available',
     icon: 'database',
-    color: 'text-blue-500',
+    color: 'text-white',
     bgColor: 'bg-blue-500',
     file: 'no-data.md',
   },
   'general-help': {
     title: 'Trace Viewer Help',
     icon: 'question-circle',
-    color: 'text-purple-500',
+    color: 'text-white',
     bgColor: 'bg-purple-500',
     file: 'general-help.md',
   },
@@ -141,13 +141,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, type, cur
       title={
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 rounded-full ${helpConfig.bgColor} flex items-center justify-center`}>
-            {helpConfig.icon === 'angle-down' ? (
-              <Icon name="angle-down" className={`w-4 h-4 ${helpConfig.color}`} />
-            ) : helpConfig.icon === 'database' ? (
-              <Icon name="database" className={`w-4 h-4 ${helpConfig.color}`} />
-            ) : (
-              <Icon name="info-circle" className={`w-4 h-4 ${helpConfig.color}`} />
-            )}
+            <Icon name={helpConfig.icon as any} className={`w-4 h-4 ${helpConfig.color}`} />
           </div>
           <span>{helpConfig.title}</span>
         </div>

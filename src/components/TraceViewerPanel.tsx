@@ -1,5 +1,6 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
+import { Button } from '@grafana/ui';
 import TraceDetail from './TraceDetail';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelpModal } from './HelpModal';
@@ -37,15 +38,16 @@ export const TraceViewerPanel: React.FC<Props> = ({ options, data, width, height
             <p className="text-sm text-gray-500 mt-1">
               Current size: {width}x{height} pixels
             </p>
-            <button
+            <Button
               onClick={() => {
                 setHelpModalType('panel-too-small');
                 setShowHelpModal(true);
               }}
-              className="mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded transition-colors"
+              variant="primary"
+              className="mt-4"
             >
               Get Help
-            </button>
+            </Button>
           </div>
         </div>
         <HelpModal
@@ -107,15 +109,16 @@ export const TraceViewerPanel: React.FC<Props> = ({ options, data, width, height
             <h3 className="text-lg font-semibold mb-2">📊 No trace data available</h3>
             <p>The current query returned no trace data.</p>
             <p className="text-sm text-gray-500 mt-1">Try adjusting your query or time range to see traces.</p>
-            <button
+            <Button
               onClick={() => {
                 setHelpModalType('no-data');
                 setShowHelpModal(true);
               }}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+              variant="primary"
+              className="mt-4"
             >
               Get Help
-            </button>
+            </Button>
           </div>
         </div>
         <HelpModal
