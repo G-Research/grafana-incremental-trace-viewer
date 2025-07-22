@@ -38,27 +38,27 @@ const HELP_CONFIG = {
 // Custom components for react-markdown to match our styling
 const markdownComponents = {
   h1: ({ children, ...props }: any) => (
-    <h1 className="text-2xl font-bold text-white mb-4" {...props}>
+    <h1 className="text-2xl font-bold text-white mb-4 mt-8 pt-8" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: any) => (
-    <h2 className="text-xl font-bold text-white mb-3" {...props}>
+    <h2 className="text-xl font-bold text-white mb-3 mt-6 pt-6" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: any) => (
-    <h3 className="text-lg font-semibold text-white mb-2" {...props}>
+    <h3 className="text-lg font-semibold text-white mb-2 mt-4 pt-4" {...props}>
       {children}
     </h3>
   ),
   p: ({ children, ...props }: any) => (
-    <p className="text-sm text-gray-300 mb-2" {...props}>
+    <p className="text-sm text-gray-300 mb-2 mt-2 pt-2" {...props}>
       {children}
     </p>
   ),
   ul: ({ children, ...props }: any) => (
-    <ul className="text-sm text-gray-300 space-y-1 list-disc list-inside mb-3" {...props}>
+    <ul className="text-sm text-gray-300 space-y-1 list-disc list-inside mb-3 mt-3" {...props}>
       {children}
     </ul>
   ),
@@ -66,6 +66,11 @@ const markdownComponents = {
     <li className="text-sm text-gray-300" {...props}>
       {children}
     </li>
+  ),
+  a: ({ children, href, ...props }: any) => (
+    <a href={href} className="text-blue-500" target="_blank" rel="noopener noreferrer" {...props}>
+      {children}
+    </a>
   ),
   code: ({ children, className, ...props }: any) => {
     const isInline = !className;

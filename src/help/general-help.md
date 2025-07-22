@@ -41,6 +41,10 @@ Use **TraceQL** queries to filter and find specific traces:
 {error=true}          // Show only error traces
 ```
 
+### TraceQL Documentation
+
+For detailed information about TraceQL syntax and capabilities, refer to the [official TraceQL documentation](https://grafana.com/docs/tempo/latest/traceql/).
+
 ### Panel Configuration
 
 - **Resize the panel** for better visualization

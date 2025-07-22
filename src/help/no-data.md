@@ -57,6 +57,10 @@ Click **Save** in the top-right corner to apply your changes.
 {duration < 100ms}   // Show fast traces
 ```
 
+### TraceQL Documentation
+
+For more detailed information about TraceQL syntax and advanced query capabilities, visit the [TraceQL Documentation](https://grafana.com/docs/tempo/latest/traceql/).
+
 ### Common Time Ranges to Try
 
 - **Last 1 hour** - Recent traces
