@@ -157,7 +157,9 @@ async function loadMoreSpans(
 ): Promise<SpanInfo[]> {
   const q = `{ trace:id = "${traceId}" && span:parentID = "${
     span.spanId
-  }" } | select (span:parentID, span:name, resource.service.namespace${supportsChildCount ? ', childCount' : ''})`;
+  }" } | select (span:parentID, span:name, span.k8s.container.name, resource.service.namespace${
+    supportsChildCount ? ', childCount' : ''
+  })`;
   const start = mkUnixEpochFromNanoSeconds(span.startTimeUnixNano);
   // As a precaution, we add 1 second to the end time.
   // This is to avoid any rounding errors where the microseconds or nanoseconds are not included in the end time.
@@ -194,7 +196,7 @@ function TraceDetail({
       queryFn: async () => {
         const start = mkUnixEpochFromMiliseconds(startTimeInMs);
         const end = start + 1;
-        const q = `{ trace:id = "${traceId}" && nestedSetParent = -1 } | select (span:name, resource.service.namespace${
+        const q = `{ trace:id = "${traceId}" && nestedSetParent = -1 } | select (span:name, span.k8s.container.name, resource.service.namespace${
           supportsChildCount ? ', childCount' : ''
         })`;
         const data = await search(datasourceUid, q, start, end);
