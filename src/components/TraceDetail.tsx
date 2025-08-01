@@ -132,6 +132,8 @@ async function extractSpans(
     const serviceNamespace =
       span.attributes?.find((a) => a.key === 'service.namespace')?.value?.stringValue || undefined;
 
+    const serviceName = span.attributes?.find((a) => a.key === 'k8s.container.name')?.value?.stringValue || undefined;
+
     spans.push({
       spanId: span.spanID,
       parentSpanId: parentSpanId,
@@ -139,7 +141,7 @@ async function extractSpans(
       level: idToLevelMap.get(span.spanID) || 0,
       startTimeUnixNano: startTimeUnixNano,
       endTimeUnixNano: endTimeUnixNano,
-      name: span.name || '',
+      name: serviceName || span.name || '',
       hasMore: hasMore,
       serviceNamespace,
     });
