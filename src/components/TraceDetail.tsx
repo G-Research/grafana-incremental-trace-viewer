@@ -199,7 +199,9 @@ function TraceDetail({
   );
 
   const visibleIndexes = React.useMemo(() => {
-    if (!result.isSuccess) return [];
+    if (!result.isSuccess) {
+      return [];
+    }
 
     const indexes: number[] = [];
     const collapsedParents = new Set<string>();
@@ -219,8 +221,6 @@ function TraceDetail({
 
       indexes.push(i);
     }
-
-    console.log('indexes', indexes);
 
     return indexes;
   }, [result.isSuccess, result.data]);
@@ -291,7 +291,6 @@ function TraceDetail({
   };
 
   let showChildren = (span: SpanInfo) => {
-    console.log('show children', span);
     queryClient.setQueryData<SpanInfo[]>(queryKey, (oldData) => {
       return oldData?.map((sp) => {
         return sp.spanId === span.spanId ? { ...span, childStatus: ChildStatus.ShowChildren } : sp;
@@ -300,9 +299,10 @@ function TraceDetail({
   };
 
   let hideChildren = (span: SpanInfo) => {
-    console.log('hide children', span);
     queryClient.setQueryData<SpanInfo[]>(queryKey, (oldData) => {
-      if (!oldData) return oldData;
+      if (!oldData) {
+        return oldData;
+      }
 
       const descendantsToHide = new Set<string>([span.spanId]);
 
@@ -321,7 +321,6 @@ function TraceDetail({
         return sp;
       });
 
-      console.table(newData);
       return newData;
     });
   };
@@ -342,7 +341,6 @@ function TraceDetail({
       parentSpanId: d.parentSpanId,
     }));
     navigator.clipboard.writeText(JSON.stringify(striped));
-    console.log('copied', striped);
   }
 
   return (
