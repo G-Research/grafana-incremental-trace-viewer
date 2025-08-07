@@ -5,6 +5,7 @@ import type { SpanInfo } from '../../types';
 import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
 import { searchTags, search, KeyValue, AnyValue } from 'utils/utils.api';
+import { Accordion } from './Accordion';
 
 async function getTagAttributes(
   datasourceUid: string,
@@ -58,14 +59,17 @@ async function getTagAttributes(
 function splitAttributesAndEvents(allAttributes: Record<string, AnyValue>) {
   const attributes: Record<string, AnyValue> = {};
   const events = [];
+  const process = [];
   for (const [key, value] of Object.entries(allAttributes)) {
     if (key.startsWith('event.') && value.stringValue !== undefined) {
       events.push({ time: parseInt(key.replace('event.', ''), 10), value: value.stringValue });
+    } else if (key.startsWith('k8s.')) {
+      process.push({ name: key.replace('k8s.', ''), value: value.stringValue });
     } else {
       attributes[key] = value;
     }
   }
-  return { attributes, events };
+  return { attributes, events, process };
 }
 
 export const SpanDetailPanel = ({
@@ -125,70 +129,13 @@ export const SpanDetailPanel = ({
     { key: 'Duration', value: { stringValue: formatDuration(span.endTimeUnixNano - span.startTimeUnixNano) } },
   ];
 
-  // Dummy data for Events section
-  const eventsData: KeyValue[] = [
-    { key: 'Event Count', value: { intValue: 3 } },
-    { key: 'Event Type', value: { stringValue: 'log' } },
-    { key: 'Event Name', value: { stringValue: 'user.login' } },
-    { key: 'Event Timestamp', value: { stringValue: formatUnixNanoToDateTime(span.startTimeUnixNano + 1000000) } },
-    { key: 'Event Attributes', value: { stringValue: '{"user_id": "12345", "ip": "192.168.1.1"}' } },
-  ];
-
-  // Dummy data for Process section
-  const processData: KeyValue[] = [
-    { key: 'Process ID', value: { intValue: 1234 } },
-    { key: 'Process Name', value: { stringValue: 'web-server' } },
-    { key: 'Service Name', value: { stringValue: 'auth-service' } },
-    { key: 'Service Version', value: { stringValue: '1.2.3' } },
-    { key: 'Host Name', value: { stringValue: 'server-01' } },
-    { key: 'Environment', value: { stringValue: 'production' } },
-  ];
-
   const rowClassName = (index: number) => {
     return clsx('leading-7', index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700');
   };
 
-  const { attributes, events } = result.isSuccess
+  const { attributes, events, process } = result.isSuccess
     ? splitAttributesAndEvents(result.data)
-    : { attributes: {}, events: [] };
-
-  const AccordionSection = ({
-    title,
-    isExpanded,
-    onToggle,
-    children,
-  }: {
-    title: string;
-    isExpanded: boolean;
-    onToggle: () => void;
-    children: React.ReactNode;
-  }) => (
-    <div className="border-t border-gray-600 pt-4">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between text-sm font-semibold text-gray-300 hover:text-gray-100 transition-colors duration-200 mb-2"
-      >
-        <span>{title}</span>
-        <svg
-          className={clsx('w-4 h-4 transition-transform duration-200', isExpanded ? 'rotate-180' : 'rotate-0')}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      <div
-        className={clsx(
-          'overflow-hidden transition-all duration-300 ease-in-out',
-          isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        )}
-      >
-        {children}
-      </div>
-    </div>
-  );
+    : { attributes: {}, events: [], process: [] };
 
   return (
     <div className="z-10">
@@ -207,8 +154,11 @@ export const SpanDetailPanel = ({
           </tbody>
         </table>
         {Object.keys(attributes).length > 0 && (
-          <>
-            <div className="mt-4 mb-2 text-sm font-semibold text-gray-300">Additional Span Data</div>
+          <Accordion
+            title="Additional Span Data"
+            isExpanded={expandedSections.additionalData}
+            onToggle={() => toggleSection('additionalData')}
+          >
             <table className="w-full">
               <tbody>
                 {Object.entries(attributes).map(([key, value], index) => (
@@ -221,57 +171,45 @@ export const SpanDetailPanel = ({
                 ))}
               </tbody>
             </table>
-          </AccordionSection>
+          </Accordion>
         )}
-        {events.length > 0 && (
-          <>
-            <div className="mt-4 mb-2 text-sm font-semibold text-gray-300">Events</div>
-            <ul>
-              {events.map((event, index) => (
-                <li key={event.time}>
-                  <span className="px-2 py-2 text-gray-200 italic">{event.time}</span>
-                  <span className="px-2 py-2 text-gray-200 italic">{event.value}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-
-        {/* Events Section */}
-        <AccordionSection title="Events" isExpanded={expandedSections.events} onToggle={() => toggleSection('events')}>
-          <table className="w-full">
-            <tbody>
-              {eventsData.map((item, index) => (
-                <tr key={item.key} className={rowClassName(index)}>
-                  <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
-                    <span className="px-2 py-2">{item.key}</span>
-                  </td>
-                  <td>{item.value && formatValue(item.value)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </AccordionSection>
 
         {/* Process Section */}
-        <AccordionSection
-          title="Process"
-          isExpanded={expandedSections.process}
-          onToggle={() => toggleSection('process')}
-        >
+        <Accordion title="Process" isExpanded={expandedSections.process} onToggle={() => toggleSection('process')}>
           <table className="w-full">
             <tbody>
-              {processData.map((item, index) => (
-                <tr key={item.key} className={rowClassName(index)}>
+              {process.map((item, index) => (
+                <tr key={item.name} className={rowClassName(index)}>
                   <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
-                    <span className="px-2 py-2">{item.key}</span>
+                    <span className="px-2 py-2">{item.name}</span>
                   </td>
-                  <td>{item.value && formatValue(item.value)}</td>
+                  <td>{item.value && formatValue({ stringValue: item.value })}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </AccordionSection>
+        </Accordion>
+
+        {/* Events Section */}
+        {events.length > 0 && (
+          <Accordion title="Events" isExpanded={expandedSections.events} onToggle={() => toggleSection('events')}>
+            <table className="w-full">
+              <tbody>
+                {events.map((item, index) => (
+                  <tr key={item.time} className={rowClassName(index)}>
+                    <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
+                      <span className="px-2 py-2">
+                        {/* print the time in seconds since the start of the span with 3 decimal places */}
+                        {((item.time - span.startTimeUnixNano / 1000000) / 1000).toFixed(3)}s
+                      </span>
+                    </td>
+                    <td>{item.value && formatValue({ stringValue: item.value })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Accordion>
+        )}
       </div>
     </div>
   );
