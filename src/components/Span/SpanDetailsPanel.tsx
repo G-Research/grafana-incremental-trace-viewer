@@ -30,25 +30,27 @@ async function getTagAttributes(
 
   // Add span tags to the groups
   for (const tag of spanTags) {
-    if (currentLength + tag.length < maxLength) {
-      currentGroup.push(tag);
-      currentLength += tag.length;
+    const tagIdentifier = `span.${tag}`;
+    if (currentLength + tagIdentifier.length < maxLength) {
+      currentGroup.push(tagIdentifier);
+      currentLength += tagIdentifier.length;
     } else {
       groups.push(currentGroup);
-      currentGroup = [tag];
-      currentLength = tag.length;
+      currentGroup = [tagIdentifier];
+      currentLength = tagIdentifier.length;
     }
   }
 
   // Add resource tags to the groups
   for (const tag of resourceTags) {
-    if (currentLength + tag.length < maxLength) {
-      currentGroup.push(tag);
-      currentLength += tag.length;
+    const tagIdentifier = `resource.${tag}`;
+    if (currentLength + tagIdentifier.length < maxLength) {
+      currentGroup.push(tagIdentifier);
+      currentLength += tagIdentifier.length;
     } else {
       groups.push(currentGroup);
-      currentGroup = [tag];
-      currentLength = tag.length;
+      currentGroup = [tagIdentifier];
+      currentLength = tagIdentifier.length;
     }
   }
 
@@ -57,9 +59,7 @@ async function getTagAttributes(
   }
 
   const promises = groups.map(async (group) => {
-    const q = `{ trace:id = "${traceId}" && span:id = "${spanId}" } | select (${group
-      .map((t) => `span.${t}`)
-      .join(', ')})`;
+    const q = `{ trace:id = "${traceId}" && span:id = "${spanId}" } | select (${group.join(', ')})`;
     const data = await search(datasourceUid, q, start, end, 1);
     return data.traces?.[0].spanSets?.[0].spans?.[0].attributes || [];
   });
