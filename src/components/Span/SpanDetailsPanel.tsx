@@ -4,8 +4,13 @@ import clsx from 'clsx';
 import type { SpanInfo } from '../../types';
 import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
-import { searchTags, search, KeyValue, AnyValue } from 'utils/utils.api';
+import { searchTags, search, KeyValue, AnyValue, SearchTagsResult } from 'utils/utils.api';
 import { Accordion } from './Accordion';
+
+type TagAttributes = {
+  spanAttributes: Record<string, AnyValue>;
+  resourceAttributes: Record<string, AnyValue>;
+};
 
 async function getTagAttributes(
   datasourceUid: string,
@@ -13,14 +18,30 @@ async function getTagAttributes(
   end: number,
   traceId: string,
   spanId: string,
-  tags: string[]
-) {
+  tagResult: SearchTagsResult
+): Promise<TagAttributes> {
   // There could potentially be a lot of tags, so we need to split them into groups to avoid the query being too long.
   const groups: string[][] = [];
   let currentGroup: string[] = [];
   let currentLength = 0;
   let maxLength = 1000;
-  for (const tag of tags) {
+
+  const { spanTags, resourceTags } = tagResult;
+
+  // Add span tags to the groups
+  for (const tag of spanTags) {
+    if (currentLength + tag.length < maxLength) {
+      currentGroup.push(tag);
+      currentLength += tag.length;
+    } else {
+      groups.push(currentGroup);
+      currentGroup = [tag];
+      currentLength = tag.length;
+    }
+  }
+
+  // Add resource tags to the groups
+  for (const tag of resourceTags) {
     if (currentLength + tag.length < maxLength) {
       currentGroup.push(tag);
       currentLength += tag.length;
@@ -44,32 +65,34 @@ async function getTagAttributes(
   });
 
   const results: KeyValue[][] = await Promise.all(promises);
-  const combined: Record<string, AnyValue> = {};
+  const spanAttributes: Record<string, AnyValue> = {};
+  const resourceAttributes: Record<string, AnyValue> = {};
   for (const result of results) {
     for (const keyValue of result) {
-      if (keyValue.key) {
-        combined[keyValue.key] = keyValue.value !== undefined ? keyValue.value : { stringValue: '???' };
+      if (keyValue.key && keyValue.value !== undefined) {
+        if (spanTags.includes(keyValue.key)) {
+          spanAttributes[keyValue.key] = keyValue.value;
+        } else {
+          resourceAttributes[keyValue.key] = keyValue.value;
+        }
       }
     }
   }
 
-  return combined;
+  return { spanAttributes, resourceAttributes };
 }
 
-function splitAttributesAndEvents(allAttributes: Record<string, AnyValue>) {
-  const attributes: Record<string, AnyValue> = {};
+function splitAttributesAndEvents(tagAttributes: TagAttributes) {
+  const spanAttributes: Record<string, AnyValue> = {};
   const events = [];
-  const process = [];
-  for (const [key, value] of Object.entries(allAttributes)) {
+  for (const [key, value] of Object.entries(tagAttributes.spanAttributes)) {
     if (key.startsWith('event.') && value.stringValue !== undefined) {
       events.push({ time: parseInt(key.replace('event.', ''), 10), value: value.stringValue });
-    } else if (key.startsWith('k8s.')) {
-      process.push({ name: key.replace('k8s.', ''), value: value.stringValue });
     } else {
-      attributes[key] = value;
+      spanAttributes[key] = value;
     }
   }
-  return { attributes, events, process };
+  return { spanAttributes, events, resourceAttributes: tagAttributes.resourceAttributes };
 }
 
 export const SpanDetailPanel = ({
@@ -94,14 +117,14 @@ export const SpanDetailPanel = ({
     }));
   };
 
-  const result = useQuery<Record<string, any>>({
+  const result = useQuery<TagAttributes>({
     queryKey: ['trace', span.traceId, 'span', span.spanId, 'details'],
     queryFn: async () => {
       const qTags = `{ trace:id = "${span.traceId}" && span:id = "${span.spanId}" }`;
       const start = mkUnixEpochFromNanoSeconds(span.startTimeUnixNano);
       const end = mkUnixEpochFromNanoSeconds(span.endTimeUnixNano);
-      const tags = await searchTags(datasourceUid, qTags, start, end);
-      return getTagAttributes(datasourceUid, start, end, span.traceId, span.spanId, tags);
+      const tagsResult = await searchTags(datasourceUid, qTags, start, end);
+      return getTagAttributes(datasourceUid, start, end, span.traceId, span.spanId, tagsResult);
     },
   });
 
@@ -133,9 +156,9 @@ export const SpanDetailPanel = ({
     return clsx('leading-7', index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700');
   };
 
-  const { attributes, events, process } = result.isSuccess
+  const { spanAttributes, events, resourceAttributes } = result.isSuccess
     ? splitAttributesAndEvents(result.data)
-    : { attributes: {}, events: [], process: [] };
+    : { spanAttributes: {}, events: [], resourceAttributes: {} };
 
   return (
     <div className="z-10">
@@ -153,7 +176,7 @@ export const SpanDetailPanel = ({
             ))}
           </tbody>
         </table>
-        {Object.keys(attributes).length > 0 && (
+        {Object.keys(spanAttributes).length > 0 && (
           <Accordion
             title="Additional Span Data"
             isExpanded={expandedSections.additionalData}
@@ -161,8 +184,11 @@ export const SpanDetailPanel = ({
           >
             <table className="w-full">
               <tbody>
-                {Object.entries(attributes).map(([key, value], index) => (
-                  <tr key={key} className={rowClassName(basicSpanData.length + Object.keys(attributes).length + index)}>
+                {Object.entries(spanAttributes).map(([key, value], index) => (
+                  <tr
+                    key={key}
+                    className={rowClassName(basicSpanData.length + Object.keys(spanAttributes).length + index)}
+                  >
                     <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
                       <span className="px-2 py-2">{key}</span>
                     </td>
@@ -174,21 +200,23 @@ export const SpanDetailPanel = ({
           </Accordion>
         )}
 
-        {/* Process Section */}
-        <Accordion title="Process" isExpanded={expandedSections.process} onToggle={() => toggleSection('process')}>
-          <table className="w-full">
-            <tbody>
-              {process.map((item, index) => (
-                <tr key={item.name} className={rowClassName(index)}>
-                  <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
-                    <span className="px-2 py-2">{item.name}</span>
-                  </td>
-                  <td>{item.value && formatValue({ stringValue: item.value })}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Accordion>
+        {/* Resource Section */}
+        {Object.keys(resourceAttributes).length > 0 && (
+          <Accordion title="Resource" isExpanded={expandedSections.process} onToggle={() => toggleSection('process')}>
+            <table className="w-full">
+              <tbody>
+                {Object.entries(resourceAttributes).map(([key, value], index) => (
+                  <tr key={key} className={rowClassName(index)}>
+                    <td className="font-semibold text-gray-300 border-r border-gray-600 w-1/3">
+                      <span className="px-2 py-2">{key}</span>
+                    </td>
+                    <td>{value && formatValue(value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Accordion>
+        )}
 
         {/* Events Section */}
         {events.length > 0 && (
