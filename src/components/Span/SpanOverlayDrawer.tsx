@@ -137,7 +137,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
         </div>
 
         {/* Content */}
-        <div className="h-full overflow-y-auto pl-2 pr-1 py-1">{children}</div>
+        <div className="h-full overflow-y-auto pl-3 pr-1 py-1">{children}</div>
       </div>
     </>
   );
