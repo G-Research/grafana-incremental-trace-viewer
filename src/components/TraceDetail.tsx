@@ -262,7 +262,8 @@ function TraceDetail({
   }, []);
 
   React.useEffect(() => {
-    function onMouseMove(e: MouseEvent) {
+    const controller = new AbortController();
+    const onMouseMove = (e: MouseEvent) => {
       if (!isResizingRef.current) {
         return;
       }
@@ -274,18 +275,15 @@ function TraceDetail({
       const relativeX = e.clientX - bounds.left;
       const percent = Math.min(80, Math.max(15, (relativeX / bounds.width) * 100));
       setLeftColumnPercent(percent);
-    }
-    function onMouseUp() {
+    };
+    const onMouseUp = () => {
       if (isResizingRef.current) {
         isResizingRef.current = false;
       }
-    }
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
     };
+    window.addEventListener('mousemove', onMouseMove, { signal: controller.signal });
+    window.addEventListener('mouseup', onMouseUp, { signal: controller.signal });
+    return () => controller.abort();
   }, []);
 
   const loadRemoteChildren = async (span: SpanInfo) => {
