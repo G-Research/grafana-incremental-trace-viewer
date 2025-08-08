@@ -169,6 +169,8 @@ function TraceDetail({
   const parentRef = React.useRef(null);
   const queryKey = ['datasource', datasourceUid, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
+  const [leftColumnPercent, setLeftColumnPercent] = React.useState<number>(25);
+  const isResizingRef = React.useRef(false);
 
   const idToLevelMap = React.useRef(new Map<string, number>());
   // Keep track of the open/collapsed items in a map
@@ -252,6 +254,39 @@ function TraceDetail({
     getScrollElement: () => parentRef.current,
     estimateSize: () => 28,
   });
+
+  // Resize handlers for the column divider
+  const onMouseDownDivider = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    isResizingRef.current = true;
+    e.preventDefault();
+  }, []);
+
+  React.useEffect(() => {
+    function onMouseMove(e: MouseEvent) {
+      if (!isResizingRef.current) {
+        return;
+      }
+      const container = parentRef.current as unknown as HTMLElement | null;
+      if (!container) {
+        return;
+      }
+      const bounds = container.getBoundingClientRect();
+      const relativeX = e.clientX - bounds.left;
+      const percent = Math.min(80, Math.max(15, (relativeX / bounds.width) * 100));
+      setLeftColumnPercent(percent);
+    }
+    function onMouseUp() {
+      if (isResizingRef.current) {
+        isResizingRef.current = false;
+      }
+    }
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
 
   const loadRemoteChildren = async (span: SpanInfo) => {
     if (!result.isSuccess) {
@@ -355,6 +390,8 @@ function TraceDetail({
             panelWidth={panelWidth}
             panelHeight={panelHeight}
             timeRange={timeRange}
+            leftColumnPercent={leftColumnPercent}
+            onDividerMouseDown={onMouseDownDivider}
           />
         </div>
         <div className={`flex-grow py-2`} data-testid={testIds.pageThree.container}>
@@ -405,10 +442,18 @@ function TraceDetail({
                         traceDurationInMiliseconds={traceDurationInMiliseconds}
                         onSelect={setSelectedSpan}
                         isSelected={selectedSpan?.spanId === span.spanId}
+                        leftColumnPercent={leftColumnPercent}
                       />
                     </div>
                   );
                 })}
+                {/* Vertical drag handle overlay across the scroll area */}
+                <div
+                  onMouseDown={onMouseDownDivider}
+                  title="Drag to resize"
+                  style={{ left: `calc(${leftColumnPercent}% - 3px)` }}
+                  className="absolute top-0 h-full w-[6px] cursor-col-resize hover:bg-gray-600/50 active:bg-gray-500/60 z-10"
+                />
               </div>
             </div>
           )}
