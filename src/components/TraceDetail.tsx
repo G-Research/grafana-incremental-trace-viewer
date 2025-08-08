@@ -170,6 +170,7 @@ function TraceDetail({
   const queryKey = ['datasource', datasourceUid, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
   const [leftColumnPercent, setLeftColumnPercent] = React.useState<number>(25);
+  const [drawerWidthPercent, setDrawerWidthPercent] = React.useState<number>(0);
   const isResizingRef = React.useRef(false);
 
   const idToLevelMap = React.useRef(new Map<string, number>());
@@ -275,7 +276,9 @@ function TraceDetail({
         }
         const bounds = container.getBoundingClientRect();
         const relativeX = e.clientX - bounds.left;
-        const percent = Math.min(80, Math.max(15, (relativeX / bounds.width) * 100));
+        // Clamp so that left + drawer <= 80% of panel width
+        const maxLeft = Math.max(15, 80 - drawerWidthPercent);
+        const percent = Math.min(maxLeft, Math.max(15, (relativeX / bounds.width) * 100));
         setLeftColumnPercent(percent);
       },
       { signal: controller.signal }
@@ -290,7 +293,7 @@ function TraceDetail({
       { signal: controller.signal }
     );
     return () => controller.abort();
-  }, []);
+  }, [drawerWidthPercent]);
 
   const loadRemoteChildren = async (span: SpanInfo) => {
     if (!result.isSuccess) {
@@ -468,6 +471,8 @@ function TraceDetail({
         onClose={() => setSelectedSpan(null)}
         title="Span Details"
         panelWidth={panelWidth || window.innerWidth}
+        leftColumnPercent={leftColumnPercent}
+        onWidthPercentChange={setDrawerWidthPercent}
       >
         {selectedSpan && (
           <SpanDetailPanel span={selectedSpan} onClose={() => setSelectedSpan(null)} datasourceUid={datasourceUid} />
