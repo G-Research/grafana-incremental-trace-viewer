@@ -263,26 +263,32 @@ function TraceDetail({
 
   React.useEffect(() => {
     const controller = new AbortController();
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isResizingRef.current) {
-        return;
-      }
-      const container = parentRef.current as unknown as HTMLElement | null;
-      if (!container) {
-        return;
-      }
-      const bounds = container.getBoundingClientRect();
-      const relativeX = e.clientX - bounds.left;
-      const percent = Math.min(80, Math.max(15, (relativeX / bounds.width) * 100));
-      setLeftColumnPercent(percent);
-    };
-    const onMouseUp = () => {
-      if (isResizingRef.current) {
-        isResizingRef.current = false;
-      }
-    };
-    window.addEventListener('mousemove', onMouseMove, { signal: controller.signal });
-    window.addEventListener('mouseup', onMouseUp, { signal: controller.signal });
+    window.addEventListener(
+      'mousemove',
+      (e: MouseEvent) => {
+        if (!isResizingRef.current) {
+          return;
+        }
+        const container = parentRef.current as unknown as HTMLElement | null;
+        if (!container) {
+          return;
+        }
+        const bounds = container.getBoundingClientRect();
+        const relativeX = e.clientX - bounds.left;
+        const percent = Math.min(80, Math.max(15, (relativeX / bounds.width) * 100));
+        setLeftColumnPercent(percent);
+      },
+      { signal: controller.signal }
+    );
+    window.addEventListener(
+      'mouseup',
+      () => {
+        if (isResizingRef.current) {
+          isResizingRef.current = false;
+        }
+      },
+      { signal: controller.signal }
+    );
     return () => controller.abort();
   }, []);
 
