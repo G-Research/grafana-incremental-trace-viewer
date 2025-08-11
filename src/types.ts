@@ -31,4 +31,5 @@ export type TraceViewerHeaderProps = {
   timeRange: TimeRange;
   leftColumnPercent: number;
   onDividerMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onCollapseAll: () => void;
 };

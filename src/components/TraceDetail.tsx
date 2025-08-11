@@ -367,6 +367,22 @@ function TraceDetail({
     });
   };
 
+  const collapseAll = () => {
+    queryClient.setQueryData<SpanInfo[]>(queryKey, (oldData) => {
+      if (!oldData) {
+        return oldData;
+      }
+
+      return oldData.map((sp) => {
+        // Only collapse spans that have children and are currently showing them
+        if (sp.childStatus === ChildStatus.ShowChildren && sp.childCount && sp.childCount > 0) {
+          return { ...sp, childStatus: ChildStatus.HideChildren };
+        }
+        return sp;
+      });
+    });
+  };
+
   const virtualItems = rowVirtualizer.getVirtualItems();
 
   function copyData() {
@@ -396,6 +412,7 @@ function TraceDetail({
             timeRange={timeRange}
             leftColumnPercent={leftColumnPercent}
             onDividerMouseDown={onMouseDownDivider}
+            onCollapseAll={collapseAll}
           />
         </div>
         <div className={`flex-grow py-2`} data-testid={testIds.pageThree.container}>
