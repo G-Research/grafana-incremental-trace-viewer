@@ -277,9 +277,11 @@ function TraceDetail({
         }
         const bounds = container.getBoundingClientRect();
         const relativeX = e.clientX - bounds.left;
-        // Clamp so that left + drawer <= 80% of panel width
-        const maxLeft = Math.max(15, 80 - drawerWidthPercent);
-        const percent = Math.min(maxLeft, Math.max(15, (relativeX / bounds.width) * 100));
+        // Clamp so that left + drawer <= 90% of panel width
+        const maxLeft = Math.max(15, 90 - drawerWidthPercent);
+        // Enforce 45% panel width limit for left column
+        const maxLeftWithLimit = Math.min(maxLeft, 45);
+        const percent = Math.min(maxLeftWithLimit, Math.max(15, (relativeX / bounds.width) * 100));
         setLeftColumnPercent(percent);
       },
       { signal: controller.signal }
