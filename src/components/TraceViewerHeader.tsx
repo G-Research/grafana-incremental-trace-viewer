@@ -1,6 +1,6 @@
 import React from 'react';
 import { TraceViewerHeaderProps } from '../types';
-import { Button, Icon, IconButton } from '@grafana/ui';
+import { IconButton } from '@grafana/ui';
 // removed unused Help/Info imports after replacing with resize handle
 import { isDark } from '../utils/utils.url';
 
