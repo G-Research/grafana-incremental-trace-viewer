@@ -7,8 +7,6 @@ interface SpanOverlayDrawerProps {
   children: React.ReactNode;
   title?: string;
   panelWidth: number;
-  onWidthPercentChange?: (percent: number) => void;
-  leftColumnPercent: number;
 }
 
 export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
@@ -17,8 +15,6 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   children,
   title = 'Span Details',
   panelWidth,
-  onWidthPercentChange,
-  leftColumnPercent,
 }) => {
   // Default width: up to 50% of panel width, but no more than 378px
   const defaultWidthPx = Math.min(panelWidth * 0.5, 378);
@@ -53,12 +49,9 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
         // Desired width is distance from mouse to the right edge of the container
         const widthPx = Math.max(0, bounds.right - e.clientX);
         const minPx = 220; // minimum comfortable width
-        const percentRaw = (widthPx / bounds.width) * 100;
-        // Respect overall layout constraint: left + drawer <= 80%
-        const maxPercent = Math.max(0, 80 - leftColumnPercent);
-        // Convert minPx to percent for clamping
-        const minPercent = (minPx / bounds.width) * 100;
-        const percent = Math.min(maxPercent, Math.max(minPercent, percentRaw));
+        const maxPx = Math.min(bounds.width * 0.7, Math.max(378, bounds.width * 0.3));
+        const clamped = Math.min(Math.max(widthPx, minPx), maxPx);
+        const percent = (clamped / bounds.width) * 100;
         setWidthPercent(percent);
       },
       { signal: controller.signal }
@@ -73,26 +66,9 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
       { signal: controller.signal }
     );
     return () => controller.abort();
-  }, [isOpen, leftColumnPercent]);
+  }, [isOpen]);
 
   const drawerWidth = `${(widthPercent / 100) * panelWidth}px`;
-
-  // Notify parent of width percent changes when open
-  React.useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    onWidthPercentChange?.(widthPercent);
-  }, [widthPercent, isOpen, onWidthPercentChange]);
-
-  // Ensure current drawer width respects left+drawer <= 80 when opening or when left column changes
-  React.useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    const maxPercent = Math.max(0, 80 - leftColumnPercent);
-    setWidthPercent((prev) => Math.min(prev, maxPercent));
-  }, [leftColumnPercent, isOpen]);
 
   if (!isOpen) {
     return null;
