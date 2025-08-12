@@ -9,6 +9,20 @@ interface SpanOverlayDrawerProps {
   panelWidth: number;
 }
 
+/**
+ * Easily tunable drawer width constraints
+ * Limits are set in both absolute and relative terms
+ * The default width is 50% of panel width, but no more than 378px
+ * The maximum width is 75% of panel width, but no more than 920px
+ * The minimum width is set to 220px
+ * The maximum percentage is set to 75%
+ */
+const DRAWER_MIN_WIDTH_PX = 220; // minimum comfortable width
+const DRAWER_MAX_WIDTH_PX = 920; // maximum absolute width
+const DRAWER_MAX_PERCENT = 75; // maximum as percentage of panel width
+const DRAWER_DEFAULT_PERCENT = 50; // default as percentage of panel width
+const DRAWER_DEFAULT_PX = 378; // default maximum absolute width
+
 export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   isOpen,
   onClose,
@@ -17,7 +31,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   panelWidth,
 }) => {
   // Default width: up to 50% of panel width, but no more than 378px
-  const defaultWidthPx = Math.min(panelWidth * 0.5, 378);
+  const defaultWidthPx = Math.min(panelWidth * (DRAWER_DEFAULT_PERCENT / 100), DRAWER_DEFAULT_PX);
   const [widthPercent, setWidthPercent] = React.useState<number>((defaultWidthPx / panelWidth) * 100);
   const isResizingRef = React.useRef<boolean>(false);
   const drawerRef = React.useRef<HTMLDivElement | null>(null);
@@ -48,8 +62,8 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
         const bounds = container.getBoundingClientRect();
         // Desired width is distance from mouse to the right edge of the container
         const widthPx = Math.max(0, bounds.right - e.clientX);
-        const minPx = 220; // minimum comfortable width
-        const maxPx = Math.min(bounds.width * 0.7, Math.max(378, bounds.width * 0.3));
+        const minPx = DRAWER_MIN_WIDTH_PX; // minimum comfortable width
+        const maxPx = Math.min(bounds.width * (DRAWER_MAX_PERCENT / 100), DRAWER_MAX_WIDTH_PX);
         const clamped = Math.min(Math.max(widthPx, minPx), maxPx);
         const percent = (clamped / bounds.width) * 100;
         setWidthPercent(percent);
