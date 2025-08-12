@@ -1,6 +1,6 @@
 import React from 'react';
 import { TraceViewerHeaderProps } from '../types';
-import { Button, Icon } from '@grafana/ui';
+import { Button, Icon, IconButton } from '@grafana/ui';
 // removed unused Help/Info imports after replacing with resize handle
 import { isDark } from '../utils/utils.url';
 
@@ -125,19 +125,17 @@ export const TraceViewerHeader = ({
             </div>
           </div>
           {/* Collapse All Button */}
-          {hasExpandedSpans && (
-            <div className="px-3 py-1">
-              <Button
-                variant="secondary"
-                fill="text"
-                size="sm"
-                onClick={onCollapseAll}
-                title="Collapse all expanded spans"
-              >
-                <Icon name="table-collapse-all" />
-              </Button>
-            </div>
-          )}
+          <div className="px-3 py-1">
+            <IconButton
+              variant="secondary"
+              name="table-collapse-all"
+              size="sm"
+              onClick={onCollapseAll}
+              title="Collapse all expanded spans"
+              disabled={!hasExpandedSpans}
+              aria-label="Collapse all expanded spans"
+            />
+          </div>
         </div>
         <div className="font-bold px-4" style={{ width: `${100 - leftColumnPercent}%` }}>
           <div className="w-full relative">
