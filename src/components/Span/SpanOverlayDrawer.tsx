@@ -79,7 +79,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
     return () => controller.abort();
   }, [isOpen, panelWidth]);
 
-  const drawerWidth = `${(widthPercent / 100) * panelWidth}px`;
+  const drawerWidth = React.useMemo(() => `${(widthPercent / 100) * panelWidth}px`, [widthPercent, panelWidth]);
 
   if (!isOpen) {
     return null;
