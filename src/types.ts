@@ -32,4 +32,5 @@ export type TraceViewerHeaderProps = {
   leftColumnPercent: number;
   onDividerMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
   onCollapseAll: () => void;
+  hasExpandedSpans?: boolean;
 };

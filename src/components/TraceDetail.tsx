@@ -397,6 +397,10 @@ function TraceDetail({
     navigator.clipboard.writeText(JSON.stringify(striped));
   }
 
+  // Check if there are any expanded spans that can be collapsed
+  const hasExpandedSpans =
+    result.isSuccess && result.data.some((span) => span.childStatus === ChildStatus.ShowChildren);
+
   return (
     // Grafana sets padding on the parent panel which causes our content to overflow.
     // This negative margin compensates for that padding to keep content within bounds.
@@ -413,6 +417,7 @@ function TraceDetail({
             leftColumnPercent={leftColumnPercent}
             onDividerMouseDown={onMouseDownDivider}
             onCollapseAll={collapseAll}
+            hasExpandedSpans={hasExpandedSpans}
           />
         </div>
         <div className={`flex-grow py-2`} data-testid={testIds.pageThree.container}>
