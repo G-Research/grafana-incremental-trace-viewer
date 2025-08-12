@@ -12,16 +12,13 @@ interface SpanOverlayDrawerProps {
 /**
  * Easily tunable drawer width constraints
  * Limits are set in both absolute and relative terms
- * The default width is 50% of panel width, but no more than 378px
- * The maximum width is 75% of panel width, but no more than 920px
- * The minimum width is set to 220px
- * The maximum percentage is set to 75%
+ * The default width is 50% of panel width
+ * The minimum width is set to 10% of panel width
+ * The maximum width is set to 75% of panel width
  */
-const DRAWER_MIN_WIDTH_PX = 220; // minimum comfortable width
-const DRAWER_MAX_WIDTH_PX = 920; // maximum absolute width
+const DRAWER_MIN_PERCENT = 10; // minimum comfortable width
 const DRAWER_MAX_PERCENT = 75; // maximum as percentage of panel width
-const DRAWER_DEFAULT_PERCENT = 50; // default as percentage of panel width
-const DRAWER_DEFAULT_PX = 378; // default maximum absolute width
+const DRAWER_DEFAULT_PERCENT = 25; // default as percentage of panel width
 
 export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   isOpen,
@@ -30,8 +27,8 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   title = 'Span Details',
   panelWidth,
 }) => {
-  // Default width: up to 50% of panel width, but no more than 378px
-  const defaultWidthPx = Math.min(panelWidth * (DRAWER_DEFAULT_PERCENT / 100), DRAWER_DEFAULT_PX);
+  // Default width: up to 25% of panel width
+  const defaultWidthPx = panelWidth * (DRAWER_DEFAULT_PERCENT / 100);
   const [widthPercent, setWidthPercent] = React.useState<number>((defaultWidthPx / panelWidth) * 100);
   const isResizingRef = React.useRef<boolean>(false);
   const drawerRef = React.useRef<HTMLDivElement | null>(null);
@@ -62,8 +59,8 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
         const bounds = container.getBoundingClientRect();
         // Desired width is distance from mouse to the right edge of the container
         const widthPx = Math.max(0, bounds.right - e.clientX);
-        const minPx = DRAWER_MIN_WIDTH_PX; // minimum comfortable width
-        const maxPx = Math.min(bounds.width * (DRAWER_MAX_PERCENT / 100), DRAWER_MAX_WIDTH_PX);
+        const minPx = panelWidth * (DRAWER_MIN_PERCENT / 100); // minimum comfortable width
+        const maxPx = panelWidth * (DRAWER_MAX_PERCENT / 100);
         const clamped = Math.min(Math.max(widthPx, minPx), maxPx);
         const percent = (clamped / bounds.width) * 100;
         setWidthPercent(percent);
@@ -80,7 +77,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
       { signal: controller.signal }
     );
     return () => controller.abort();
-  }, [isOpen]);
+  }, [isOpen, panelWidth]);
 
   const drawerWidth = `${(widthPercent / 100) * panelWidth}px`;
 
