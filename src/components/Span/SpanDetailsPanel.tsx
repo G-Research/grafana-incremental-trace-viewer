@@ -134,20 +134,29 @@ function Value({ value }: { value: AnyValue }) {
     return (
       <ValueWrapper
         value={value.stringValue}
-        color="text-cyan-600 dark:text-cyan-400"
+        color="text-cyan-600 light:text-cyan-600 dark:text-cyan-400"
         displayValue={`"${value.stringValue}"`}
       />
     );
   } else if (value.boolValue !== undefined) {
-    return <ValueWrapper value={value.boolValue ? 'true' : 'false'} color={'text-blue-600 dark:text-blue-500'} />;
+    return (
+      <ValueWrapper
+        value={value.boolValue ? 'true' : 'false'}
+        color={'text-blue-600 light:text-blue-600 dark:text-blue-500'}
+      />
+    );
   } else if (value.intValue !== undefined) {
-    return <ValueWrapper value={value.intValue} color="text-green-700 dark:text-green-600" />;
+    return <ValueWrapper value={value.intValue} color="text-green-700 light:text-green-700 dark:text-green-600" />;
   } else if (value.doubleValue !== undefined) {
-    return <ValueWrapper value={value.doubleValue} color="text-green-700 dark:text-green-600" />;
+    return <ValueWrapper value={value.doubleValue} color="text-green-700 light:text-green-700 dark:text-green-600" />;
   } else if (value.bytesValue !== undefined) {
-    return <ValueWrapper value={JSON.stringify(value)} color="text-gray-700 dark:text-gray-200" italic />;
+    return (
+      <ValueWrapper value={JSON.stringify(value)} color="text-gray-700 light:text-gray-700 dark:text-gray-200" italic />
+    );
   }
-  return <ValueWrapper value={JSON.stringify(value)} color="text-gray-700 dark:text-gray-200" italic />;
+  return (
+    <ValueWrapper value={JSON.stringify(value)} color="text-gray-700 light:text-gray-700 dark:text-gray-200" italic />
+  );
 }
 
 export const SpanDetailPanel = ({
@@ -193,7 +202,12 @@ export const SpanDetailPanel = ({
   ];
 
   const rowClassName = (index: number) => {
-    return clsx('leading-7', index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700');
+    return clsx(
+      'leading-7',
+      index % 2 === 0
+        ? 'bg-gray-100 light:bg-gray-100 dark:bg-gray-800'
+        : 'bg-gray-50 light:bg-gray-50 dark:bg-gray-700'
+    );
   };
 
   const { spanAttributes, events, resourceAttributes } = result.isSuccess
@@ -207,7 +221,7 @@ export const SpanDetailPanel = ({
           <tbody>
             {basicSpanData.map((item, index) => (
               <tr key={item.key} className={rowClassName(index)}>
-                <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3 mx-4">
+                <td className="font-semibold text-gray-700 light:text-gray-700 dark:text-gray-300 border-r border-gray-300 light:border-gray-300 dark:border-gray-600 w-1/3 mx-4">
                   <span className="px-2 py-2">{item.key}</span>{' '}
                   {/* TODO: padding & margins are overriden to 0 by the global CSS and it is not possible to set it on the td tag */}
                 </td>
@@ -229,7 +243,7 @@ export const SpanDetailPanel = ({
                     key={key}
                     className={rowClassName(basicSpanData.length + Object.keys(spanAttributes).length + index)}
                   >
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 light:text-gray-700 dark:text-gray-300 border-r border-gray-300 light:border-gray-300 dark:border-gray-600 w-1/3">
                       <span className="px-2 py-2">{key}</span>
                     </td>
                     <td>{value && <Value value={value} />}</td>
@@ -247,7 +261,7 @@ export const SpanDetailPanel = ({
               <tbody>
                 {Object.entries(resourceAttributes).map(([key, value], index) => (
                   <tr key={key} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 light:text-gray-700 dark:text-gray-300 border-r border-gray-300 light:border-gray-300 dark:border-gray-600 w-1/3">
                       <span className="px-2 py-2">{key}</span>
                     </td>
                     <td>{value && <Value value={value} />}</td>
@@ -265,7 +279,7 @@ export const SpanDetailPanel = ({
               <tbody>
                 {events.map((item, index) => (
                   <tr key={item.time} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 light:text-gray-700 dark:text-gray-300 border-r border-gray-300 light:border-gray-300 dark:border-gray-600 w-1/3">
                       <span className="px-2 py-2">
                         {/* print the time in seconds since the start of the span with 3 decimal places */}
                         {((item.time - span.startTimeUnixNano / 1000000) / 1000).toFixed(3)}s

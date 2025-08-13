@@ -56,7 +56,7 @@ export const Span = (props: SpanNodeProps) => {
       // We add 1% to the width for some padding.
       style={{ left: `${width + offset + 1}%` }}
     >
-      <span className="m-auto leading-none text-gray-500 dark:text-gray-500 font-xs font-mono">
+      <span className="m-auto leading-none text-gray-500 light:text-gray-500 dark:text-gray-500 font-xs font-mono">
         {formattedDuration}
       </span>
     </div>
@@ -64,8 +64,8 @@ export const Span = (props: SpanNodeProps) => {
 
   return (
     <div
-      className={`flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
-        props.isSelected ? 'bg-blue-100 dark:bg-gray-600 z-1000' : ''
+      className={`flex items-center hover:bg-gray-100 light:hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
+        props.isSelected ? 'bg-blue-100 light:bg-blue-100 dark:bg-gray-600 z-1000' : ''
       }`}
     >
       <div
@@ -81,12 +81,12 @@ export const Span = (props: SpanNodeProps) => {
           {props.childCount !== undefined && props.childCount > 0 && (
             <strong
               style={{ backgroundColor: getColourForValue(props.serviceNamespace || 'default') }}
-              className="block p-[3px] min-w-5 mr-1 rounded font-mono font-thin leading-none text-gray-900 dark:text-black text-center"
+              className="block p-[3px] min-w-5 mr-1 rounded font-mono font-thin leading-none text-gray-900 light:text-gray-900 dark:text-black text-center"
             >
               {props.childCount}
             </strong>
           )}
-          <span className="text-gray-900 dark:text-white">{props.name}</span>
+          <span className="text-gray-900 light:text-gray-900 dark:text-white">{props.name}</span>
         </div>
       </div>
       <div
