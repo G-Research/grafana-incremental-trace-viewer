@@ -93,7 +93,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className="absolute top-0 right-0 h-full bg-white dark:bg-black border-l border-gray-300 dark:border-gray-700 shadow-lg overflow-hidden z-[1000]"
+        className="absolute top-0 right-0 h-full bg-white dark:bg-black border-l border-t dark:border-t-0 border-gray-300 dark:border-gray-700 shadow-lg overflow-hidden z-[1000]"
         style={{
           width: drawerWidth,
           transform: 'translateX(0)',
