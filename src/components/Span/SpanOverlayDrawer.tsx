@@ -17,6 +17,7 @@ interface SpanOverlayDrawerProps {
  * The maximum width is set to 75% of panel width
  */
 const DRAWER_MIN_PERCENT = 10; // minimum comfortable width
+const DRAWER_MIN_WIDTH_PX = 384; // minimum width in pixels
 const DRAWER_MAX_PERCENT = 75; // maximum as percentage of panel width
 const DRAWER_DEFAULT_PERCENT = 25; // default as percentage of panel width
 
@@ -28,7 +29,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   panelWidth,
 }) => {
   // Default width: up to 25% of panel width
-  const defaultWidthPx = panelWidth * (DRAWER_DEFAULT_PERCENT / 100);
+  const defaultWidthPx = Math.max(panelWidth * (DRAWER_DEFAULT_PERCENT / 100), DRAWER_MIN_WIDTH_PX);
   const [widthPercent, setWidthPercent] = React.useState<number>((defaultWidthPx / panelWidth) * 100);
   const isResizingRef = React.useRef<boolean>(false);
   const drawerRef = React.useRef<HTMLDivElement | null>(null);
@@ -88,12 +89,12 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   return (
     <>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-gray-900 dark:bg-black opacity-20 z-[998]" onClick={onClose} />
+      <div className="absolute inset-0 bg-white dark:bg-black opacity-20 z-[998]" onClick={onClose} />
 
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className="absolute top-0 right-0 h-full bg-white dark:bg-gray-800 border-l border-gray-300 dark:border-gray-700 shadow-lg overflow-hidden z-[1000]"
+        className="absolute top-0 right-0 h-full bg-white dark:bg-black border-l border-gray-300 dark:border-gray-700 shadow-lg overflow-hidden z-[1000]"
         style={{
           width: drawerWidth,
           transform: 'translateX(0)',
@@ -111,16 +112,6 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
             <span className="block w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></span>
             <span className="block w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></span>
           </div>
-        </div>
-        {/* Header */}
-        <div className="absolute top-0 right-0">
-          <button
-            onClick={onClose}
-            className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Close drawer"
-          >
-            <Icon name="times" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white" />
-          </button>
         </div>
 
         {/* Content */}

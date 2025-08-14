@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { IconButton } from '@grafana/ui';
+import { IconButton, Input } from '@grafana/ui';
 
 import type { SpanInfo } from '../../types';
 import { mkUnixEpochFromNanoSeconds, formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
@@ -113,7 +113,7 @@ function ValueWrapper({
 }) {
   const [tooltip, setTooltip] = useState('Copy value');
   return (
-    <span className={`p-2 flex gap-1 items-center justify-between ${italic ? 'italic' : ''}`}>
+    <span className={`flex gap-1 items-center justify-between ${italic ? 'italic' : ''}`}>
       <span className={`px-2 py-2 ${color}`}>{displayValue || value}</span>
       <IconButton
         name="copy"
@@ -234,7 +234,7 @@ export const SpanDetailPanel = ({
   );
 
   const rowClassName = (index: number) => {
-    return clsx('leading-7', index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700');
+    return clsx('text-[0.9rem]', index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-900' : 'bg-gray-50 dark:bg-black');
   };
 
   const { spanAttributes, events, resourceAttributes } = React.useMemo(() => {
@@ -260,14 +260,29 @@ export const SpanDetailPanel = ({
   return (
     <div className="z-10">
       <div className="overflow-hidden text-sm">
-        <h2 className="uppercase">Span Details</h2>
-        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
-        <table className="w-full">
+        <div className="flex flex-col gap-1 items-start justify-between py-4 px-2">
+          <span className="uppercase text-base font-light">Span Details</span>
+          <Input
+            className="w-full"
+            type="text"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.currentTarget.value)}
+            suffix={
+              search ? (
+                <IconButton name="times" variant="secondary" aria-label="Clear" onClick={() => setSearch('')} />
+              ) : (
+                <IconButton name="search" variant="secondary" aria-label="Search" />
+              )
+            }
+          />
+        </div>
+        <table className="w-full text-[0.8rem]">
           <tbody>
             {basicSpanData.map((item, index) => (
               <tr key={item.key} className={rowClassName(index)}>
-                <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3 mx-4">
-                  <span className="px-2 py-2">{item.key}</span>{' '}
+                <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3 mx-4">
+                  <span className="px-2">{item.key}</span>{' '}
                   {/* TODO: padding & margins are overriden to 0 by the global CSS and it is not possible to set it on the td tag */}
                 </td>
                 <td>{item.value && <Value value={item.value} />}</td>
@@ -286,7 +301,7 @@ export const SpanDetailPanel = ({
               <tbody>
                 {spanAttributes.map(({ key, value }, index) => (
                   <tr key={key} className={rowClassName(basicSpanData.length + spanAttributes.length + index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
                       <span className="px-2 py-2">{key}</span>
                     </td>
                     <td>{value && <Value value={value} />}</td>
@@ -309,7 +324,7 @@ export const SpanDetailPanel = ({
               <tbody>
                 {resourceAttributes.map(({ key, value }, index) => (
                   <tr key={key} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
                       <span className="px-2 py-2">{key}</span>
                     </td>
                     <td>{value && <Value value={value} />}</td>
@@ -332,7 +347,7 @@ export const SpanDetailPanel = ({
               <tbody>
                 {events.map((item, index) => (
                   <tr key={item.time} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300 border-r border-gray-300 dark:border-gray-600 w-1/3">
+                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
                       <span className="px-2 py-2">
                         {/* print the time in seconds since the start of the span with 3 decimal places */}
                         {((item.time - span.startTimeUnixNano / 1000000) / 1000).toFixed(3)}s
