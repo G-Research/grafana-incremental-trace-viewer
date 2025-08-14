@@ -114,7 +114,7 @@ function ValueWrapper({
   const [tooltip, setTooltip] = useState('Copy value');
   return (
     <span className={`flex gap-1 items-center justify-between ${italic ? 'italic' : ''}`}>
-      <span className={`px-2 py-2 ${color}`}>{displayValue || value}</span>
+      <span className={`p-2 ${color}`}>{displayValue || value}</span>
       <IconButton
         name="copy"
         variant="secondary"
@@ -262,7 +262,7 @@ export const SpanDetailPanel = ({
 
   return (
     <div className="z-10 overflow-hidden text-sm">
-      <div className="px-2 py-2">
+      <div className="p-2">
         <div className="flex flex-col gap-4 items-start justify-between py-4 px-2 mx-4">
           <div className="flex items-center justify-between gap-2 w-full">
             <span className="uppercase text-lg font-light">Span Details</span>
