@@ -234,7 +234,10 @@ export const SpanDetailPanel = ({
   );
 
   const rowClassName = (index: number) => {
-    return clsx('text-[0.9rem]', index % 2 === 0 ? 'bg-neutral-100 dark:bg-neutral-900' : 'bg-gray-50 dark:bg-black');
+    return clsx(
+      'text-[0.9rem] hover:bg-neutral-200 dark:hover:bg-neutral-800',
+      index % 2 === 0 ? 'bg-neutral-100 dark:bg-neutral-900' : 'bg-gray-50 dark:bg-black'
+    );
   };
 
   const { spanAttributes, events, resourceAttributes } = React.useMemo(() => {
