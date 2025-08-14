@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from '@grafana/ui';
 
 interface SpanOverlayDrawerProps {
   isOpen: boolean;

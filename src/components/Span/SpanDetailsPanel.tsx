@@ -234,7 +234,7 @@ export const SpanDetailPanel = ({
   );
 
   const rowClassName = (index: number) => {
-    return clsx('text-[0.9rem]', index % 2 === 0 ? 'bg-gray-100 dark:bg-gray-900' : 'bg-gray-50 dark:bg-black');
+    return clsx('text-[0.9rem]', index % 2 === 0 ? 'bg-neutral-100 dark:bg-neutral-900' : 'bg-gray-50 dark:bg-black');
   };
 
   const { spanAttributes, events, resourceAttributes } = React.useMemo(() => {
@@ -258,14 +258,24 @@ export const SpanDetailPanel = ({
   }, [result, debouncedSearch]);
 
   return (
-    <div className="z-10">
-      <div className="overflow-hidden text-sm">
-        <div className="flex flex-col gap-1 items-start justify-between py-4 px-2">
-          <span className="uppercase text-base font-light">Span Details</span>
+    <div className="z-10 overflow-hidden text-sm">
+      <div className="px-2 py-2">
+        <div className="flex flex-col gap-4 items-start justify-between py-4 px-2 mx-4">
+          <div className="flex items-center justify-between gap-2 w-full">
+            <span className="uppercase text-lg font-light">Span Details</span>
+            <IconButton
+              size="xxl"
+              name="times"
+              variant="secondary"
+              aria-label="Close"
+              onClick={onClose}
+              className="w-4 h-4"
+            />
+          </div>
           <Input
             className="w-full"
             type="text"
-            placeholder="Search"
+            placeholder="Search details"
             value={search}
             onChange={(e) => setSearch(e.currentTarget.value)}
             suffix={
@@ -277,90 +287,97 @@ export const SpanDetailPanel = ({
             }
           />
         </div>
+      </div>
+      <div className="px-4">
         <table className="w-full text-[0.8rem]">
           <tbody>
             {basicSpanData.map((item, index) => (
               <tr key={item.key} className={rowClassName(index)}>
                 <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3 mx-4">
                   <span className="px-2">{item.key}</span>{' '}
-                  {/* TODO: padding & margins are overriden to 0 by the global CSS and it is not possible to set it on the td tag */}
                 </td>
                 <td className="font-light">{item.value && <Value value={item.value} />}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {spanAttributes.length > 0 && (
-          <Accordion
-            title="Additional Span Data"
-            showToggle={debouncedSearch === ''}
-            isExpanded={debouncedSearch !== '' || expandedSections.additionalData}
-            onToggle={() => toggleSection('additionalData')}
-          >
+      </div>
+      {spanAttributes.length > 0 && (
+        <Accordion
+          title="Additional Span Data"
+          showToggle={debouncedSearch === ''}
+          isExpanded={debouncedSearch !== '' || expandedSections.additionalData}
+          onToggle={() => toggleSection('additionalData')}
+        >
+          <div className="px-2">
             <table className="w-full">
               <tbody>
                 {spanAttributes.map(({ key, value }, index) => (
-                  <tr key={key} className={rowClassName(basicSpanData.length + spanAttributes.length + index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2 py-2">{key}</span>
+                  <tr key={key} className={rowClassName(index)}>
+                    <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
+                      <span className="px-2">{key}</span>
                     </td>
-                    <td>{value && <Value value={value} />}</td>
+                    <td className="font-light">{value && <Value value={value} />}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </Accordion>
-        )}
+          </div>
+        </Accordion>
+      )}
 
-        {/* Resource Section */}
-        {resourceAttributes.length > 0 && (
-          <Accordion
-            title="Resource"
-            showToggle={debouncedSearch === ''}
-            isExpanded={debouncedSearch !== '' || expandedSections.process}
-            onToggle={() => toggleSection('process')}
-          >
+      {/* Resource Section */}
+      {resourceAttributes.length > 0 && (
+        <Accordion
+          title="Resource"
+          showToggle={debouncedSearch === ''}
+          isExpanded={debouncedSearch !== '' || expandedSections.process}
+          onToggle={() => toggleSection('process')}
+        >
+          <div className="px-2">
             <table className="w-full">
               <tbody>
                 {resourceAttributes.map(({ key, value }, index) => (
                   <tr key={key} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2 py-2">{key}</span>
+                    <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
+                      <span className="px-2">{key}</span>
                     </td>
-                    <td>{value && <Value value={value} />}</td>
+                    <td className="font-light">{value && <Value value={value} />}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </Accordion>
-        )}
+          </div>
+        </Accordion>
+      )}
 
-        {/* Events Section */}
-        {events.length > 0 && (
-          <Accordion
-            title="Events"
-            showToggle={debouncedSearch === ''}
-            isExpanded={debouncedSearch !== '' || expandedSections.events}
-            onToggle={() => toggleSection('events')}
-          >
+      {/* Events Section */}
+      {events.length > 0 && (
+        <Accordion
+          title="Events"
+          showToggle={debouncedSearch === ''}
+          isExpanded={debouncedSearch !== '' || expandedSections.events}
+          onToggle={() => toggleSection('events')}
+        >
+          <div className="px-2">
             <table className="w-full">
               <tbody>
                 {events.map((item, index) => (
                   <tr key={item.time} className={rowClassName(index)}>
-                    <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2 py-2">
+                    <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
+                      <span className="px-2">
                         {/* print the time in seconds since the start of the span with 3 decimal places */}
                         {((item.time - span.startTimeUnixNano / 1000000) / 1000).toFixed(3)}s
                       </span>
                     </td>
-                    <td>{item.value && <Value value={{ stringValue: item.value }} />}</td>
+                    <td className="font-light">{item.value && <Value value={{ stringValue: item.value }} />}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </Accordion>
-        )}
-      </div>
+          </div>
+        </Accordion>
+      )}
     </div>
   );
 };
