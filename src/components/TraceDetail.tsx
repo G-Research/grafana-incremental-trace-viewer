@@ -164,8 +164,22 @@ function TraceDetail({
 
   const queryClient = useQueryClient();
   const parentRef = React.useRef(null);
+  const traceViewerHeaderRef = React.useRef<HTMLDivElement>(null);
   const queryKey = ['datasource', datasourceUid, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
+  const [selectedSpanElementYOffset, setSelectedSpanElementYOffset] = React.useState<number | null>(null);
+
+  const handleSpanSelect = React.useCallback((span: SpanInfo, element?: HTMLElement) => {
+    const traceViewerHeader = traceViewerHeaderRef.current?.getBoundingClientRect();
+    const selectedElementBoundingClientRect = element?.getBoundingClientRect();
+
+    const yOffset =
+      traceViewerHeader && selectedElementBoundingClientRect
+        ? Math.abs(traceViewerHeader.top - selectedElementBoundingClientRect.top)
+        : null;
+    setSelectedSpan(span);
+    setSelectedSpanElementYOffset(yOffset);
+  }, []);
   const [leftColumnPercent, setLeftColumnPercent] = React.useState<number>(25);
   const isResizingRef = React.useRef(false);
 
@@ -406,7 +420,7 @@ function TraceDetail({
     // This negative margin compensates for that padding to keep content within bounds.
     <div className="flex flex-col relative m-[-8px]" style={{ height: `${panelHeight}px` }}>
       <div className="flex flex-col gap-2 px-2 flex-1 min-h-0">
-        <div className="flex-shrink-0">
+        <div ref={traceViewerHeaderRef} className="flex-shrink-0">
           <TraceViewerHeader
             traceId={traceId}
             startTimeInMs={startTimeInMs}
@@ -466,7 +480,7 @@ function TraceDetail({
                         updateChildStatus={updateChildStatus}
                         traceStartTimeInMiliseconds={traceStartTimeInMiliseconds}
                         traceDurationInMiliseconds={traceDurationInMiliseconds}
-                        onSelect={setSelectedSpan}
+                        onSelect={handleSpanSelect}
                         isSelected={selectedSpan?.spanId === span.spanId}
                         leftColumnPercent={leftColumnPercent}
                         timelineOffset={timelineOffset}
@@ -488,12 +502,23 @@ function TraceDetail({
       </div>
       <SpanOverlayDrawer
         isOpen={!!selectedSpan}
-        onClose={() => setSelectedSpan(null)}
+        onClose={() => {
+          setSelectedSpan(null);
+          setSelectedSpanElementYOffset(null);
+        }}
         title="Span Details"
         panelWidth={panelWidth || window.innerWidth}
+        selectedSpanElementYOffset={selectedSpanElementYOffset}
       >
         {selectedSpan && (
-          <SpanDetailPanel span={selectedSpan} onClose={() => setSelectedSpan(null)} datasourceUid={datasourceUid} />
+          <SpanDetailPanel
+            span={selectedSpan}
+            onClose={() => {
+              setSelectedSpan(null);
+              setSelectedSpanElementYOffset(null);
+            }}
+            datasourceUid={datasourceUid}
+          />
         )}
       </SpanOverlayDrawer>
     </div>
