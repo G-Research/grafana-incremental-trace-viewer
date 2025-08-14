@@ -168,24 +168,30 @@ function TraceDetail({
   const queryKey = ['datasource', datasourceUid, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
   const [selectedSpanElementYOffset, setSelectedSpanElementYOffset] = React.useState<number | null>(null);
-
-  const handleSpanSelect = React.useCallback((span: SpanInfo, element?: HTMLElement) => {
-    const traceViewerHeader = traceViewerHeaderRef.current?.getBoundingClientRect();
-    const selectedElementBoundingClientRect = element?.getBoundingClientRect();
-
-    const yOffset =
-      traceViewerHeader && selectedElementBoundingClientRect
-        ? Math.abs(traceViewerHeader.top - selectedElementBoundingClientRect.top)
-        : null;
-    setSelectedSpan(span);
-    setSelectedSpanElementYOffset(yOffset);
-  }, []);
   const [leftColumnPercent, setLeftColumnPercent] = React.useState<number>(25);
   const isResizingRef = React.useRef(false);
 
   const idToLevelMap = React.useRef(new Map<string, number>());
   // Keep track of the open/collapsed items in a map
   // filter accordingly in the virtualizer
+
+  const handleSpanSelect = (span: SpanInfo, element?: HTMLElement) => {
+    // Early return if no element provided
+    if (!element) {
+      setSelectedSpan(span);
+      setSelectedSpanElementYOffset(null);
+      return;
+    }
+
+    const traceViewerHeader = traceViewerHeaderRef.current?.getBoundingClientRect();
+    const selectedElementBoundingClientRect = element.getBoundingClientRect();
+
+    // Calculate offset only if both elements exist
+    const yOffset = traceViewerHeader ? Math.abs(traceViewerHeader.top - selectedElementBoundingClientRect.top) : null;
+
+    setSelectedSpan(span);
+    setSelectedSpanElementYOffset(yOffset);
+  };
 
   const result = useQuery<SpanInfo[]>(
     {
