@@ -14,7 +14,7 @@ export const Accordion = ({
   onToggle: () => void;
   children: React.ReactNode;
 }) => (
-  <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-2 pb-2 px-2">
+  <div className="border-t border-gray-300 dark:border-gray-600 py-5 px-2">
     {
       <button
         onClick={onToggle}
@@ -37,7 +37,7 @@ export const Accordion = ({
     <div
       className={clsx(
         'overflow-hidden transition-all duration-300 ease-in-out',
-        isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        isExpanded ? 'max-h-96 opacity-100 pt-5 pb-2' : 'max-h-0 opacity-0'
       )}
     >
       {children}

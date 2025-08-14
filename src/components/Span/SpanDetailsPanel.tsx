@@ -297,7 +297,7 @@ export const SpanDetailPanel = ({
             {basicSpanData.map((item, index) => (
               <tr key={item.key} className={rowClassName(index)}>
                 <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3 mx-4">
-                  <span className="px-2">{item.key}</span>{' '}
+                  <span className="px-2 whitespace-nowrap">{item.key}</span>{' '}
                 </td>
                 <td className="font-light">{item.value && <Value value={item.value} />}</td>
               </tr>
@@ -318,7 +318,7 @@ export const SpanDetailPanel = ({
                 {spanAttributes.map(({ key, value }, index) => (
                   <tr key={key} className={rowClassName(index)}>
                     <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2">{key}</span>
+                      <span className="px-2 whitespace-nowrap">{key}</span>
                     </td>
                     <td className="font-light">{value && <Value value={value} />}</td>
                   </tr>
@@ -343,7 +343,7 @@ export const SpanDetailPanel = ({
                 {resourceAttributes.map(({ key, value }, index) => (
                   <tr key={key} className={rowClassName(index)}>
                     <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2">{key}</span>
+                      <span className="px-2 whitespace-nowrap">{key}</span>
                     </td>
                     <td className="font-light">{value && <Value value={value} />}</td>
                   </tr>
@@ -368,7 +368,7 @@ export const SpanDetailPanel = ({
                 {events.map((item, index) => (
                   <tr key={item.time} className={rowClassName(index)}>
                     <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3">
-                      <span className="px-2">
+                      <span className="px-2 whitespace-nowrap">
                         {/* print the time in seconds since the start of the span with 3 decimal places */}
                         {((item.time - span.startTimeUnixNano / 1000000) / 1000).toFixed(3)}s
                       </span>
