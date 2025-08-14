@@ -281,11 +281,11 @@ export const SpanDetailPanel = ({
           <tbody>
             {basicSpanData.map((item, index) => (
               <tr key={item.key} className={rowClassName(index)}>
-                <td className="font-semibold text-gray-700 dark:text-gray-300  w-1/3 mx-4">
+                <td className="font-regular text-gray-700 dark:text-gray-300  w-1/3 mx-4">
                   <span className="px-2">{item.key}</span>{' '}
                   {/* TODO: padding & margins are overriden to 0 by the global CSS and it is not possible to set it on the td tag */}
                 </td>
-                <td>{item.value && <Value value={item.value} />}</td>
+                <td className="font-light">{item.value && <Value value={item.value} />}</td>
               </tr>
             ))}
           </tbody>

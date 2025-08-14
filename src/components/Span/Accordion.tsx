@@ -14,7 +14,7 @@ export const Accordion = ({
   onToggle: () => void;
   children: React.ReactNode;
 }) => (
-  <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-2">
+  <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-2 pl-2">
     {
       <button
         onClick={onToggle}

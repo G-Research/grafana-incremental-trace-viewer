@@ -107,15 +107,17 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
           title="Drag to resize"
           className="absolute top-0 left-0 h-full w-[6px] cursor-col-resize hover:bg-gray-400/50 dark:hover:bg-gray-600/50 active:bg-gray-500/60 dark:active:bg-gray-500/60 z-[1001]"
         >
-          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-[2px] pointer-events-none">
-            <span className="block w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></span>
-            <span className="block w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></span>
-            <span className="block w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></span>
+          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+            <div className="flex flex-col items-center gap-[2px] bg-gray-400/10 dark:bg-gray-600/10 w-full px-[1px] py-2">
+              <span className="block w-[2px] h-[2px] rounded-full bg-gray-500 dark:bg-gray-400"></span>
+              <span className="block w-[2px] h-[2px] rounded-full bg-gray-500 dark:bg-gray-400"></span>
+              <span className="block w-[2px] h-[2px] rounded-full bg-gray-500 dark:bg-gray-400"></span>
+            </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="h-full overflow-y-auto pl-2 pr-1 py-1">{children}</div>
+        <div className="h-full overflow-y-auto">{children}</div>
       </div>
     </>
   );
