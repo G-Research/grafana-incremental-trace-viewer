@@ -6,6 +6,7 @@ interface SpanOverlayDrawerProps {
   children: React.ReactNode;
   title?: string;
   panelWidth: number;
+  selectedSpanElementYOffset?: number | null;
 }
 
 /**
@@ -26,6 +27,7 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
   children,
   title = 'Span Details',
   panelWidth,
+  selectedSpanElementYOffset,
 }) => {
   // Default width: up to 25% of panel width
   const defaultWidthPx = Math.max(panelWidth * (DRAWER_DEFAULT_PERCENT / 100), DRAWER_MIN_WIDTH_PX);
@@ -89,6 +91,20 @@ export const SpanOverlayDrawer: React.FC<SpanOverlayDrawerProps> = ({
     <>
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/10 dark:bg-black/20 z-[998]" onClick={onClose} />
+
+      {/* Tooltip Arrow pointing to selected span */}
+      {selectedSpanElementYOffset && (
+        <div
+          className="absolute z-[1001]"
+          style={{
+            right: `${panelWidth * (widthPercent / 100) - 1}px`,
+            top: `${selectedSpanElementYOffset}px`,
+          }}
+        >
+          <div className="w-0 h-0 border-r-14 border-r-gray-300 dark:border-r-gray-700 border-t-14 border-t-transparent border-b-14 border-b-transparent"></div>
+          <div className="w-0 h-0 border-r-12 border-r-white dark:border-r-black border-t-12 border-t-transparent border-b-12 border-b-transparent mt-[-26px] ml-[2px]"></div>
+        </div>
+      )}
 
       {/* Drawer */}
       <div
