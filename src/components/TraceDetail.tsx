@@ -164,7 +164,7 @@ function TraceDetail({
 
   const queryClient = useQueryClient();
   const parentRef = React.useRef(null);
-  const traceViewerHeaderRef = React.useRef<HTMLDivElement>(null);
+  const headerRef = React.useRef<HTMLDivElement>(null);
   const queryKey = ['datasource', datasourceUid, 'trace', traceId];
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
   const [selectedSpanElementYOffset, setSelectedSpanElementYOffset] = React.useState<number | null>(null);
@@ -175,21 +175,20 @@ function TraceDetail({
   // Keep track of the open/collapsed items in a map
   // filter accordingly in the virtualizer
 
-  const handleSpanSelect = (span: SpanInfo, element?: HTMLElement) => {
+  const handleSpanSelect = (span: SpanInfo, selectedElementTopCoordinate?: number) => {
+    setSelectedSpan(span);
+
     // Early return if no element provided
-    if (!element) {
-      setSelectedSpan(span);
+    if (!selectedElementTopCoordinate) {
       setSelectedSpanElementYOffset(null);
       return;
     }
 
-    const traceViewerHeader = traceViewerHeaderRef.current?.getBoundingClientRect();
-    const selectedElementBoundingClientRect = element.getBoundingClientRect();
+    const traceViewerHeader = headerRef.current?.getBoundingClientRect();
 
     // Calculate offset only if both elements exist
-    const yOffset = traceViewerHeader ? Math.abs(traceViewerHeader.top - selectedElementBoundingClientRect.top) : null;
+    const yOffset = traceViewerHeader ? Math.abs(traceViewerHeader.top - selectedElementTopCoordinate) : null;
 
-    setSelectedSpan(span);
     setSelectedSpanElementYOffset(yOffset);
   };
 
@@ -426,7 +425,7 @@ function TraceDetail({
     // This negative margin compensates for that padding to keep content within bounds.
     <div className="flex flex-col relative m-[-8px]" style={{ height: `${panelHeight}px` }}>
       <div className="flex flex-col gap-2 px-2 flex-1 min-h-0">
-        <div ref={traceViewerHeaderRef} className="flex-shrink-0">
+        <div ref={headerRef} className="flex-shrink-0">
           <TraceViewerHeader
             traceId={traceId}
             startTimeInMs={startTimeInMs}
