@@ -10,6 +10,7 @@ import { SpanOverlayDrawer } from './Span/SpanOverlayDrawer';
 import { ChildStatus, SpanInfo } from 'types';
 import TraceViewerHeader from './TraceViewerHeader';
 import { TimeRange } from '@grafana/data';
+import { LoadingBar, LoadingPlaceholder } from '@grafana/ui';
 
 // default Grafana does not support child count.
 // In production, we use a custom build of Grafana that supports child count.
@@ -425,7 +426,14 @@ function TraceDetail({
           />
         </div>
         <div className={`flex-1 flex flex-col min-h-0`} data-testid={testIds.pageThree.container}>
-          {result.isLoading && <div>Loading...</div>}
+          {result.isLoading && (
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="w-64 bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                <LoadingBar width={100} />
+              </div>
+              <LoadingPlaceholder text={`Loading trace ${traceId.slice(0, 8)}...`} />
+            </div>
+          )}
           {result.isError && <div>Error: {result.error.message}</div>}
           {result.isSuccess && (
             <div ref={parentRef} className="overflow-auto h-full">
