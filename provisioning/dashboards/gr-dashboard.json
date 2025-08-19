@@ -51,7 +51,26 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Set trace ID",
+                    "url": "/d/gr-trace-viewer-dashboard?var-traceId=${__data.fields.traceID}&${__url_time_range}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -84,7 +103,7 @@
           "metricsQueryType": "range",
           "query": "{}",
           "queryType": "traceql",
-          "refId": "A",
+          "refId": "Auto",
           "tableType": "traces"
         }
       ],
@@ -117,9 +136,9 @@
           },
           "limit": 20,
           "metricsQueryType": "range",
-          "query": "{}",
+          "query": "{trace:id=\"${traceId}\"}",
           "queryType": "traceql",
-          "refId": "A",
+          "refId": "Auto",
           "tableType": "traces"
         }
       ],
@@ -131,14 +150,34 @@
   "schemaVersion": 41,
   "tags": ["plugin", "traces"],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "description": "Selected trace ID from table click",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Trace ID",
+        "multi": false,
+        "name": "traceId",
+        "options": [],
+        "query": "",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
   },
   "time": {
     "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "browser",
+  "timezone": "",
   "title": "GR Incremental Trace Viewer",
   "uid": "gr-trace-viewer-dashboard",
   "version": 1
