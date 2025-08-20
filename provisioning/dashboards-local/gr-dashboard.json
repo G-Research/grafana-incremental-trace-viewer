@@ -23,7 +23,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "P214B5B846CF3925F"
+        "uid": "P2DF0285183BB248E"
       },
       "fieldConfig": {
         "defaults": {
@@ -173,7 +173,7 @@
     ]
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
