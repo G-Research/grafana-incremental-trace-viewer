@@ -23,7 +23,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "P2DF0285183BB248E"
+        "uid": "tempo-local"
       },
       "fieldConfig": {
         "defaults": {
@@ -113,7 +113,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "P2DF0285183BB248E"
+        "uid": "tempo-local"
       },
       "fieldConfig": {
         "defaults": {},
@@ -132,7 +132,7 @@
         {
           "datasource": {
             "type": "tempo",
-            "uid": "P2DF0285183BB248E"
+            "uid": "tempo-local"
           },
           "limit": 20,
           "metricsQueryType": "range",
