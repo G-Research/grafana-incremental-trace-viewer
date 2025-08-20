@@ -113,7 +113,7 @@
     {
       "datasource": {
         "type": "tempo",
-        "uid": "P214B5B846CF3925F"
+        "uid": "P2DF0285183BB248E"
       },
       "fieldConfig": {
         "defaults": {},
@@ -132,7 +132,7 @@
         {
           "datasource": {
             "type": "tempo",
-            "uid": "P214B5B846CF3925F"
+            "uid": "P2DF0285183BB248E"
           },
           "limit": 20,
           "metricsQueryType": "range",
