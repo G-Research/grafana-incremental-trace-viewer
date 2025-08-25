@@ -73,7 +73,9 @@ async function getTagAttributes(
       if (keyValue.key && keyValue.value !== undefined) {
         if (resourceTags.includes(keyValue.key)) {
           resourceAttributes[keyValue.key] = keyValue.value;
-        } else spanAttributes[keyValue.key] = keyValue.value;
+        } else {
+          spanAttributes[keyValue.key] = keyValue.value;
+        }
       }
     }
   }
