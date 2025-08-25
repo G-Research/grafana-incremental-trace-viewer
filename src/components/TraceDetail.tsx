@@ -10,7 +10,7 @@ import { SpanOverlayDrawer } from './Span/SpanOverlayDrawer';
 import { ChildStatus, SpanInfo } from 'types';
 import TraceViewerHeader from './TraceViewerHeader';
 import { TimeRange } from '@grafana/data';
-import { LoadingBar, LoadingPlaceholder } from '@grafana/ui';
+import { LoadingBar } from '@grafana/ui';
 
 // default Grafana does not support child count.
 // In production, we use a custom build of Grafana that supports child count.
@@ -169,6 +169,7 @@ function TraceDetail({
   const [selectedSpan, setSelectedSpan] = React.useState<SpanInfo | null>(null);
   const [selectedSpanElementYOffset, setSelectedSpanElementYOffset] = React.useState<number | null>(null);
   const [leftColumnPercent, setLeftColumnPercent] = React.useState<number>(25);
+  const [loadingMessage, setLoadingMessage] = React.useState<string | null>(null);
   const isResizingRef = React.useRef(false);
 
   const idToLevelMap = React.useRef(new Map<string, number>());
@@ -197,6 +198,7 @@ function TraceDetail({
       queryKey,
       staleTime: 5000,
       queryFn: async () => {
+        setLoadingMessage('Loading root nodes of trace');
         const start = mkUnixEpochFromMiliseconds(startTimeInMs);
         const end = mkUnixEpochFromMiliseconds(startTimeInMs + durationInMs);
         const q = `{ trace:id = "${traceId}" && nestedSetParent = -1 } ${pipeSelect}`;
@@ -207,10 +209,12 @@ function TraceDetail({
         // We fetch the first round of children for each span.
         let isSingleRootSpan = spans.filter((s) => s.level === 0).length === 1;
         if (!isSingleRootSpan) {
+          setLoadingMessage(null);
           return spans;
         }
 
-        const allSpans = [];
+        setLoadingMessage('Trace has a single root node, loading its children');
+        const allSpans = [] as SpanInfo[];
         for (const span of spans) {
           const hasNoChildren = span.childStatus === ChildStatus.NoChildren;
           if (!hasNoChildren) {
@@ -222,6 +226,7 @@ function TraceDetail({
             allSpans.push(...moreSpans);
           }
         }
+        setLoadingMessage(null);
         return allSpans;
       },
     },
@@ -428,10 +433,10 @@ function TraceDetail({
         <div className={`flex-1 flex flex-col min-h-0`} data-testid={testIds.pageThree.container}>
           {result.isLoading && (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-64 bg-gray-200 dark:bg-gray-700 overflow-hidden">
+              <div className="w-96 bg-gray-200 dark:bg-gray-700 overflow-hidden">
                 <LoadingBar width={100} />
               </div>
-              <LoadingPlaceholder text={`Loading trace ${traceId.slice(0, 8)}...`} />
+              <div className="pt-10">{loadingMessage ?? 'Loading...'}</div>
             </div>
           )}
           {result.isError && <div>Error: {result.error.message}</div>}
