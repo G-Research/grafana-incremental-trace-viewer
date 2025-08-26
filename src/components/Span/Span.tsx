@@ -107,6 +107,7 @@ export const Span = (props: SpanNodeProps) => {
               100;
             return (
               <span
+                key={e.time}
                 className="absolute z-2000 h-full w-[1px] bg-neutral-950 flex items-center justify-center"
                 style={{ left: `${left}%` }}
               >
