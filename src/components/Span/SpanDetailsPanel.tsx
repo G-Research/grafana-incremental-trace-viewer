@@ -84,7 +84,7 @@ async function getTagAttributes(
 
   const results: KeyValue[] = await Promise.all(promises).then((rs) => rs.flatMap((r) => r));
 
-  return collectTagAttributes(resourceTags.includes, results);
+  return collectTagAttributes((key: string) => resourceTags.includes(key), results);
 }
 
 function splitAttributesAndEvents(tagAttributes: TagAttributes) {
