@@ -412,15 +412,7 @@ function TraceDetail({
   const hasExpandedSpans =
     result.isSuccess && result.data.some((span) => span.childStatus === ChildStatus.ShowChildren);
 
-  const timelineOffset = React.useMemo(() => {
-    if (!result.isSuccess) {
-      return 0;
-    }
-    const rootSpan = result.data[0];
-    const textLength = formatDuration(rootSpan.endTimeUnixNano - rootSpan.startTimeUnixNano);
-    // This is a rough estimate of the width of the duration text.
-    return Math.floor(textLength.length * 8);
-  }, [result.isSuccess, result.data]);
+  const timelineOffset = Math.floor(formatDuration((startTimeInMs + durationInMs) * 100_000).length * 8);
 
   return (
     // Grafana sets padding on the parent panel which causes our content to overflow.
