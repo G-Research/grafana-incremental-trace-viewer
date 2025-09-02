@@ -121,6 +121,7 @@ async function main() {
   const weatherCheckSpan = missionControlTracer.startSpan('WeatherVerification', undefined, missionControlCtx);
   weatherCheckSpan.setAttribute('wind.speed', '8 knots');
   weatherCheckSpan.setAttribute('visibility', '10 miles');
+  weatherCheckSpan.setAttribute('temparature in kelvin', 250);
 
   await sleep(25);
   weatherCheckSpan.setAttribute(getEventName(), 'WeatherGo');
