@@ -10,7 +10,7 @@ services:
     image: oven/bun:latest
     container_name: tempo
     volumes:
-      - ./proxy.js:/app/proxy.js
+      - ./scripts/proxy.js:/app/proxy.js
     working_dir: /app
     command: bun run proxy.js
     ports:

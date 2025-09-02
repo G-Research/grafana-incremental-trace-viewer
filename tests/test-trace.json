@@ -1,16 +1,156 @@
 {
-  "traceID": "49da22d8ee934a3351e0965ea2a61cc7",
+  "traceID": "c2b5e5f83a3a93e78b833d4046286e20",
   "rootServiceName": "MissionControl",
   "rootTraceName": "MissionControl",
-  "startTimeUnixNano": "1756805019856000000",
-  "durationMs": 1485,
+  "startTimeUnixNano": "1756817743401000000",
+  "durationMs": 1461,
+  "spanSet": {
+    "spans": [
+      {
+        "spanID": "84b7461b83a49690",
+        "startTimeUnixNano": "1756817743553000000",
+        "durationNanos": "37231542"
+      },
+      {
+        "spanID": "084a3081be5a93ba",
+        "startTimeUnixNano": "1756817743590000000",
+        "durationNanos": "18599375"
+      },
+      {
+        "spanID": "1d8a16f95ddf6a1c",
+        "startTimeUnixNano": "1756817743609000000",
+        "durationNanos": "23370916"
+      },
+      {
+        "spanID": "6131d70efa588ff1",
+        "startTimeUnixNano": "1756817743633000000",
+        "durationNanos": "80519083"
+      },
+      {
+        "spanID": "fb76cca5e334f9c4",
+        "startTimeUnixNano": "1756817743527000000",
+        "durationNanos": "186080250"
+      },
+      {
+        "spanID": "3d53dd0505ff529a",
+        "startTimeUnixNano": "1756817743433000000",
+        "durationNanos": "25671458"
+      },
+      {
+        "spanID": "1f6a22ce86ef5886",
+        "startTimeUnixNano": "1756817743458000000",
+        "durationNanos": "20839583"
+      },
+      {
+        "spanID": "efc0039a7f605370",
+        "startTimeUnixNano": "1756817743479000000",
+        "durationNanos": "233838000"
+      },
+      {
+        "spanID": "7e7d3b906943dfd9",
+        "startTimeUnixNano": "1756817744784000000",
+        "durationNanos": "78120000"
+      },
+      {
+        "spanID": "8d138de7bb222e96",
+        "startTimeUnixNano": "1756817743401000000",
+        "durationNanos": "1461642250"
+      },
+      {
+        "spanID": "563c5be5887eb925",
+        "startTimeUnixNano": "1756817743984000000",
+        "durationNanos": "46610917"
+      },
+      {
+        "spanID": "8b589955ba4e88fb",
+        "startTimeUnixNano": "1756817744031000000",
+        "durationNanos": "116463083"
+      },
+      {
+        "spanID": "144fd7b84cc4b115",
+        "startTimeUnixNano": "1756817743952000000",
+        "durationNanos": "195402375"
+      },
+      {
+        "spanID": "a4c18136d0c7419a",
+        "startTimeUnixNano": "1756817744399000000",
+        "durationNanos": "21219333"
+      },
+      {
+        "spanID": "4585ae57465a6371",
+        "startTimeUnixNano": "1756817744420000000",
+        "durationNanos": "62214750"
+      },
+      {
+        "spanID": "26fb22a19ce32fd8",
+        "startTimeUnixNano": "1756817744341000000",
+        "durationNanos": "140933208"
+      },
+      {
+        "spanID": "795a4d42c6466498",
+        "startTimeUnixNano": "1756817743750000000",
+        "durationNanos": "72439709"
+      },
+      {
+        "spanID": "ee5437fdfcedb194",
+        "startTimeUnixNano": "1756817743823000000",
+        "durationNanos": "128979333"
+      },
+      {
+        "spanID": "15f5aced140f58da",
+        "startTimeUnixNano": "1756817743713000000",
+        "durationNanos": "238601667"
+      },
+      {
+        "spanID": "b5607f481a6a1c76",
+        "startTimeUnixNano": "1756817744482000000",
+        "durationNanos": "80863000"
+      },
+      {
+        "spanID": "e68ae749864655c4",
+        "startTimeUnixNano": "1756817744563000000",
+        "durationNanos": "118117625"
+      },
+      {
+        "spanID": "6e0d479a497d53aa",
+        "startTimeUnixNano": "1756817744682000000",
+        "durationNanos": "102661500"
+      },
+      {
+        "spanID": "f3ff5e0b2702fbc0",
+        "startTimeUnixNano": "1756817744310000000",
+        "durationNanos": "552893875"
+      },
+      {
+        "spanID": "fb1b04deb1029ef3",
+        "startTimeUnixNano": "1756817744206000000",
+        "durationNanos": "36322750"
+      },
+      {
+        "spanID": "1e86cfdde356c7eb",
+        "startTimeUnixNano": "1756817744243000000",
+        "durationNanos": "67081542"
+      },
+      {
+        "spanID": "cdb12f92d81eb69a",
+        "startTimeUnixNano": "1756817744148000000",
+        "durationNanos": "161946666"
+      },
+      {
+        "spanID": "42dc28541cd034e3",
+        "startTimeUnixNano": "1756817744179000000",
+        "durationNanos": "26648958"
+      }
+    ],
+    "matched": 27
+  },
   "spanSets": [
     {
       "spans": [
         {
-          "spanID": "ed70c874a4722f01",
-          "startTimeUnixNano": "1756805020008000000",
-          "durationNanos": "36950834",
+          "spanID": "84b7461b83a49690",
+          "startTimeUnixNano": "1756817743553000000",
+          "durationNanos": "37231542",
           "attributes": [
             {
               "key": "engine.type",
@@ -21,17 +161,17 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "ca78fdc99577f95c"
+                "stringValue": "fb76cca5e334f9c4"
               }
             },
             {
-              "key": "event.1756805020029000000",
+              "key": "event.1756817743574000000",
               "value": {
                 "stringValue": "EngineIgnition"
               }
             },
             {
-              "key": "event.1756805020045000000",
+              "key": "event.1756817743590000000",
               "value": {
                 "stringValue": "FullThrust"
               }
@@ -49,15 +189,15 @@
               }
             },
             {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
               "key": "rocket.name",
               "value": {
                 "stringValue": "Saturn V"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
               }
             },
             {
@@ -81,18 +221,18 @@
           ]
         },
         {
-          "spanID": "2aea18872455343f",
-          "startTimeUnixNano": "1756805020045000000",
-          "durationNanos": "18742208",
+          "spanID": "084a3081be5a93ba",
+          "startTimeUnixNano": "1756817743590000000",
+          "durationNanos": "18599375",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "ca78fdc99577f95c"
+                "stringValue": "fb76cca5e334f9c4"
               }
             },
             {
-              "key": "event.1756805020064000000",
+              "key": "event.1756817743609000000",
               "value": {
                 "stringValue": "FuelFlowNormal"
               }
@@ -110,27 +250,27 @@
               }
             },
             {
-              "key": "engine.count",
-              "value": {
-                "stringValue": "5"
-              }
-            },
-            {
-              "key": "rocket.name",
-              "value": {
-                "stringValue": "Saturn V"
-              }
-            },
-            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
               }
             },
             {
+              "key": "engine.count",
+              "value": {
+                "stringValue": "5"
+              }
+            },
+            {
               "key": "service.name",
               "value": {
                 "stringValue": "RocketLaunchSystem"
+              }
+            },
+            {
+              "key": "rocket.name",
+              "value": {
+                "stringValue": "Saturn V"
               }
             },
             {
@@ -148,9 +288,9 @@
           ]
         },
         {
-          "spanID": "3d2129f9f7e78ec9",
-          "startTimeUnixNano": "1756805020064000000",
-          "durationNanos": "22675792",
+          "spanID": "1d8a16f95ddf6a1c",
+          "startTimeUnixNano": "1756817743609000000",
+          "durationNanos": "23370916",
           "attributes": [
             {
               "key": "computer.status",
@@ -161,11 +301,11 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "ca78fdc99577f95c"
+                "stringValue": "fb76cca5e334f9c4"
               }
             },
             {
-              "key": "event.1756805020087000000",
+              "key": "event.1756817743632000000",
               "value": {
                 "stringValue": "GuidanceActive"
               }
@@ -177,15 +317,9 @@
               }
             },
             {
-              "key": "engine.count",
+              "key": "service.namespace",
               "value": {
-                "stringValue": "5"
-              }
-            },
-            {
-              "key": "rocket.name",
-              "value": {
-                "stringValue": "Saturn V"
+                "stringValue": "nasa"
               }
             },
             {
@@ -195,9 +329,15 @@
               }
             },
             {
-              "key": "service.namespace",
+              "key": "rocket.name",
               "value": {
-                "stringValue": "nasa"
+                "stringValue": "Saturn V"
+              }
+            },
+            {
+              "key": "engine.count",
+              "value": {
+                "stringValue": "5"
               }
             },
             {
@@ -215,32 +355,32 @@
           ]
         },
         {
-          "spanID": "bfb26d1f6536117e",
-          "startTimeUnixNano": "1756805020087000000",
-          "durationNanos": "81578542",
+          "spanID": "6131d70efa588ff1",
+          "startTimeUnixNano": "1756817743633000000",
+          "durationNanos": "80519083",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "ca78fdc99577f95c"
+                "stringValue": "fb76cca5e334f9c4"
               }
             },
             {
-              "key": "event.1756805020146000000",
+              "key": "event.1756817743713000000",
               "value": {
-                "stringValue": "Stage2Separation"
+                "stringValue": "Stage3Separation"
               }
             },
             {
-              "key": "event.1756805020119000000",
+              "key": "event.1756817743664000000",
               "value": {
                 "stringValue": "Stage1Separation"
               }
             },
             {
-              "key": "event.1756805020167000000",
+              "key": "event.1756817743691000000",
               "value": {
-                "stringValue": "Stage3Separation"
+                "stringValue": "Stage2Separation"
               }
             },
             {
@@ -262,15 +402,15 @@
               }
             },
             {
-              "key": "service.name",
-              "value": {
-                "stringValue": "RocketLaunchSystem"
-              }
-            },
-            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "RocketLaunchSystem"
               }
             },
             {
@@ -288,20 +428,20 @@
           ]
         },
         {
-          "spanID": "ca78fdc99577f95c",
-          "startTimeUnixNano": "1756805019983000000",
-          "durationNanos": "185916084",
+          "spanID": "fb76cca5e334f9c4",
+          "startTimeUnixNano": "1756817743527000000",
+          "durationNanos": "186080250",
           "attributes": [
-            {
-              "key": "event.1756805020008000000",
-              "value": {
-                "stringValue": "LaunchSequenceInitiated"
-              }
-            },
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "aea3d750559c90bf"
+                "stringValue": "efc0039a7f605370"
+              }
+            },
+            {
+              "key": "event.1756817743553000000",
+              "value": {
+                "stringValue": "LaunchSequenceInitiated"
               }
             },
             {
@@ -349,26 +489,20 @@
           ]
         },
         {
-          "spanID": "6a865b3c63b798e5",
-          "startTimeUnixNano": "1756805019887000000",
-          "durationNanos": "26488792",
+          "spanID": "3d53dd0505ff529a",
+          "startTimeUnixNano": "1756817743433000000",
+          "durationNanos": "25671458",
           "attributes": [
-            {
-              "key": "event.1756805019914000000",
-              "value": {
-                "stringValue": "WeatherGo"
-              }
-            },
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "3368fdee0f6e9168"
+                "stringValue": "8d138de7bb222e96"
               }
             },
             {
-              "key": "wind.speed",
+              "key": "event.1756817743458000000",
               "value": {
-                "stringValue": "8 knots"
+                "stringValue": "WeatherGo"
               }
             },
             {
@@ -384,9 +518,9 @@
               }
             },
             {
-              "key": "mission.name",
+              "key": "wind.speed",
               "value": {
-                "stringValue": "Apollo 11"
+                "stringValue": "8 knots"
               }
             },
             {
@@ -396,15 +530,21 @@
               }
             },
             {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
               "key": "service.name",
               "value": {
                 "stringValue": "MissionControl"
+              }
+            },
+            {
+              "key": "mission.name",
+              "value": {
+                "stringValue": "Apollo 11"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
               }
             },
             {
@@ -422,9 +562,9 @@
           ]
         },
         {
-          "spanID": "56d51757c5d2e677",
-          "startTimeUnixNano": "1756805019914000000",
-          "durationNanos": "20516042",
+          "spanID": "1f6a22ce86ef5886",
+          "startTimeUnixNano": "1756817743458000000",
+          "durationNanos": "20839583",
           "attributes": [
             {
               "key": "crew.size",
@@ -433,15 +573,15 @@
               }
             },
             {
-              "key": "event.1756805019935000000",
+              "key": "span:parentID",
               "value": {
-                "stringValue": "CrewReady"
+                "stringValue": "8d138de7bb222e96"
               }
             },
             {
-              "key": "span:parentID",
+              "key": "event.1756817743479000000",
               "value": {
-                "stringValue": "3368fdee0f6e9168"
+                "stringValue": "CrewReady"
               }
             },
             {
@@ -451,9 +591,9 @@
               }
             },
             {
-              "key": "mission.target",
+              "key": "mission.name",
               "value": {
-                "stringValue": "Moon"
+                "stringValue": "Apollo 11"
               }
             },
             {
@@ -463,9 +603,9 @@
               }
             },
             {
-              "key": "mission.name",
+              "key": "mission.target",
               "value": {
-                "stringValue": "Apollo 11"
+                "stringValue": "Moon"
               }
             },
             {
@@ -489,28 +629,10 @@
           ]
         },
         {
-          "spanID": "aea3d750559c90bf",
-          "startTimeUnixNano": "1756805019935000000",
-          "durationNanos": "233989208",
+          "spanID": "efc0039a7f605370",
+          "startTimeUnixNano": "1756817743479000000",
+          "durationNanos": "233838000",
           "attributes": [
-            {
-              "key": "event.1756805019971000000",
-              "value": {
-                "stringValue": "T-minus5"
-              }
-            },
-            {
-              "key": "event.1756805019983000000",
-              "value": {
-                "stringValue": "T-minus1"
-              }
-            },
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "3368fdee0f6e9168"
-              }
-            },
             {
               "key": "countdown.start",
               "value": {
@@ -518,15 +640,27 @@
               }
             },
             {
-              "key": "event.1756805019955000000",
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "8d138de7bb222e96"
+              }
+            },
+            {
+              "key": "event.1756817743500000000",
               "value": {
                 "stringValue": "T-minus10"
               }
             },
             {
-              "key": "service.name",
+              "key": "event.1756817743516000000",
               "value": {
-                "stringValue": "MissionControl"
+                "stringValue": "T-minus5"
+              }
+            },
+            {
+              "key": "event.1756817743527000000",
+              "value": {
+                "stringValue": "T-minus1"
               }
             },
             {
@@ -548,6 +682,12 @@
               }
             },
             {
+              "key": "service.name",
+              "value": {
+                "stringValue": "MissionControl"
+              }
+            },
+            {
               "key": "nestedSetParent",
               "value": {
                 "intValue": "1"
@@ -562,32 +702,14 @@
           ]
         },
         {
-          "spanID": "b5f4740f2c7040b0",
-          "startTimeUnixNano": "1756805021261000000",
-          "durationNanos": "79750833",
+          "spanID": "7e7d3b906943dfd9",
+          "startTimeUnixNano": "1756817744784000000",
+          "durationNanos": "78120000",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "c0caae950be6ff41"
-              }
-            },
-            {
-              "key": "event.1756805021319000000",
-              "value": {
-                "stringValue": "AstronautsRecovered"
-              }
-            },
-            {
-              "key": "event.1756805021292000000",
-              "value": {
-                "stringValue": "RecoveryTeamDeployed"
-              }
-            },
-            {
-              "key": "event.1756805021341000000",
-              "value": {
-                "stringValue": "MissionAccomplished"
+                "stringValue": "f3ff5e0b2702fbc0"
               }
             },
             {
@@ -597,15 +719,21 @@
               }
             },
             {
-              "key": "mission.name",
+              "key": "event.1756817744816000000",
               "value": {
-                "stringValue": "Apollo 11"
+                "stringValue": "RecoveryTeamDeployed"
               }
             },
             {
-              "key": "service.name",
+              "key": "event.1756817744863000000",
               "value": {
-                "stringValue": "MissionControl"
+                "stringValue": "MissionAccomplished"
+              }
+            },
+            {
+              "key": "event.1756817744842000000",
+              "value": {
+                "stringValue": "AstronautsRecovered"
               }
             },
             {
@@ -615,15 +743,27 @@
               }
             },
             {
+              "key": "mission.name",
+              "value": {
+                "stringValue": "Apollo 11"
+              }
+            },
+            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
               }
             },
             {
+              "key": "service.name",
+              "value": {
+                "stringValue": "MissionControl"
+              }
+            },
+            {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "25"
+                "intValue": "23"
               }
             },
             {
@@ -635,20 +775,20 @@
           ]
         },
         {
-          "spanID": "3368fdee0f6e9168",
-          "startTimeUnixNano": "1756805019856000000",
-          "durationNanos": "1484914375",
+          "spanID": "8d138de7bb222e96",
+          "startTimeUnixNano": "1756817743401000000",
+          "durationNanos": "1461642250",
           "attributes": [
-            {
-              "key": "event.1756805019887000000",
-              "value": {
-                "stringValue": "MissionControlStarted"
-              }
-            },
             {
               "key": "span:parentID",
               "value": {
                 "stringValue": "0000000000000000"
+              }
+            },
+            {
+              "key": "event.1756817743432000000",
+              "value": {
+                "stringValue": "MissionControlStarted"
               }
             },
             {
@@ -658,15 +798,15 @@
               }
             },
             {
-              "key": "mission.name",
-              "value": {
-                "stringValue": "Apollo 11"
-              }
-            },
-            {
               "key": "mission.target",
               "value": {
                 "stringValue": "Moon"
+              }
+            },
+            {
+              "key": "mission.name",
+              "value": {
+                "stringValue": "Apollo 11"
               }
             },
             {
@@ -696,300 +836,38 @@
           ]
         },
         {
-          "spanID": "8a5b5b50f1091a4c",
-          "startTimeUnixNano": "1756805020671000000",
-          "durationNanos": "37862625",
-          "attributes": [
-            {
-              "key": "astronaut",
-              "value": {
-                "stringValue": "Neil Armstrong"
-              }
-            },
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "bb48c918b002e395"
-              }
-            },
-            {
-              "key": "event.1756805020693000000",
-              "value": {
-                "stringValue": "FootOnLadder"
-              }
-            },
-            {
-              "key": "event.1756805020709000000",
-              "value": {
-                "stringValue": "FirstStepTaken"
-              }
-            },
-            {
-              "key": "quote",
-              "value": {
-                "stringValue": "That's one small step for man..."
-              }
-            },
-            {
-              "key": "landing.site",
-              "value": {
-                "stringValue": "Tranquility Base"
-              }
-            },
-            {
-              "key": "activity.type",
-              "value": {
-                "stringValue": "Geological Survey"
-              }
-            },
-            {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
-              "key": "service.name",
-              "value": {
-                "stringValue": "LunarSurfaceScience"
-              }
-            },
-            {
-              "key": "nestedSetParent",
-              "value": {
-                "intValue": "18"
-              }
-            },
-            {
-              "key": "childCount",
-              "value": {
-                "intValue": "0"
-              }
-            }
-          ]
-        },
-        {
-          "spanID": "e1bb37a50f8623b2",
-          "startTimeUnixNano": "1756805020710000000",
-          "durationNanos": "68548041",
+          "spanID": "563c5be5887eb925",
+          "startTimeUnixNano": "1756817743984000000",
+          "durationNanos": "46610917",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "bb48c918b002e395"
+                "stringValue": "144fd7b84cc4b115"
               }
             },
             {
-              "key": "event.1756805020746000000",
-              "value": {
-                "stringValue": "FlagPlanted"
-              }
-            },
-            {
-              "key": "event.1756805020778000000",
-              "value": {
-                "stringValue": "SampleCollected"
-              }
-            },
-            {
-              "key": "samples.target",
-              "value": {
-                "stringValue": "21.6 kg"
-              }
-            },
-            {
-              "key": "sample.id",
-              "value": {
-                "stringValue": "AS11-10001"
-              }
-            },
-            {
-              "key": "activity.type",
-              "value": {
-                "stringValue": "Geological Survey"
-              }
-            },
-            {
-              "key": "landing.site",
-              "value": {
-                "stringValue": "Tranquility Base"
-              }
-            },
-            {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
-              "key": "service.name",
-              "value": {
-                "stringValue": "LunarSurfaceScience"
-              }
-            },
-            {
-              "key": "nestedSetParent",
-              "value": {
-                "intValue": "18"
-              }
-            },
-            {
-              "key": "childCount",
-              "value": {
-                "intValue": "0"
-              }
-            }
-          ]
-        },
-        {
-          "spanID": "bb48c918b002e395",
-          "startTimeUnixNano": "1756805020610000000",
-          "durationNanos": "168390000",
-          "attributes": [
-            {
-              "key": "duration",
-              "value": {
-                "stringValue": "2.5 hours"
-              }
-            },
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "cc058ddcecae1472"
-              }
-            },
-            {
-              "key": "event.1756805020644000000",
-              "value": {
-                "stringValue": "SurfaceOperationsBegin"
-              }
-            },
-            {
-              "key": "activity.type",
-              "value": {
-                "stringValue": "Geological Survey"
-              }
-            },
-            {
-              "key": "landing.site",
-              "value": {
-                "stringValue": "Tranquility Base"
-              }
-            },
-            {
-              "key": "service.name",
-              "value": {
-                "stringValue": "LunarSurfaceScience"
-              }
-            },
-            {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
-              "key": "nestedSetParent",
-              "value": {
-                "intValue": "17"
-              }
-            },
-            {
-              "key": "childCount",
-              "value": {
-                "intValue": "2"
-              }
-            }
-          ]
-        },
-        {
-          "spanID": "c5c49522e07a154d",
-          "startTimeUnixNano": "1756805020645000000",
-          "durationNanos": "26445916",
-          "attributes": [
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "bb48c918b002e395"
-              }
-            },
-            {
-              "key": "event.1756805020671000000",
-              "value": {
-                "stringValue": "HatchOpen"
-              }
-            },
-            {
-              "key": "suit.pressure",
-              "value": {
-                "stringValue": "3.7 psi"
-              }
-            },
-            {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
-              "key": "suit.pressure.target",
-              "value": {
-                "stringValue": "3.7 psi"
-              }
-            },
-            {
-              "key": "suit.type",
-              "value": {
-                "stringValue": "A7L"
-              }
-            },
-            {
-              "key": "service.name",
-              "value": {
-                "stringValue": "AstronautLifeSupport"
-              }
-            },
-            {
-              "key": "nestedSetParent",
-              "value": {
-                "intValue": "18"
-              }
-            },
-            {
-              "key": "childCount",
-              "value": {
-                "intValue": "0"
-              }
-            }
-          ]
-        },
-        {
-          "spanID": "92c5352c902d0422",
-          "startTimeUnixNano": "1756805020444000000",
-          "durationNanos": "48938792",
-          "attributes": [
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "cc058ddcecae1472"
-              }
-            },
-            {
-              "key": "event.1756805020470000000",
-              "value": {
-                "stringValue": "DockingLatchesReleased"
-              }
-            },
-            {
-              "key": "event.1756805020492000000",
+              "key": "event.1756817744031000000",
               "value": {
                 "stringValue": "LMDriftAway"
+              }
+            },
+            {
+              "key": "event.1756817744010000000",
+              "value": {
+                "stringValue": "DockingLatchesReleased"
               }
             },
             {
               "key": "separation.velocity",
               "value": {
                 "stringValue": "0.5 m/s"
+              }
+            },
+            {
+              "key": "lm.name",
+              "value": {
+                "stringValue": "Eagle"
               }
             },
             {
@@ -1002,12 +880,6 @@
               "key": "lm.co_pilot",
               "value": {
                 "stringValue": "Buzz Aldrin"
-              }
-            },
-            {
-              "key": "lm.name",
-              "value": {
-                "stringValue": "Eagle"
               }
             },
             {
@@ -1037,22 +909,10 @@
           ]
         },
         {
-          "spanID": "9432debbef23f343",
-          "startTimeUnixNano": "1756805020493000000",
-          "durationNanos": "116966708",
+          "spanID": "8b589955ba4e88fb",
+          "startTimeUnixNano": "1756817744031000000",
+          "durationNanos": "116463083",
           "attributes": [
-            {
-              "key": "alarm.code",
-              "value": {
-                "stringValue": "1202"
-              }
-            },
-            {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "cc058ddcecae1472"
-              }
-            },
             {
               "key": "descent.engine.thrust",
               "value": {
@@ -1066,33 +926,39 @@
               }
             },
             {
-              "key": "event.1756805020561000000",
+              "key": "alarm.code",
+              "value": {
+                "stringValue": "1202"
+              }
+            },
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "144fd7b84cc4b115"
+              }
+            },
+            {
+              "key": "event.1756817744099000000",
               "value": {
                 "stringValue": "AltitudeCheck"
               }
             },
             {
-              "key": "event.1756805020589000000",
-              "value": {
-                "stringValue": "GuidanceAlarm"
-              }
-            },
-            {
-              "key": "event.1756805020610000000",
-              "value": {
-                "stringValue": "Touchdown"
-              }
-            },
-            {
-              "key": "event.1756805020530000000",
+              "key": "event.1756817744067000000",
               "value": {
                 "stringValue": "DescentEngineIgnition"
               }
             },
             {
-              "key": "lm.name",
+              "key": "event.1756817744126000000",
               "value": {
-                "stringValue": "Eagle"
+                "stringValue": "GuidanceAlarm"
+              }
+            },
+            {
+              "key": "event.1756817744147000000",
+              "value": {
+                "stringValue": "Touchdown"
               }
             },
             {
@@ -1102,9 +968,9 @@
               }
             },
             {
-              "key": "lm.co_pilot",
+              "key": "lm.name",
               "value": {
-                "stringValue": "Buzz Aldrin"
+                "stringValue": "Eagle"
               }
             },
             {
@@ -1117,6 +983,12 @@
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "lm.co_pilot",
+              "value": {
+                "stringValue": "Buzz Aldrin"
               }
             },
             {
@@ -1140,18 +1012,18 @@
           ]
         },
         {
-          "spanID": "cc058ddcecae1472",
-          "startTimeUnixNano": "1756805020412000000",
-          "durationNanos": "197882042",
+          "spanID": "144fd7b84cc4b115",
+          "startTimeUnixNano": "1756817743952000000",
+          "durationNanos": "195402375",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "cb599ed4a6271dda"
+                "stringValue": "15f5aced140f58da"
               }
             },
             {
-              "key": "event.1756805020443000000",
+              "key": "event.1756817743984000000",
               "value": {
                 "stringValue": "LMActivated"
               }
@@ -1160,12 +1032,6 @@
               "key": "lm.status",
               "value": {
                 "stringValue": "active"
-              }
-            },
-            {
-              "key": "lm.pilot",
-              "value": {
-                "stringValue": "Neil Armstrong"
               }
             },
             {
@@ -1178,6 +1044,12 @@
               "key": "lm.name",
               "value": {
                 "stringValue": "Eagle"
+              }
+            },
+            {
+              "key": "lm.pilot",
+              "value": {
+                "stringValue": "Neil Armstrong"
               }
             },
             {
@@ -1201,24 +1073,24 @@
             {
               "key": "childCount",
               "value": {
-                "intValue": "3"
+                "intValue": "2"
               }
             }
           ]
         },
         {
-          "spanID": "1f3452424203d69f",
-          "startTimeUnixNano": "1756805020867000000",
-          "durationNanos": "21391500",
+          "spanID": "a4c18136d0c7419a",
+          "startTimeUnixNano": "1756817744399000000",
+          "durationNanos": "21219333",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "7ffd12d71500245c"
+                "stringValue": "26fb22a19ce32fd8"
               }
             },
             {
-              "key": "event.1756805020888000000",
+              "key": "event.1756817744420000000",
               "value": {
                 "stringValue": "GuidanceActive"
               }
@@ -1227,6 +1099,12 @@
               "key": "guidance.type",
               "value": {
                 "stringValue": "ascent"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "LunarModuleOperations"
               }
             },
             {
@@ -1254,15 +1132,9 @@
               }
             },
             {
-              "key": "service.name",
-              "value": {
-                "stringValue": "LunarModuleOperations"
-              }
-            },
-            {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "28"
+                "intValue": "26"
               }
             },
             {
@@ -1274,24 +1146,24 @@
           ]
         },
         {
-          "spanID": "e48410d42e03e770",
-          "startTimeUnixNano": "1756805020889000000",
-          "durationNanos": "62536667",
+          "spanID": "4585ae57465a6371",
+          "startTimeUnixNano": "1756817744420000000",
+          "durationNanos": "62214750",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "7ffd12d71500245c"
+                "stringValue": "26fb22a19ce32fd8"
               }
             },
             {
-              "key": "event.1756805020925000000",
+              "key": "event.1756817744456000000",
               "value": {
                 "stringValue": "RadarLock"
               }
             },
             {
-              "key": "event.1756805020951000000",
+              "key": "event.1756817744482000000",
               "value": {
                 "stringValue": "RendezvousAchieved"
               }
@@ -1315,15 +1187,15 @@
               }
             },
             {
-              "key": "lm.co_pilot",
-              "value": {
-                "stringValue": "Buzz Aldrin"
-              }
-            },
-            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "lm.co_pilot",
+              "value": {
+                "stringValue": "Buzz Aldrin"
               }
             },
             {
@@ -1335,7 +1207,7 @@
             {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "28"
+                "intValue": "26"
               }
             },
             {
@@ -1347,10 +1219,16 @@
           ]
         },
         {
-          "spanID": "7ffd12d71500245c",
-          "startTimeUnixNano": "1756805020809000000",
-          "durationNanos": "141764583",
+          "spanID": "26fb22a19ce32fd8",
+          "startTimeUnixNano": "1756817744341000000",
+          "durationNanos": "140933208",
           "attributes": [
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "f3ff5e0b2702fbc0"
+              }
+            },
             {
               "key": "ascent.engine.thrust",
               "value": {
@@ -1358,33 +1236,21 @@
               }
             },
             {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "c0caae950be6ff41"
-              }
-            },
-            {
-              "key": "event.1756805020836000000",
-              "value": {
-                "stringValue": "AscentEngineIgnition"
-              }
-            },
-            {
-              "key": "event.1756805020867000000",
+              "key": "event.1756817744399000000",
               "value": {
                 "stringValue": "LiftoffFromMoon"
               }
             },
             {
-              "key": "lm.pilot",
+              "key": "event.1756817744367000000",
               "value": {
-                "stringValue": "Neil Armstrong"
+                "stringValue": "AscentEngineIgnition"
               }
             },
             {
-              "key": "lm.name",
+              "key": "service.name",
               "value": {
-                "stringValue": "Eagle"
+                "stringValue": "LunarModuleOperations"
               }
             },
             {
@@ -1394,9 +1260,15 @@
               }
             },
             {
-              "key": "service.name",
+              "key": "lm.name",
               "value": {
-                "stringValue": "LunarModuleOperations"
+                "stringValue": "Eagle"
+              }
+            },
+            {
+              "key": "lm.pilot",
+              "value": {
+                "stringValue": "Neil Armstrong"
               }
             },
             {
@@ -1408,7 +1280,7 @@
             {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "25"
+                "intValue": "23"
               }
             },
             {
@@ -1420,10 +1292,16 @@
           ]
         },
         {
-          "spanID": "51e5e21bb8cc520e",
-          "startTimeUnixNano": "1756805020207000000",
-          "durationNanos": "74751375",
+          "spanID": "795a4d42c6466498",
+          "startTimeUnixNano": "1756817743750000000",
+          "durationNanos": "72439709",
           "attributes": [
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "15f5aced140f58da"
+              }
+            },
             {
               "key": "correction.type",
               "value": {
@@ -1437,27 +1315,15 @@
               }
             },
             {
-              "key": "span:parentID",
-              "value": {
-                "stringValue": "cb599ed4a6271dda"
-              }
-            },
-            {
-              "key": "event.1756805020249000000",
+              "key": "event.1756817743792000000",
               "value": {
                 "stringValue": "CorrectionBurnStart"
               }
             },
             {
-              "key": "event.1756805020281000000",
+              "key": "event.1756817743822000000",
               "value": {
                 "stringValue": "CorrectionBurnEnd"
-              }
-            },
-            {
-              "key": "guidance.system",
-              "value": {
-                "stringValue": "Apollo Guidance Computer"
               }
             },
             {
@@ -1479,6 +1345,12 @@
               }
             },
             {
+              "key": "guidance.system",
+              "value": {
+                "stringValue": "Apollo Guidance Computer"
+              }
+            },
+            {
               "key": "nestedSetParent",
               "value": {
                 "intValue": "16"
@@ -1493,9 +1365,9 @@
           ]
         },
         {
-          "spanID": "f2d89f26345dc19c",
-          "startTimeUnixNano": "1756805020282000000",
-          "durationNanos": "130154958",
+          "spanID": "ee5437fdfcedb194",
+          "startTimeUnixNano": "1756817743823000000",
+          "durationNanos": "128979333",
           "attributes": [
             {
               "key": "altitude",
@@ -1506,25 +1378,25 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "cb599ed4a6271dda"
+                "stringValue": "15f5aced140f58da"
               }
             },
             {
-              "key": "event.1756805020412000000",
-              "value": {
-                "stringValue": "OrbitAchieved"
-              }
-            },
-            {
-              "key": "event.1756805020329000000",
+              "key": "event.1756817743869000000",
               "value": {
                 "stringValue": "LOIBurnStart"
               }
             },
             {
-              "key": "event.1756805020390000000",
+              "key": "event.1756817743930000000",
               "value": {
                 "stringValue": "LOIBurnEnd"
+              }
+            },
+            {
+              "key": "event.1756817743952000000",
+              "value": {
+                "stringValue": "OrbitAchieved"
               }
             },
             {
@@ -1540,15 +1412,15 @@
               }
             },
             {
-              "key": "spacecraft.name",
-              "value": {
-                "stringValue": "Apollo CSM"
-              }
-            },
-            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "spacecraft.name",
+              "value": {
+                "stringValue": "Apollo CSM"
               }
             },
             {
@@ -1572,9 +1444,9 @@
           ]
         },
         {
-          "spanID": "cb599ed4a6271dda",
-          "startTimeUnixNano": "1756805020169000000",
-          "durationNanos": "243084917",
+          "spanID": "15f5aced140f58da",
+          "startTimeUnixNano": "1756817743713000000",
+          "durationNanos": "238601667",
           "attributes": [
             {
               "key": "distance",
@@ -1585,11 +1457,11 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "ca78fdc99577f95c"
+                "stringValue": "fb76cca5e334f9c4"
               }
             },
             {
-              "key": "event.1756805020206000000",
+              "key": "event.1756817743750000000",
               "value": {
                 "stringValue": "TransLunarInjection"
               }
@@ -1601,27 +1473,27 @@
               }
             },
             {
-              "key": "guidance.system",
-              "value": {
-                "stringValue": "Apollo Guidance Computer"
-              }
-            },
-            {
-              "key": "spacecraft.name",
-              "value": {
-                "stringValue": "Apollo CSM"
-              }
-            },
-            {
               "key": "service.name",
               "value": {
                 "stringValue": "SpacecraftNavigation"
               }
             },
             {
+              "key": "guidance.system",
+              "value": {
+                "stringValue": "Apollo Guidance Computer"
+              }
+            },
+            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "spacecraft.name",
+              "value": {
+                "stringValue": "Apollo CSM"
               }
             },
             {
@@ -1639,9 +1511,9 @@
           ]
         },
         {
-          "spanID": "e15b7f1c0e2a7676",
-          "startTimeUnixNano": "1756805020951000000",
-          "durationNanos": "79947875",
+          "spanID": "b5607f481a6a1c76",
+          "startTimeUnixNano": "1756817744482000000",
+          "durationNanos": "80863000",
           "attributes": [
             {
               "key": "docking.type",
@@ -1652,25 +1524,37 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "c0caae950be6ff41"
+                "stringValue": "f3ff5e0b2702fbc0"
               }
             },
             {
-              "key": "event.1756805021031000000",
-              "value": {
-                "stringValue": "PressureEqualized"
-              }
-            },
-            {
-              "key": "event.1756805020983000000",
+              "key": "event.1756817744514000000",
               "value": {
                 "stringValue": "SoftDock"
               }
             },
             {
-              "key": "event.1756805021009000000",
+              "key": "event.1756817744540000000",
               "value": {
                 "stringValue": "HardDock"
+              }
+            },
+            {
+              "key": "event.1756817744563000000",
+              "value": {
+                "stringValue": "PressureEqualized"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "SpacecraftNavigation"
               }
             },
             {
@@ -1686,21 +1570,9 @@
               }
             },
             {
-              "key": "service.name",
-              "value": {
-                "stringValue": "SpacecraftNavigation"
-              }
-            },
-            {
-              "key": "service.namespace",
-              "value": {
-                "stringValue": "nasa"
-              }
-            },
-            {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "25"
+                "intValue": "23"
               }
             },
             {
@@ -1712,16 +1584,10 @@
           ]
         },
         {
-          "spanID": "b58f211c32d97d3e",
-          "startTimeUnixNano": "1756805021031000000",
-          "durationNanos": "120697416",
+          "spanID": "e68ae749864655c4",
+          "startTimeUnixNano": "1756817744563000000",
+          "durationNanos": "118117625",
           "attributes": [
-            {
-              "key": "delta_v",
-              "value": {
-                "stringValue": "2,500 m/s"
-              }
-            },
             {
               "key": "burn.type",
               "value": {
@@ -1731,23 +1597,29 @@
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "c0caae950be6ff41"
+                "stringValue": "f3ff5e0b2702fbc0"
               }
             },
             {
-              "key": "event.1756805021084000000",
+              "key": "delta_v",
+              "value": {
+                "stringValue": "2,500 m/s"
+              }
+            },
+            {
+              "key": "event.1756817744615000000",
               "value": {
                 "stringValue": "TEIBurnStart"
               }
             },
             {
-              "key": "event.1756805021131000000",
+              "key": "event.1756817744661000000",
               "value": {
                 "stringValue": "TEIBurnEnd"
               }
             },
             {
-              "key": "event.1756805021152000000",
+              "key": "event.1756817744682000000",
               "value": {
                 "stringValue": "EarthBound"
               }
@@ -1759,12 +1631,6 @@
               }
             },
             {
-              "key": "service.name",
-              "value": {
-                "stringValue": "SpacecraftNavigation"
-              }
-            },
-            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
@@ -1777,9 +1643,15 @@
               }
             },
             {
+              "key": "service.name",
+              "value": {
+                "stringValue": "SpacecraftNavigation"
+              }
+            },
+            {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "25"
+                "intValue": "23"
               }
             },
             {
@@ -1791,30 +1663,30 @@
           ]
         },
         {
-          "spanID": "21db23388c265203",
-          "startTimeUnixNano": "1756805021152000000",
-          "durationNanos": "107597208",
+          "spanID": "6e0d479a497d53aa",
+          "startTimeUnixNano": "1756817744682000000",
+          "durationNanos": "102661500",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "c0caae950be6ff41"
+                "stringValue": "f3ff5e0b2702fbc0"
               }
             },
             {
-              "key": "event.1756805021194000000",
+              "key": "event.1756817744722000000",
               "value": {
                 "stringValue": "AtmosphericEntry"
               }
             },
             {
-              "key": "event.1756805021231000000",
+              "key": "event.1756817744758000000",
               "value": {
                 "stringValue": "ParachuteDeployment"
               }
             },
             {
-              "key": "event.1756805021260000000",
+              "key": "event.1756817744784000000",
               "value": {
                 "stringValue": "Splashdown"
               }
@@ -1852,7 +1724,7 @@
             {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "25"
+                "intValue": "23"
               }
             },
             {
@@ -1864,18 +1736,18 @@
           ]
         },
         {
-          "spanID": "c0caae950be6ff41",
-          "startTimeUnixNano": "1756805020779000000",
-          "durationNanos": "562211708",
+          "spanID": "f3ff5e0b2702fbc0",
+          "startTimeUnixNano": "1756817744310000000",
+          "durationNanos": "552893875",
           "attributes": [
             {
               "key": "span:parentID",
               "value": {
-                "stringValue": "bb48c918b002e395"
+                "stringValue": "cdb12f92d81eb69a"
               }
             },
             {
-              "key": "event.1756805020809000000",
+              "key": "event.1756817744341000000",
               "value": {
                 "stringValue": "ReturnSequenceInitiated"
               }
@@ -1884,6 +1756,12 @@
               "key": "journey.type",
               "value": {
                 "stringValue": "return"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
               }
             },
             {
@@ -1905,6 +1783,207 @@
               }
             },
             {
+              "key": "nestedSetParent",
+              "value": {
+                "intValue": "22"
+              }
+            },
+            {
+              "key": "childCount",
+              "value": {
+                "intValue": "5"
+              }
+            }
+          ]
+        },
+        {
+          "spanID": "fb1b04deb1029ef3",
+          "startTimeUnixNano": "1756817744206000000",
+          "durationNanos": "36322750",
+          "attributes": [
+            {
+              "key": "astronaut",
+              "value": {
+                "stringValue": "Neil Armstrong"
+              }
+            },
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "cdb12f92d81eb69a"
+              }
+            },
+            {
+              "key": "event.1756817744227000000",
+              "value": {
+                "stringValue": "FootOnLadder"
+              }
+            },
+            {
+              "key": "event.1756817744242000000",
+              "value": {
+                "stringValue": "FirstStepTaken"
+              }
+            },
+            {
+              "key": "quote",
+              "value": {
+                "stringValue": "That's one small step for man..."
+              }
+            },
+            {
+              "key": "activity.type",
+              "value": {
+                "stringValue": "Geological Survey"
+              }
+            },
+            {
+              "key": "landing.site",
+              "value": {
+                "stringValue": "Tranquility Base"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "LunarSurfaceScience"
+              }
+            },
+            {
+              "key": "nestedSetParent",
+              "value": {
+                "intValue": "22"
+              }
+            },
+            {
+              "key": "childCount",
+              "value": {
+                "intValue": "0"
+              }
+            }
+          ]
+        },
+        {
+          "spanID": "1e86cfdde356c7eb",
+          "startTimeUnixNano": "1756817744243000000",
+          "durationNanos": "67081542",
+          "attributes": [
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "cdb12f92d81eb69a"
+              }
+            },
+            {
+              "key": "event.1756817744278000000",
+              "value": {
+                "stringValue": "FlagPlanted"
+              }
+            },
+            {
+              "key": "event.1756817744310000000",
+              "value": {
+                "stringValue": "SampleCollected"
+              }
+            },
+            {
+              "key": "samples.target",
+              "value": {
+                "stringValue": "21.6 kg"
+              }
+            },
+            {
+              "key": "sample.id",
+              "value": {
+                "stringValue": "AS11-10001"
+              }
+            },
+            {
+              "key": "activity.type",
+              "value": {
+                "stringValue": "Geological Survey"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "landing.site",
+              "value": {
+                "stringValue": "Tranquility Base"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "LunarSurfaceScience"
+              }
+            },
+            {
+              "key": "nestedSetParent",
+              "value": {
+                "intValue": "22"
+              }
+            },
+            {
+              "key": "childCount",
+              "value": {
+                "intValue": "0"
+              }
+            }
+          ]
+        },
+        {
+          "spanID": "cdb12f92d81eb69a",
+          "startTimeUnixNano": "1756817744148000000",
+          "durationNanos": "161946666",
+          "attributes": [
+            {
+              "key": "duration",
+              "value": {
+                "stringValue": "2.5 hours"
+              }
+            },
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "144fd7b84cc4b115"
+              }
+            },
+            {
+              "key": "event.1756817744179000000",
+              "value": {
+                "stringValue": "SurfaceOperationsBegin"
+              }
+            },
+            {
+              "key": "landing.site",
+              "value": {
+                "stringValue": "Tranquility Base"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "LunarSurfaceScience"
+              }
+            },
+            {
+              "key": "activity.type",
+              "value": {
+                "stringValue": "Geological Survey"
+              }
+            },
+            {
               "key": "service.namespace",
               "value": {
                 "stringValue": "nasa"
@@ -1913,13 +1992,74 @@
             {
               "key": "nestedSetParent",
               "value": {
-                "intValue": "18"
+                "intValue": "17"
               }
             },
             {
               "key": "childCount",
               "value": {
-                "intValue": "5"
+                "intValue": "3"
+              }
+            }
+          ]
+        },
+        {
+          "spanID": "42dc28541cd034e3",
+          "startTimeUnixNano": "1756817744179000000",
+          "durationNanos": "26648958",
+          "attributes": [
+            {
+              "key": "span:parentID",
+              "value": {
+                "stringValue": "cdb12f92d81eb69a"
+              }
+            },
+            {
+              "key": "event.1756817744206000000",
+              "value": {
+                "stringValue": "HatchOpen"
+              }
+            },
+            {
+              "key": "suit.pressure",
+              "value": {
+                "stringValue": "3.7 psi"
+              }
+            },
+            {
+              "key": "service.name",
+              "value": {
+                "stringValue": "AstronautLifeSupport"
+              }
+            },
+            {
+              "key": "service.namespace",
+              "value": {
+                "stringValue": "nasa"
+              }
+            },
+            {
+              "key": "suit.pressure.target",
+              "value": {
+                "stringValue": "3.7 psi"
+              }
+            },
+            {
+              "key": "suit.type",
+              "value": {
+                "stringValue": "A7L"
+              }
+            },
+            {
+              "key": "nestedSetParent",
+              "value": {
+                "intValue": "22"
+              }
+            },
+            {
+              "key": "childCount",
+              "value": {
+                "intValue": "0"
               }
             }
           ]
