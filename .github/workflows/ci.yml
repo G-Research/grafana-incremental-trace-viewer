@@ -113,8 +113,7 @@ jobs:
         uses: grafana/plugin-actions/e2e-version@main # zizmor: ignore[unpinned-uses] provided by grafana
 
   playwright-tests:
-    if: false
-    needs: [resolve-versions, build]
+    needs: [build]
     timeout-minutes: 15
     permissions:
       contents: read
@@ -160,7 +159,10 @@ jobs:
           url: http://localhost:3000/login
 
       - name: Install Playwright Browsers
-        run: yarn exec playwright install chromium --with-deps
+        run: bunx playwright install chromium --with-deps
+
+      - name: Provision sample data
+        run: bun run scripts/e2e-tempo-trace.js
 
       - name: Run Playwright tests
         id: run-tests
