@@ -98,6 +98,6 @@ for (const ss of trace.spanSets || []) {
 }
 
 const traceJSON = JSON.stringify(trace, undefined, 2);
-await Bun.file(new URL('../tests/test-trace.json', import.meta.url).pathname).write(traceJSON);
+await Bun.file(new URL('../tests/test-trace.json', import.meta.url).pathname).write(traceJSON + '\n');
 
 export {};
