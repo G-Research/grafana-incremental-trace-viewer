@@ -164,6 +164,9 @@ jobs:
       - name: Provision sample data
         run: bun run scripts/e2e-tempo-trace.js
 
+      - name: Fetch trace
+        run: curl "http://localhost:3200/api/search?q=%7B%7D"
+
       - name: Run Playwright tests
         id: run-tests
         run: bun run e2e
