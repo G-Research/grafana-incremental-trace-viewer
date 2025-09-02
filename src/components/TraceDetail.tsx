@@ -4,7 +4,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { testIds } from './testIds';
 import { Span as SpanComponent, SpanDetailPanel } from './Span';
 import { mkUnixEpochFromNanoSeconds, mkUnixEpochFromMiliseconds, formatDuration } from '../utils/utils.timeline';
-import { FetchFunction, search, SearchResponse, Span } from '../utils/utils.api';
+import { FetchFunction, search, SearchResponse, Span, supportsChildCount } from '../utils/utils.api';
 import type { QueryInfo as TraceDetailProps } from './TraceViewerPanel';
 import { SpanOverlayDrawer } from './Span/SpanOverlayDrawer';
 import { ChildStatus, SpanInfo } from 'types';
@@ -24,11 +24,6 @@ export function searchWithDatasourceUid<TResponse>(datasourceUid: string): Fetch
     return response.data;
   };
 }
-
-// default Grafana does not support child count.
-// In production, we use a custom build of Grafana that supports child count.
-// This value is set at build time via environment variable SUPPORTS_CHILD_COUNT
-const supportsChildCount = process.env.SUPPORTS_CHILD_COUNT || false;
 
 function getParentSpanId(span: Span): string | null {
   const attributes = span.attributes;
@@ -55,18 +50,6 @@ async function fetchChildCountViaAPI(
   return data.traces?.[0]?.spanSets?.[0]?.matched;
 }
 
-/**
- * Extracts and maps span nodes from the search response to a list of SpanInfo objects.
- * Assigns a hierarchical level to each span based on its parent-child relationship.
- * Optionally determines if a span has more children, setting the hasMore flag accordingly.
- *
- * @param idToLevelMap - A map tracking the hierarchical level of each span by span ID.
- * @param traceId - The ID of the trace to extract spans from.
- * @param datasourceUid - The UID of the datasource to use for fetching additional span information.
- * @param responseData - The search response containing trace and span data.
- * @param fixedHasMore - If provided, sets the hasMore flag for all spans to this value instead of checking for children.
- * @returns Promise<SpanInfo[]>
- */
 async function extractSpans(
   fetchFn: FetchFunction<SearchResponse>,
   idToLevelMap: Map<string, number>,
@@ -151,6 +134,7 @@ async function extractSpans(
       serviceName,
       warning,
       events,
+      attributes: span.attributes || [],
     });
   }
   return spans;
@@ -232,7 +216,6 @@ function TraceDetail({
         const data = await search(fetchFn, q, start, end);
         // We pass in hasMore: false because we are fetching the first round of children later.
         const spans: SpanInfo[] = await extractSpans(fetchFn, idToLevelMap.current, traceId, data);
-        console.log('Spans:', spans);
 
         // We fetch the first round of children for each span.
         let isSingleRootSpan = spans.filter((s) => s.level === 0).length === 1;

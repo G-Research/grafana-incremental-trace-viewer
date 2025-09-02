@@ -5,8 +5,32 @@ import { IconButton, Input } from '@grafana/ui';
 import type { SpanInfo } from '../../types';
 import { formatUnixNanoToDateTime, formatDuration } from 'utils/utils.timeline';
 import { useQuery } from '@tanstack/react-query';
-import { KeyValue, AnyValue, FetchFunction, TagAttributes, getTagAttributesForSpan } from 'utils/utils.api';
+import {
+  KeyValue,
+  AnyValue,
+  FetchFunction,
+  TagAttributes,
+  getTagAttributesForSpan,
+  supportsChildCount,
+} from 'utils/utils.api';
 import { Accordion } from './Accordion';
+
+function collectTagAttributes(filterResource: (v: string) => boolean, result: KeyValue[]): TagAttributes {
+  const spanAttributes: Record<string, AnyValue> = {};
+  const resourceAttributes: Record<string, AnyValue> = {};
+
+  for (const keyValue of result) {
+    if (keyValue.key && keyValue.value !== undefined) {
+      if (filterResource(keyValue.key)) {
+        resourceAttributes[keyValue.key] = keyValue.value;
+      } else {
+        spanAttributes[keyValue.key] = keyValue.value;
+      }
+    }
+  }
+
+  return { spanAttributes, resourceAttributes };
+}
 
 function splitAttributesAndEvents(tagAttributes: TagAttributes) {
   const spanAttributes: KeyValue[] = [];
@@ -38,7 +62,7 @@ function ValueWrapper({
 }) {
   const [tooltip, setTooltip] = useState('Copy value');
   return (
-    <tr>
+    <tr title={displayValue || value}>
       <td className={`max-w-[1px] w-full ${italic ? 'italic' : ''}`}>
         <span className={`block truncate p-2 ${color}`}>{displayValue || value}</span>
       </td>
@@ -141,6 +165,10 @@ export function SpanDetailPanel({
   const result = useQuery<TagAttributes>({
     queryKey: ['trace', span.traceId, 'span', span.spanId, 'details'],
     queryFn: async () => {
+      if (supportsChildCount) {
+        return collectTagAttributes((key: string) => key.startsWith('resource.'), span.attributes);
+      }
+
       return await getTagAttributesForSpan(
         fetchFn,
         span.traceId,

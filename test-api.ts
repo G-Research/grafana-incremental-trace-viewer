@@ -1,4 +1,4 @@
-import type { Trace, Span, SearchResponse } from './src/utils/utils.api';
+import type { SearchResponse } from './src/utils/utils.api';
 import trace from './test-trace.json';
 
 const searchResponse: SearchResponse = {
