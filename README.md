@@ -259,6 +259,16 @@ We run end-to-end using Playwright and `@grafana/plugin-e2e`.
 There are two ways to run the tests, there is setup for when `SUPPORTS_CHILD_COUNT=0` or `SUPPORTS_CHILD_COUNT=1`.
 In both cases, we rely on a provisioned Docker compose setup.
 
+**Playwright requires Chromium as a dependency**
+
+```shell
+bunx playwright install
+```
+
+_Why is this not part of our package.json?_
+
+Chromium cannot be installed in our production environment, so we do not include it as a required dependency in package.json.
+
 ### SUPPORTS_CHILD_COUNT = 0
 
 Run `bun run server` to start the regular developer setup.  
