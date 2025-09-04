@@ -15,14 +15,14 @@ import {
 } from 'utils/utils.api';
 import { Accordion } from './Accordion';
 
-function collectTagAttributes(filterResource: (v: string) => boolean, result: KeyValue[]): TagAttributes {
+function collectTagAttributes(result: KeyValue[]): TagAttributes {
   const spanAttributes: Record<string, AnyValue> = {};
   const resourceAttributes: Record<string, AnyValue> = {};
 
   for (const keyValue of result) {
     if (keyValue.key && keyValue.value !== undefined) {
-      if (filterResource(keyValue.key)) {
-        resourceAttributes[keyValue.key] = keyValue.value;
+      if (keyValue.key.startsWith('resource.')) {
+        resourceAttributes[keyValue.key.replace('resource.', '')] = keyValue.value;
       } else {
         spanAttributes[keyValue.key] = keyValue.value;
       }
@@ -166,7 +166,7 @@ export function SpanDetailPanel({
     queryKey: ['trace', span.traceId, 'span', span.spanId, 'details'],
     queryFn: async () => {
       if (supportsChildCount) {
-        return collectTagAttributes((key: string) => key.startsWith('resource.'), span.attributes);
+        return collectTagAttributes(span.attributes);
       }
 
       return await getTagAttributesForSpan(
