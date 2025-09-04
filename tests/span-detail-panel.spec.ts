@@ -1,7 +1,7 @@
 import { test, expect } from '@grafana/plugin-e2e';
 import { Page } from '@playwright/test';
 
-async function getLastTraceId() {
+export async function getLastTraceId() {
   // Current time in seconds
   const end = Math.floor(new Date().getTime() / 1000);
   // Minus one day
