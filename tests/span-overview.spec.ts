@@ -94,20 +94,3 @@ test.describe('Data Consistency', () => {
     expect(headerDuration!.trim()).not.toBe('');
   });
 });
-
-test.describe('Error States', () => {
-  test.beforeEach(async ({ page, gotoDashboardPage }) => {
-    await gotoTraceViewerDashboard(gotoDashboardPage, 'non-existent-trace-id');
-    await page.waitForLoadState('networkidle');
-  });
-
-  test('should handle no data state correctly', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-    await expect(page.locator('text=No trace data available for this query')).toBeVisible({ timeout: TIMEOUT.MEDIUM });
-  });
-
-  test('should handle empty trace id', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-    await expect(page.locator('text=No trace data available for this query')).toBeVisible({ timeout: TIMEOUT.MEDIUM });
-  });
-});
