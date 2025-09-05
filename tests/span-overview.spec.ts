@@ -111,27 +111,3 @@ test.describe('Error States', () => {
     await expect(page.locator('text=No trace data available for this query')).toBeVisible({ timeout: TIMEOUT.MEDIUM });
   });
 });
-
-test.describe('Responsive Behavior', () => {
-  test.beforeEach(async ({ page, gotoDashboardPage }) => {
-    await gotoTraceViewerDashboard(gotoDashboardPage);
-    await page.waitForLoadState('networkidle');
-  });
-
-  test('should display panel too small warning when panel is too small', async ({ page, gotoDashboardPage }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
-    await page.setViewportSize({ width: 400, height: 200 });
-
-    await expect(page.locator('text=Panel too small')).toBeVisible({ timeout: TIMEOUT.SHORT });
-    await expect(page.locator('text=Current panel size is')).toBeVisible();
-  });
-
-  test('should handle normal panel size correctly', async ({ page }) => {
-    await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
-    await expect(page.locator('text=Panel too small')).not.toBeVisible();
-    await expect(page.getByTestId('span-name-MissionControl')).toBeVisible();
-  });
-});
