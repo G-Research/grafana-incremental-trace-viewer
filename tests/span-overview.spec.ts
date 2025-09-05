@@ -1,5 +1,5 @@
 import { test, expect } from '@grafana/plugin-e2e';
-import { getLastTraceId } from './util';
+import { getLastTraceId, gotoTraceViewerDashboard } from './util';
 
 const TIMEOUT = {
   SHORT: 5000,
@@ -7,21 +7,15 @@ const TIMEOUT = {
   LONG: 15000,
 } as const;
 
-const DASHBOARD_UID = 'gr-trace-viewer-dashboard' as const;
-const INVALID_TRACE_ID = 'invalid-trace-id' as const;
 const PANEL_HEADER_TESTID = 'data-testid Panel header Incremental Trace Viewer' as const;
 
 test.describe('Span Overview Display', () => {
-  test('should display root span with correct name on initial render', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage);
+    await page.waitForLoadState('networkidle');
+  });
 
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
+  test('should display root span with correct name on initial render', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
     const rootSpanNameElement = page.getByTestId('span-name-MissionControl');
@@ -29,16 +23,7 @@ test.describe('Span Overview Display', () => {
     await expect(rootSpanNameElement).toHaveText('MissionControl');
   });
 
-  test('should display multiple spans when available', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
+  test('should display multiple spans when available', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
     const spanElements = page.locator('.span-row');
@@ -47,16 +32,7 @@ test.describe('Span Overview Display', () => {
     expect(spanCount).toBeGreaterThan(0);
   });
 
-  test('should display span structure correctly', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
+  test('should display span structure correctly', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
     // Check that span duration elements exist (they are the visual timeline bars)
@@ -77,32 +53,19 @@ test.describe('Span Overview Display', () => {
 });
 
 test.describe('Header Information', () => {
-  test('should display trace id in header', async ({ page, gotoDashboardPage }) => {
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage);
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('should display trace id in header', async ({ page }) => {
     const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
     const headerTraceId = page.getByTestId('header-trace-id');
     await expect(headerTraceId).toBeVisible();
     await expect(headerTraceId).toHaveText(traceId.slice(0, 8));
   });
 
-  test('should display header duration', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
-    // Use first() to handle multiple elements with same test ID
+  test('should display header duration', async ({ page }) => {
     const headerDuration = page.getByTestId('header-duration').first();
     await expect(headerDuration).toBeVisible();
     const durationText = await headerDuration.textContent();
@@ -112,19 +75,14 @@ test.describe('Header Information', () => {
 });
 
 test.describe('Data Consistency', () => {
-  test('header duration should be displayed correctly', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage);
+    await page.waitForLoadState('networkidle');
+  });
 
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
+  test('header duration should be displayed correctly', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
-    // Use first() to handle multiple elements with same test ID
     const headerDurationElement = page.getByTestId('header-duration').first();
     await expect(headerDurationElement).toBeVisible();
 
@@ -138,42 +96,29 @@ test.describe('Data Consistency', () => {
 });
 
 test.describe('Error States', () => {
-  test('should handle no data state correctly', async ({ page, gotoDashboardPage }) => {
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': INVALID_TRACE_ID,
-      }),
-    });
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage, 'non-existent-trace-id');
+    await page.waitForLoadState('networkidle');
+  });
 
+  test('should handle no data state correctly', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
     await expect(page.locator('text=No trace data available for this query')).toBeVisible({ timeout: TIMEOUT.MEDIUM });
   });
 
-  test('should handle empty trace id', async ({ page, gotoDashboardPage }) => {
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': '',
-      }),
-    });
-
+  test('should handle empty trace id', async ({ page }) => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
     await expect(page.locator('text=No trace data available for this query')).toBeVisible({ timeout: TIMEOUT.MEDIUM });
   });
 });
 
 test.describe('Responsive Behavior', () => {
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage);
+    await page.waitForLoadState('networkidle');
+  });
+
   test('should display panel too small warning when panel is too small', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
     await page.setViewportSize({ width: 400, height: 200 });
@@ -182,16 +127,7 @@ test.describe('Responsive Behavior', () => {
     await expect(page.locator('text=Current panel size is')).toBeVisible();
   });
 
-  test('should handle normal panel size correctly', async ({ page, gotoDashboardPage }) => {
-    const traceId = await getLastTraceId();
-
-    await gotoDashboardPage({
-      uid: DASHBOARD_UID,
-      queryParams: new URLSearchParams({
-        'var-traceId': traceId,
-      }),
-    });
-
+  test('should handle normal panel size correctly', async ({ page }) => {
     await page.setViewportSize({ width: 1200, height: 800 });
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
