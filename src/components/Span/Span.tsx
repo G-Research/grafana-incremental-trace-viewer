@@ -64,7 +64,7 @@ export const Span = (props: SpanNodeProps) => {
 
   return (
     <div
-      className={`flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
+      className={`span-row flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
         props.isSelected ? 'bg-blue-100 dark:bg-gray-600 z-1000' : ''
       }`}
     >
@@ -90,7 +90,7 @@ export const Span = (props: SpanNodeProps) => {
             <IconButton name="exclamation-circle" variant="destructive" tooltip={props.warning} size="sm" />
           )}
           <span className="text-gray-900 dark:text-white">{props.serviceName}</span>
-          <span className="text-gray-400" data-testid="span-name">
+          <span className="text-gray-400" data-testid={`span-name-${props.name}`}>
             {props.name}
           </span>
         </div>
@@ -110,7 +110,7 @@ export const Span = (props: SpanNodeProps) => {
             return (
               <span
                 key={e.time}
-                data-testid="span-timeline"
+                data-testid={`span-timeline-${props.name}`}
                 className="absolute z-2000 h-full w-[1px] bg-neutral-950 flex items-center justify-center"
                 style={{ left: `${left}%` }}
               >
@@ -131,7 +131,7 @@ export const Span = (props: SpanNodeProps) => {
             );
           })}
           <div
-            className="h-3/4 absolute my-auto top-0 bottom-0 rounded-sm min-w-[2px]"
+            className="span-duration h-3/4 absolute my-auto top-0 bottom-0 rounded-sm min-w-[2px]"
             style={{
               left: `${offset}%`,
               width: `${Math.max(width, 0.1)}%`,

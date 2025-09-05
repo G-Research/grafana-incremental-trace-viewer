@@ -24,7 +24,7 @@ test.describe('Span Overview Display', () => {
 
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
-    const rootSpanNameElement = page.getByTestId('span-name').first();
+    const rootSpanNameElement = page.getByTestId('span-name-MissionControl');
     await expect(rootSpanNameElement).toBeVisible();
     await expect(rootSpanNameElement).toHaveText('MissionControl');
   });
@@ -41,7 +41,7 @@ test.describe('Span Overview Display', () => {
 
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
-    const spanElements = page.getByTestId('span-name');
+    const spanElements = page.locator('.span-row');
     await expect(spanElements.first()).toBeVisible();
     const spanCount = await spanElements.count();
     expect(spanCount).toBeGreaterThan(0);
@@ -60,7 +60,8 @@ test.describe('Span Overview Display', () => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
 
     // Check that span duration elements exist (they are the visual timeline bars)
-    const spanDurationElements = page.locator('[data-testid^="span-duration-"]');
+    const spanDurationElements = page.locator('.span-duration');
+    console.log('spanDurationElements', spanDurationElements);
     const durationCount = await spanDurationElements.count();
     expect(durationCount).toBeGreaterThan(0);
     
@@ -68,7 +69,7 @@ test.describe('Span Overview Display', () => {
     await expect(spanDurationElements.first()).toBeVisible();
     
     // Check that span names are visible
-    const spanNames = page.getByTestId('span-name');
+    const spanNames = page.locator('.span-row');
     const nameCount = await spanNames.count();
     expect(nameCount).toBeGreaterThan(0);
     await expect(spanNames.first()).toBeVisible();
@@ -195,6 +196,6 @@ test.describe('Responsive Behavior', () => {
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
     
     await expect(page.locator('text=Panel too small')).not.toBeVisible();
-    await expect(page.getByTestId('span-name').first()).toBeVisible();
+    await expect(page.getByTestId('span-name-MissionControl')).toBeVisible();
   });
 });
