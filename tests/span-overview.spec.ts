@@ -14,7 +14,7 @@ const PANEL_HEADER_TESTID = 'data-testid Panel header Incremental Trace Viewer' 
 test.describe('Span Overview Display', () => {
   test('should display root span with correct name on initial render', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -31,7 +31,7 @@ test.describe('Span Overview Display', () => {
 
   test('should display multiple spans when available', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -49,7 +49,7 @@ test.describe('Span Overview Display', () => {
 
   test('should display span structure correctly', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -64,10 +64,10 @@ test.describe('Span Overview Display', () => {
     console.log('spanDurationElements', spanDurationElements);
     const durationCount = await spanDurationElements.count();
     expect(durationCount).toBeGreaterThan(0);
-    
+
     // Verify the first span duration element is visible
     await expect(spanDurationElements.first()).toBeVisible();
-    
+
     // Check that span names are visible
     const spanNames = page.locator('.span-row');
     const nameCount = await spanNames.count();
@@ -79,7 +79,7 @@ test.describe('Span Overview Display', () => {
 test.describe('Header Information', () => {
   test('should display trace id in header', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -94,7 +94,7 @@ test.describe('Header Information', () => {
 
   test('should display header duration', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -114,7 +114,7 @@ test.describe('Header Information', () => {
 test.describe('Data Consistency', () => {
   test('header duration should be displayed correctly', async ({ page, gotoDashboardPage }) => {
     const traceId = await getLastTraceId();
-    
+
     await gotoDashboardPage({
       uid: DASHBOARD_UID,
       queryParams: new URLSearchParams({
@@ -127,11 +127,11 @@ test.describe('Data Consistency', () => {
     // Use first() to handle multiple elements with same test ID
     const headerDurationElement = page.getByTestId('header-duration').first();
     await expect(headerDurationElement).toBeVisible();
-    
+
     const headerDuration = await headerDurationElement.textContent();
     expect(headerDuration).toBeTruthy();
     expect(headerDuration).toMatch(/\d+(\.\d+)?(ms|s)/); // Should match timing format
-    
+
     // Verify the header duration makes sense (not empty or invalid)
     expect(headerDuration!.trim()).not.toBe('');
   });
@@ -194,7 +194,7 @@ test.describe('Responsive Behavior', () => {
 
     await page.setViewportSize({ width: 1200, height: 800 });
     await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-    
+
     await expect(page.locator('text=Panel too small')).not.toBeVisible();
     await expect(page.getByTestId('span-name-MissionControl')).toBeVisible();
   });
