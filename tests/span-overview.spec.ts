@@ -1,5 +1,5 @@
 import { test, expect } from '@grafana/plugin-e2e';
-import { getLastTraceId, gotoTraceViewerDashboard } from './util';
+import { getLastTraceId, gotoTraceViewerDashboard, waitForDashboardLoad } from './util';
 
 const TIMEOUT = {
   SHORT: 5000,
@@ -12,7 +12,7 @@ const PANEL_HEADER_TESTID = 'data-testid Panel header Incremental Trace Viewer' 
 test.describe('Span Overview Display', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await page.waitForLoadState('networkidle');
+    await waitForDashboardLoad(page, TIMEOUT.LONG);
   });
 
   test('should display root span with correct name on initial render', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe('Span Overview Display', () => {
 test.describe('Header Information', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await page.waitForLoadState('networkidle');
+    await waitForDashboardLoad(page, TIMEOUT.LONG);
   });
 
   test('should display trace id in header', async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe('Header Information', () => {
 test.describe('Data Consistency', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await page.waitForLoadState('networkidle');
+    await waitForDashboardLoad(page, TIMEOUT.LONG);
   });
 
   test('header duration should be displayed correctly', async ({ page }) => {
