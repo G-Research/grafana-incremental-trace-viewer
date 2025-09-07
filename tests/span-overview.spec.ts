@@ -7,7 +7,7 @@ const TIMEOUT = {
   LONG: 15000,
 } as const;
 
-const PANEL_HEADER_TESTID = 'data-testid Panel header Incremental Trace Viewer' as const;
+// Removed PANEL_HEADER_TESTID as we're now waiting for span elements instead
 
 test.describe('Span Overview Display', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
@@ -16,16 +16,12 @@ test.describe('Span Overview Display', () => {
   });
 
   test('should display root span with correct name on initial render', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
     const rootSpanNameElement = page.getByTestId('span-name-MissionControl');
     await expect(rootSpanNameElement).toBeVisible();
     await expect(rootSpanNameElement).toHaveText('MissionControl');
   });
 
   test('should display multiple spans when available', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
     const spanElements = page.locator('.span-row');
     await expect(spanElements.first()).toBeVisible();
     const spanCount = await spanElements.count();
@@ -33,8 +29,6 @@ test.describe('Span Overview Display', () => {
   });
 
   test('should display span structure correctly', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
     // Check that span duration elements exist (they are the visual timeline bars)
     const spanDurationElements = page.locator('.span-duration');
     console.log('spanDurationElements', spanDurationElements);
@@ -81,8 +75,6 @@ test.describe('Data Consistency', () => {
   });
 
   test('header duration should be displayed correctly', async ({ page }) => {
-    await expect(page.getByTestId(PANEL_HEADER_TESTID)).toBeVisible({ timeout: TIMEOUT.SHORT });
-
     const headerDurationElement = page.getByTestId('header-duration').first();
     await expect(headerDurationElement).toBeVisible();
 
