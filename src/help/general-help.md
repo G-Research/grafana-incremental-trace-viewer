@@ -57,6 +57,7 @@ For detailed information about TraceQL syntax and capabilities, refer to the [of
 ### Span Details Panel
 
 When you click on a span, a detailed panel opens showing:
+
 - **Span attributes** and metadata
 - **Resource attributes** from the service
 - **Tags and labels** associated with the span
