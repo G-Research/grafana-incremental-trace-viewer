@@ -55,17 +55,18 @@ test.describe('Span Overview Display', () => {
   });
 
   test('should display span structure correctly', async ({ page }) => {
-    const spanDurationElements = page.locator('.span-duration');
-    console.log('spanDurationElements', spanDurationElements);
-    const durationCount = await spanDurationElements.count();
-    expect(durationCount).toBe(4);
+    const spanRows = page.getByTestId('span-row');
+    const rowCount = await spanRows.count();
+    expect(rowCount).toBe(4);
 
-    await expect(spanDurationElements.first()).toBeVisible();
+    const firstSpanRow = spanRows.first();
+    await expect(firstSpanRow).toBeVisible();
 
-    const spanNames = page.getByTestId('span-name');
-    const nameCount = await spanNames.count();
-    expect(nameCount).toBe(4);
-    await expect(spanNames.first()).toBeVisible();
+    const spanDuration = firstSpanRow.locator('.span-duration');
+    await expect(spanDuration).toBeVisible();
+
+    const spanName = firstSpanRow.getByTestId('span-name-MissionControl');
+    await expect(spanName).toBeVisible();
   });
 });
 
@@ -106,5 +107,24 @@ test.describe('Data Consistency', () => {
     expect(headerDuration).toMatch(/\d+(\.\d+)?(ms|s)/);
 
     expect(headerDuration!.trim()).not.toBe('');
+  });
+});
+
+test.describe('Error Handling', () => {
+  test.beforeEach(async ({ page, gotoDashboardPage }) => {
+    await gotoTraceViewerDashboard(gotoDashboardPage, '0000000000000000');
+    await waitForDashboardLoad(page, TIMEOUT.LONG);
+  });
+
+  test('should display error message when no spans are found', async ({ page }) => {
+    const spanRows = page.getByTestId('span-row');
+    const rowCount = await spanRows.count();
+    expect(rowCount).toBe(0);
+  });
+
+  //No trace data available for this query
+  test('should display no trace data available for this query', async ({ page }) => {
+    const noTraceDataAvailable = page.getByText('No trace data available for this query');
+    await expect(noTraceDataAvailable).toBeVisible();
   });
 });
