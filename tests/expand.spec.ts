@@ -125,7 +125,6 @@ test.describe('Span Expansion Tests', () => {
     await expect(rocketLaunchChildCount).toBeVisible();
     const expectedRocketChildCount = await rocketLaunchChildCount.textContent();
     expect(expectedRocketChildCount).toBe('5'); // RocketLaunch has 5 children
-    
 
     // Expand RocketLaunch
     const rocketLaunchExpandButton = rocketLaunchItem.getByTestId('span-collapse-expand-button');
