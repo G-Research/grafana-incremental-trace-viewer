@@ -125,6 +125,7 @@ test.describe('Span Expansion Tests', () => {
     await expect(rocketLaunchChildCount).toBeVisible();
     const expectedRocketChildCount = await rocketLaunchChildCount.textContent();
     expect(expectedRocketChildCount).toBe('5'); // RocketLaunch has 5 children
+    
 
     // Expand RocketLaunch
     const rocketLaunchExpandButton = rocketLaunchItem.getByTestId('span-collapse-expand-button');
@@ -137,7 +138,7 @@ test.describe('Span Expansion Tests', () => {
     await expect(page.getByTestId('span-list-item-GuidanceSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-StageSeparation')).toBeVisible();
 
-    // Verify the count increased by 4 (all RocketLaunch children)
+    // Verify the count increased by 5 (all RocketLaunch children)
     const virtualSpanCount = await page.getByTestId('span-virtual-item').count();
     expect(virtualSpanCount).toBe(10); // 4 initial + 1 (RocketLaunch) + 5 (RocketLaunch children)
 
