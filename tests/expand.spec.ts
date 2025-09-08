@@ -79,13 +79,13 @@ test.describe('Span Expansion Tests', () => {
     await expect(countdownSequenceItem).toBeVisible();
 
     // Get the child count displayed in the square
-    const countdownChildCount = countdownSequenceItem.locator('[data-testid="span-child-count"]');
+    const countdownChildCount = countdownSequenceItem.getByTestId('span-child-count');
     await expect(countdownChildCount).toBeVisible();
     const displayedChildCount = await countdownChildCount.textContent();
     expect(displayedChildCount).toBe('1');
 
     // Expand CountdownSequence
-    const countdownExpandButton = countdownSequenceItem.locator('[data-testid="span-collapse-expand-button"]');
+    const countdownExpandButton = countdownSequenceItem.getByTestId('span-collapse-expand-button');
     await expect(countdownExpandButton).toBeVisible();
     await countdownExpandButton.click();
 
@@ -109,7 +109,7 @@ test.describe('Span Expansion Tests', () => {
     const countdownSequenceItem = page.getByTestId('span-list-item-CountdownSequence');
     await expect(countdownSequenceItem).toBeVisible();
 
-    const countdownExpandButton = countdownSequenceItem.locator('[data-testid="span-collapse-expand-button"]');
+    const countdownExpandButton = countdownSequenceItem.getByTestId('span-collapse-expand-button');
     await expect(countdownExpandButton).toBeVisible();
     await countdownExpandButton.click();
 
@@ -121,13 +121,13 @@ test.describe('Span Expansion Tests', () => {
     await expect(rocketLaunchItem).toBeVisible();
 
     // Get the child count for RocketLaunch
-    const rocketLaunchChildCount = rocketLaunchItem.locator('[data-testid="span-child-count"]');
+    const rocketLaunchChildCount = rocketLaunchItem.getByTestId('span-child-count');
     await expect(rocketLaunchChildCount).toBeVisible();
     const expectedRocketChildCount = await rocketLaunchChildCount.textContent();
     expect(expectedRocketChildCount).toBe('5'); // RocketLaunch has 5 children
 
     // Expand RocketLaunch
-    const rocketLaunchExpandButton = rocketLaunchItem.locator('[data-testid="span-collapse-expand-button"]');
+    const rocketLaunchExpandButton = rocketLaunchItem.getByTestId('span-collapse-expand-button');
     await expect(rocketLaunchExpandButton).toBeVisible();
     await rocketLaunchExpandButton.click();
 
@@ -164,12 +164,12 @@ test.describe('Span Expansion Tests', () => {
     const countdownSequenceItem = page.getByTestId('span-list-item-CountdownSequence');
     await expect(countdownSequenceItem).toBeVisible();
 
-    const countdownChildCount = countdownSequenceItem.locator('[data-testid="span-child-count"]');
+    const countdownChildCount = countdownSequenceItem.getByTestId('span-child-count');
     const displayedCountdownCount = await countdownChildCount.textContent();
     expect(displayedCountdownCount).toBe('1');
 
     // Expand CountdownSequence
-    const countdownExpandButton = countdownSequenceItem.locator('[data-testid="span-collapse-expand-button"]');
+    const countdownExpandButton = countdownSequenceItem.getByTestId('span-collapse-expand-button');
     await countdownExpandButton.click();
     await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
 
@@ -177,12 +177,12 @@ test.describe('Span Expansion Tests', () => {
     const rocketLaunchItem = page.getByTestId('span-list-item-RocketLaunch');
     await expect(rocketLaunchItem).toBeVisible();
 
-    const rocketLaunchChildCount = rocketLaunchItem.locator('[data-testid="span-child-count"]');
+    const rocketLaunchChildCount = rocketLaunchItem.getByTestId('span-child-count');
     const displayedRocketCount = await rocketLaunchChildCount.textContent();
     expect(displayedRocketCount).toBe('5');
 
     // Expand RocketLaunch
-    const rocketLaunchExpandButton = rocketLaunchItem.locator('[data-testid="span-collapse-expand-button"]');
+    const rocketLaunchExpandButton = rocketLaunchItem.getByTestId('span-collapse-expand-button');
     await rocketLaunchExpandButton.click();
 
     // Wait for all children to load
