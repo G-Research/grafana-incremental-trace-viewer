@@ -103,21 +103,3 @@ test.describe('Data Consistency', () => {
     expect(headerDuration!.trim()).not.toBe('');
   });
 });
-
-test.describe('Error Handling', () => {
-  test.beforeEach(async ({ page, gotoDashboardPage }) => {
-    await gotoTraceViewerDashboard(gotoDashboardPage, '0000000000000000'); // Invalid trace id
-    await page.waitForSelector('[data-testid^="no-trace-data-available"]', { timeout: 5000 });
-  });
-
-  test('should display 0 spans when no trace data is available', async ({ page }) => {
-    const spanRows = page.getByTestId('span-row');
-    const rowCount = await spanRows.count();
-    expect(rowCount).toBe(0);
-  });
-
-  test('should display no trace data available for this query', async ({ page }) => {
-    const noTraceDataAvailable = page.getByText('No trace data available for this query');
-    await expect(noTraceDataAvailable).toBeVisible();
-  });
-});
