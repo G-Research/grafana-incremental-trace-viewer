@@ -107,10 +107,10 @@ test.describe('Data Consistency', () => {
 test.describe('Error Handling', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage, '0000000000000000'); // Invalid trace id
-    await waitForDashboardLoad(page);
+    await page.waitForSelector('[data-testid^="no-trace-data-available"]', { timeout: 5000 });
   });
 
-  test('should display error message when no spans are found', async ({ page }) => {
+  test('should display 0 spans when no trace data is available', async ({ page }) => {
     const spanRows = page.getByTestId('span-row');
     const rowCount = await spanRows.count();
     expect(rowCount).toBe(0);
