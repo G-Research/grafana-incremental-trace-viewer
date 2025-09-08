@@ -22,7 +22,7 @@ export default defineConfig<PluginOptions>({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'html' : 'list',
+  reporter: process.env.CI ? 'html' : 'list', // on local 'list' is easier to read and better for debugging
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
