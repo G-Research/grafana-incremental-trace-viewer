@@ -64,7 +64,8 @@ export const Span = (props: SpanNodeProps) => {
 
   return (
     <div
-      className={`span-row flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
+      data-testid="span-row"
+      className={`flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer h-full text-sm ${
         props.isSelected ? 'bg-blue-100 dark:bg-gray-600 z-1000' : ''
       }`}
     >

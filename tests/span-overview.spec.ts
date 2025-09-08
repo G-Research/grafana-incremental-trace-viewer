@@ -1,5 +1,4 @@
 import { test, expect } from '@grafana/plugin-e2e';
-import { getLastTraceId, gotoTraceViewerDashboard, waitForDashboardLoad } from './util';
 
 const TIMEOUT = {
   SHORT: 5000,
@@ -7,7 +6,34 @@ const TIMEOUT = {
   LONG: 15000,
 } as const;
 
-// Removed PANEL_HEADER_TESTID as we're now waiting for span elements instead
+async function getLastTraceId() {
+  const end = Math.floor(new Date().getTime() / 1000);
+  const start = end - 24 * 60 * 60;
+  const q = '{}';
+  const url = `http://localhost:3200/api/search?q=${encodeURIComponent(q)}&start=${start}&end=${end}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.traces[0].traceID;
+}
+
+async function gotoTraceViewerDashboard(gotoDashboardPage, traceId?: string) {
+  const traceIdToUse = traceId || (await getLastTraceId());
+  await gotoDashboardPage({
+    uid: 'gr-trace-viewer-dashboard',
+    queryParams: new URLSearchParams({
+      'var-traceId': traceIdToUse,
+    }),
+  });
+}
+
+async function waitForDashboardLoad(page: any, timeout = 30000) {
+  try {
+    await page.waitForLoadState('networkidle', { timeout });
+  } catch {
+    // Grafana 10.x support
+    await page.waitForSelector('[data-testid^="span-name-"]', { timeout });
+  }
+}
 
 test.describe('Span Overview Display', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
@@ -22,26 +48,23 @@ test.describe('Span Overview Display', () => {
   });
 
   test('should display multiple spans when available', async ({ page }) => {
-    const spanElements = page.locator('.span-row');
+    const spanElements = page.getByTestId('span-row');
     await expect(spanElements.first()).toBeVisible();
     const spanCount = await spanElements.count();
-    expect(spanCount).toBeGreaterThan(0);
+    expect(spanCount).toBe(4);
   });
 
   test('should display span structure correctly', async ({ page }) => {
-    // Check that span duration elements exist (they are the visual timeline bars)
     const spanDurationElements = page.locator('.span-duration');
     console.log('spanDurationElements', spanDurationElements);
     const durationCount = await spanDurationElements.count();
-    expect(durationCount).toBeGreaterThan(0);
+    expect(durationCount).toBe(4);
 
-    // Verify the first span duration element is visible
     await expect(spanDurationElements.first()).toBeVisible();
 
-    // Check that span names are visible
-    const spanNames = page.locator('.span-row');
+    const spanNames = page.getByTestId('span-name');
     const nameCount = await spanNames.count();
-    expect(nameCount).toBeGreaterThan(0);
+    expect(nameCount).toBe(4);
     await expect(spanNames.first()).toBeVisible();
   });
 });
@@ -64,7 +87,7 @@ test.describe('Header Information', () => {
     await expect(headerDuration).toBeVisible();
     const durationText = await headerDuration.textContent();
     expect(durationText).toBeTruthy();
-    expect(durationText).toMatch(/\d+(\.\d+)?(ms|s)/); // Should match timing format
+    expect(durationText).toMatch(/\d+(\.\d+)?(ms|s)/);
   });
 });
 
@@ -80,9 +103,8 @@ test.describe('Data Consistency', () => {
 
     const headerDuration = await headerDurationElement.textContent();
     expect(headerDuration).toBeTruthy();
-    expect(headerDuration).toMatch(/\d+(\.\d+)?(ms|s)/); // Should match timing format
+    expect(headerDuration).toMatch(/\d+(\.\d+)?(ms|s)/);
 
-    // Verify the header duration makes sense (not empty or invalid)
     expect(headerDuration!.trim()).not.toBe('');
   });
 });
