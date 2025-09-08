@@ -124,7 +124,7 @@ test.describe('Span Expansion Tests', () => {
     const rocketLaunchChildCount = rocketLaunchItem.locator('[data-testid="span-child-count"]');
     await expect(rocketLaunchChildCount).toBeVisible();
     const expectedRocketChildCount = await rocketLaunchChildCount.textContent();
-    expect(expectedRocketChildCount).toBe('5'); // RocketLaunch has 5 children
+    expect(expectedRocketChildCount).toBe('4'); // RocketLaunch has 4 children
 
     // Expand RocketLaunch
     const rocketLaunchExpandButton = rocketLaunchItem.locator('[data-testid="span-collapse-expand-button"]');
@@ -139,10 +139,10 @@ test.describe('Span Expansion Tests', () => {
 
     // Verify the count increased by 4 (all RocketLaunch children)
     const virtualSpanCount = await page.getByTestId('span-virtual-item').count();
-    expect(virtualSpanCount).toBe(10); // 4 initial + 1 (RocketLaunch) + 5 (RocketLaunch children)
+    expect(virtualSpanCount).toBe(9); // 4 initial + 1 (RocketLaunch) + 4 (RocketLaunch children)
 
-    // Verify that the displayed child count (5) matches the number of loaded children
-    expect(expectedRocketChildCount).toBe('5');
+    // Verify that the displayed child count (4) matches the number of loaded children
+    expect(expectedRocketChildCount).toBe('4');
 
     // Verify all RocketLaunchSystem children are visible
     const engineSystemItem = page.getByTestId('span-list-item-EngineSystem');
@@ -179,7 +179,7 @@ test.describe('Span Expansion Tests', () => {
 
     const rocketLaunchChildCount = rocketLaunchItem.locator('[data-testid="span-child-count"]');
     const displayedRocketCount = await rocketLaunchChildCount.textContent();
-    expect(displayedRocketCount).toBe('5');
+    expect(displayedRocketCount).toBe('4');
 
     // Expand RocketLaunch
     const rocketLaunchExpandButton = rocketLaunchItem.locator('[data-testid="span-collapse-expand-button"]');
@@ -193,10 +193,10 @@ test.describe('Span Expansion Tests', () => {
 
     // Verify final count
     const finalVirtualSpanCount = await page.getByTestId('span-virtual-item').count();
-    expect(finalVirtualSpanCount).toBe(10); // 4 initial + 1 (RocketLaunch) + 5 (RocketLaunch children)
+    expect(finalVirtualSpanCount).toBe(9); // 4 initial + 1 (RocketLaunch) + 4 (RocketLaunch children)
 
     // Verify all child counts are correct
     expect(displayedCountdownCount).toBe('1'); // CountdownSequence has 1 child
-    expect(displayedRocketCount).toBe('5'); // RocketLaunch has 5 children
+    expect(displayedRocketCount).toBe('4'); // RocketLaunch has 4 children
   });
 });
