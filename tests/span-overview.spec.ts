@@ -1,11 +1,5 @@
 import { test, expect } from '@grafana/plugin-e2e';
 
-const TIMEOUT = {
-  SHORT: 5000,
-  MEDIUM: 10000,
-  LONG: 15000,
-} as const;
-
 async function getLastTraceId() {
   const end = Math.floor(new Date().getTime() / 1000);
   const start = end - 24 * 60 * 60;
@@ -26,7 +20,7 @@ async function gotoTraceViewerDashboard(gotoDashboardPage, traceId?: string) {
   });
 }
 
-async function waitForDashboardLoad(page: any, timeout = 30000) {
+async function waitForDashboardLoad(page: any, timeout = 10000) {
   try {
     await page.waitForLoadState('networkidle', { timeout });
   } catch {
@@ -38,7 +32,7 @@ async function waitForDashboardLoad(page: any, timeout = 30000) {
 test.describe('Span Overview Display', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await waitForDashboardLoad(page, TIMEOUT.LONG);
+    await waitForDashboardLoad(page);
   });
 
   test('should display root span with correct name on initial render', async ({ page }) => {
@@ -73,7 +67,7 @@ test.describe('Span Overview Display', () => {
 test.describe('Header Information', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await waitForDashboardLoad(page, TIMEOUT.LONG);
+    await waitForDashboardLoad(page);
   });
 
   test('should display trace id in header', async ({ page }) => {
@@ -95,7 +89,7 @@ test.describe('Header Information', () => {
 test.describe('Data Consistency', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
     await gotoTraceViewerDashboard(gotoDashboardPage);
-    await waitForDashboardLoad(page, TIMEOUT.LONG);
+    await waitForDashboardLoad(page);
   });
 
   test('header duration should be displayed correctly', async ({ page }) => {
@@ -112,8 +106,8 @@ test.describe('Data Consistency', () => {
 
 test.describe('Error Handling', () => {
   test.beforeEach(async ({ page, gotoDashboardPage }) => {
-    await gotoTraceViewerDashboard(gotoDashboardPage, '0000000000000000');
-    await waitForDashboardLoad(page, TIMEOUT.LONG);
+    await gotoTraceViewerDashboard(gotoDashboardPage, '0000000000000000'); // Invalid trace id
+    await waitForDashboardLoad(page);
   });
 
   test('should display error message when no spans are found', async ({ page }) => {
@@ -122,7 +116,6 @@ test.describe('Error Handling', () => {
     expect(rowCount).toBe(0);
   });
 
-  //No trace data available for this query
   test('should display no trace data available for this query', async ({ page }) => {
     const noTraceDataAvailable = page.getByText('No trace data available for this query');
     await expect(noTraceDataAvailable).toBeVisible();
