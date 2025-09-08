@@ -36,7 +36,6 @@ test.describe('Span Expansion Tests', () => {
   });
 
   test('should expand first child node and verify RocketLaunchSystem loads', async ({ page }) => {
-    // Wait for initial spans to load
     await expect(page.getByTestId('span-virtual-item').first()).toBeVisible();
 
     // Verify initial state - should have root + 3 children (4 total)
@@ -58,7 +57,6 @@ test.describe('Span Expansion Tests', () => {
     await expect(countdownExpandButton).toBeVisible();
     await countdownExpandButton.click();
 
-    // Wait for RocketLaunch to appear
     await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
 
     // Verify the count increased by 1 (RocketLaunch was added)
@@ -71,7 +69,6 @@ test.describe('Span Expansion Tests', () => {
   });
 
   test('should verify child count matches loaded children for CountdownSequence', async ({ page }) => {
-    // Wait for initial spans to load
     await expect(page.getByTestId('span-virtual-item').first()).toBeVisible();
 
     // Find CountdownSequence span
@@ -89,7 +86,6 @@ test.describe('Span Expansion Tests', () => {
     await expect(countdownExpandButton).toBeVisible();
     await countdownExpandButton.click();
 
-    // Wait for RocketLaunch to appear
     await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
 
     // Count the actual visible children of CountdownSequence
@@ -102,7 +98,6 @@ test.describe('Span Expansion Tests', () => {
   });
 
   test('should expand next level and repeat tests for RocketLaunch', async ({ page }) => {
-    // Wait for initial spans to load
     await expect(page.getByTestId('span-virtual-item').first()).toBeVisible();
 
     // First, expand CountdownSequence to get to RocketLaunch
@@ -113,7 +108,6 @@ test.describe('Span Expansion Tests', () => {
     await expect(countdownExpandButton).toBeVisible();
     await countdownExpandButton.click();
 
-    // Wait for RocketLaunch to appear
     await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
 
     // Now test RocketLaunch expansion
@@ -131,7 +125,6 @@ test.describe('Span Expansion Tests', () => {
     await expect(rocketLaunchExpandButton).toBeVisible();
     await rocketLaunchExpandButton.click();
 
-    // Wait for RocketLaunchSystem children to appear
     await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-FuelSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-GuidanceSystem')).toBeVisible();
@@ -157,7 +150,6 @@ test.describe('Span Expansion Tests', () => {
   });
 
   test('should verify child counts match loaded children at each level', async ({ page }) => {
-    // Wait for initial spans to load
     await expect(page.getByTestId('span-virtual-item').first()).toBeVisible();
 
     // Test CountdownSequence level
@@ -185,7 +177,6 @@ test.describe('Span Expansion Tests', () => {
     const rocketLaunchExpandButton = rocketLaunchItem.getByTestId('span-collapse-expand-button');
     await rocketLaunchExpandButton.click();
 
-    // Wait for all children to load
     await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-FuelSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-GuidanceSystem')).toBeVisible();
@@ -198,5 +189,59 @@ test.describe('Span Expansion Tests', () => {
     // Verify all child counts are correct
     expect(displayedCountdownCount).toBe('1'); // CountdownSequence has 1 child
     expect(displayedRocketCount).toBe('5'); // RocketLaunch has 5 children
+  });
+
+  test('should verify span-child-count matches actual loaded children count', async ({ page }) => {
+    await expect(page.getByTestId('span-virtual-item').first()).toBeVisible();
+
+    // Test CountdownSequence
+    const countdownSequenceItem = page.getByTestId('span-list-item-CountdownSequence');
+    const countdownChildCount = countdownSequenceItem.getByTestId('span-child-count');
+    const displayedCount = await countdownChildCount.textContent();
+    
+    // Expand CountdownSequence
+    await countdownSequenceItem.getByTestId('span-collapse-expand-button').click();
+    await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
+    
+    // Count actual children loaded (should be 1 - RocketLaunch)
+    const rocketLaunchItems = page.getByTestId('span-list-item-RocketLaunch');
+    const actualChildCount = await rocketLaunchItems.count();
+    
+    expect(displayedCount).toBe(actualChildCount.toString());
+
+    // Test RocketLaunch level
+    const rocketLaunchItem = page.getByTestId('span-list-item-RocketLaunch');
+    const rocketChildCount = rocketLaunchItem.getByTestId('span-child-count');
+    const displayedRocketCount = await rocketChildCount.textContent();
+    
+    // Expand RocketLaunch
+    await rocketLaunchItem.getByTestId('span-collapse-expand-button').click();
+    await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
+    
+    // Count actual children loaded (should be 5)
+    await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
+    await expect(page.getByTestId('span-list-item-FuelSystem')).toBeVisible();
+    await expect(page.getByTestId('span-list-item-GuidanceSystem')).toBeVisible();
+    await expect(page.getByTestId('span-list-item-StageSeparation')).toBeVisible();
+    await expect(page.getByTestId('span-list-item-LunarRide')).toBeVisible();
+    
+    // Count all RocketLaunch children that are now visible
+    const rocketLaunchChildren = [
+      'span-list-item-EngineSystem',
+      'span-list-item-FuelSystem', 
+      'span-list-item-GuidanceSystem',
+      'span-list-item-StageSeparation',
+      'span-list-item-LunarRide'
+    ];
+    
+    let visibleChildCount = 0;
+    for (const childTestId of rocketLaunchChildren) {
+      const childElement = page.getByTestId(childTestId);
+      if (await childElement.isVisible()) {
+        visibleChildCount++;
+      }
+    }
+    
+    expect(displayedRocketCount).toBe(visibleChildCount.toString());
   });
 });
