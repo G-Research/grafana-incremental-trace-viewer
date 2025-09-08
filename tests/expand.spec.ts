@@ -198,42 +198,42 @@ test.describe('Span Expansion Tests', () => {
     const countdownSequenceItem = page.getByTestId('span-list-item-CountdownSequence');
     const countdownChildCount = countdownSequenceItem.getByTestId('span-child-count');
     const displayedCount = await countdownChildCount.textContent();
-    
+
     // Expand CountdownSequence
     await countdownSequenceItem.getByTestId('span-collapse-expand-button').click();
     await expect(page.getByTestId('span-list-item-RocketLaunch')).toBeVisible();
-    
+
     // Count actual children loaded (should be 1 - RocketLaunch)
     const rocketLaunchItems = page.getByTestId('span-list-item-RocketLaunch');
     const actualChildCount = await rocketLaunchItems.count();
-    
+
     expect(displayedCount).toBe(actualChildCount.toString());
 
     // Test RocketLaunch level
     const rocketLaunchItem = page.getByTestId('span-list-item-RocketLaunch');
     const rocketChildCount = rocketLaunchItem.getByTestId('span-child-count');
     const displayedRocketCount = await rocketChildCount.textContent();
-    
+
     // Expand RocketLaunch
     await rocketLaunchItem.getByTestId('span-collapse-expand-button').click();
     await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
-    
+
     // Count actual children loaded (should be 5)
     await expect(page.getByTestId('span-list-item-EngineSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-FuelSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-GuidanceSystem')).toBeVisible();
     await expect(page.getByTestId('span-list-item-StageSeparation')).toBeVisible();
     await expect(page.getByTestId('span-list-item-LunarRide')).toBeVisible();
-    
+
     // Count all RocketLaunch children that are now visible
     const rocketLaunchChildren = [
       'span-list-item-EngineSystem',
-      'span-list-item-FuelSystem', 
+      'span-list-item-FuelSystem',
       'span-list-item-GuidanceSystem',
       'span-list-item-StageSeparation',
-      'span-list-item-LunarRide'
+      'span-list-item-LunarRide',
     ];
-    
+
     let visibleChildCount = 0;
     for (const childTestId of rocketLaunchChildren) {
       const childElement = page.getByTestId(childTestId);
@@ -241,7 +241,7 @@ test.describe('Span Expansion Tests', () => {
         visibleChildCount++;
       }
     }
-    
+
     expect(displayedRocketCount).toBe(visibleChildCount.toString());
   });
 });
