@@ -53,10 +53,6 @@ jobs:
             echo "has-e2e=true" >> $GITHUB_OUTPUT
           fi
 
-      # - name: Sign plugin
-      #   run: bun run sign
-      #   if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
-
       - name: Get plugin metadata
         id: metadata
         run: |
