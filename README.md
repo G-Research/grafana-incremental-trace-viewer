@@ -118,6 +118,12 @@ Make sure to also bump the version in [package.json](./package.json), and commit
 
 On the main branch, [scripts/check-version.js](./scripts/check-version.js) will run and create a new tag if a release is found in the changelog that does not yet exist as a GitHub release.
 
+## GitHub Release
+
+If [scripts/check-version.js](./scripts/check-version.js) creates a new tag, it will trigger the [release.yml](./.github/workflows/release.yml) job.  
+This workflow builds two versions of the plugin: a signed and an unsigned one.  
+It then creates a new GitHub release with both archives attached as artifacts.
+
 # Distributing your plugin
 
 When distributing a Grafana plugin either within the community or privately the plugin must be signed so the Grafana application can verify its authenticity. This can be done with the `@grafana/sign-plugin` package.
