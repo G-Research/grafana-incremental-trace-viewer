@@ -25,6 +25,69 @@ export function searchWithDatasourceUid<TResponse>(datasourceUid: string): Fetch
   };
 }
 
+type GrafanaFetchError = {
+  status?: number;
+  statusText?: string;
+  message?: string;
+  data?: {
+    message?: string;
+    error?: string;
+    status?: string;
+    detail?: unknown;
+  };
+};
+
+function formatError(error: unknown): string {
+  if (!error) {
+    return 'Unknown error';
+  }
+
+  if (error instanceof Error) {
+    return error.message || error.name;
+  }
+
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  if (typeof error === 'object') {
+    const fetchError = error as GrafanaFetchError;
+    const details: string[] = [];
+
+    if (fetchError.status) {
+      const statusLabel = fetchError.statusText ? `${fetchError.status} ${fetchError.statusText}` : `${fetchError.status}`;
+      details.push(statusLabel);
+    }
+
+    if (fetchError.message) {
+      details.push(fetchError.message);
+    }
+
+    const data = fetchError.data;
+    if (data) {
+      const dataMessage = data.message || data.error || data.status;
+      if (dataMessage) {
+        details.push(dataMessage);
+      }
+      if (typeof data.detail === 'string') {
+        details.push(data.detail);
+      }
+    }
+
+    if (details.length > 0) {
+      return details.join(' — ');
+    }
+
+    try {
+      return JSON.stringify(error);
+    } catch (_) {
+      return String(error);
+    }
+  }
+
+  return String(error);
+}
+
 function getParentSpanId(span: Span): string | null {
   const attributes = span.attributes;
   if (!attributes) {
@@ -244,6 +307,18 @@ function TraceDetail({
     queryClient
   );
 
+  const queryData = React.useMemo<SpanInfo[]>(() => result.data ?? [], [result.data]);
+
+  React.useEffect(() => {
+    if (!result.isError) {
+      return;
+    }
+    console.error('Failed to load trace data', result.error);
+    setLoadingMessage(null);
+  }, [result.isError, result.error]);
+
+  const errorMessage = React.useMemo(() => (result.isError ? formatError(result.error) : null), [result.isError, result.error]);
+
   const visibleIndexes = React.useMemo(() => {
     if (!result.isSuccess) {
       return [];
@@ -252,8 +327,8 @@ function TraceDetail({
     const indexes: number[] = [];
     const collapsedParents = new Set<string>();
 
-    for (let i = 0; i < result.data.length; i++) {
-      const span = result.data[i];
+    for (let i = 0; i < queryData.length; i++) {
+      const span = queryData[i];
 
       // Mark this span as collapsed if it should hide children
       if (span.childStatus === ChildStatus.HideChildren) {
@@ -269,7 +344,7 @@ function TraceDetail({
     }
 
     return indexes;
-  }, [result.isSuccess, result.data]);
+  }, [result.isSuccess, queryData]);
 
   const rowVirtualizer = useVirtualizer({
     count: visibleIndexes.length,
@@ -408,8 +483,12 @@ function TraceDetail({
   const virtualItems = rowVirtualizer.getVirtualItems();
 
   // Check if there are any expanded spans that can be collapsed
-  const hasExpandedSpans =
-    result.isSuccess && result.data.some((span) => span.childStatus === ChildStatus.ShowChildren);
+  const hasExpandedSpans = React.useMemo(() => {
+    if (!result.isSuccess) {
+      return false;
+    }
+    return queryData.some((span: SpanInfo) => span.childStatus === ChildStatus.ShowChildren);
+  }, [result.isSuccess, queryData]);
 
   const timelineOffset = Math.floor(formatDuration((startTimeInMs + durationInMs) * 100_000).length * 8);
 
@@ -442,7 +521,15 @@ function TraceDetail({
               <div className="pt-10">{loadingMessage ?? 'Loading...'}</div>
             </div>
           )}
-          {result.isError && <div>Error: {result.error.message}</div>}
+          {result.isError && errorMessage && (
+            <div
+              className="p-4 border border-red-400 dark:border-red-600 rounded bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-100"
+              role="alert"
+            >
+              <div className="font-semibold">Unable to load trace</div>
+              <div className="mt-1 text-sm break-words">{errorMessage}</div>
+            </div>
+          )}
           {result.isSuccess && (
             <div ref={parentRef} className={`${selectedSpan ? 'overflow-hidden' : 'overflow-auto'} h-full`}>
               <div
@@ -452,9 +539,9 @@ function TraceDetail({
                 className="w-full relative"
               >
                 {virtualItems.map((virtualItem) => {
-                  // The index of result.data
+                  // The index of queryData
                   const originalIndex = visibleIndexes[virtualItem.index];
-                  const span = result.data[originalIndex];
+                  const span = queryData[originalIndex];
                   let updateChildStatus = (_span: SpanInfo) => {};
                   switch (span.childStatus) {
                     case ChildStatus.HideChildren:
