@@ -176,7 +176,7 @@ jobs:
         run: bun run e2e
 
       - name: Upload e2e test summary (regular)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@304ed38a05911eda030608b10ff9ca59616e465c # main (provided by grafana)
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@3ef49643a84470fd25bafeb96701fa0be3be6746 # main (provided by grafana)
         if: ${{ always() && !cancelled() }}
         with:
           upload-report: false
@@ -219,7 +219,7 @@ jobs:
           fi
 
       - name: Upload e2e test summary (G-Research custom API)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@304ed38a05911eda030608b10ff9ca59616e465c # main (provided by grafana)
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@3ef49643a84470fd25bafeb96701fa0be3be6746 # main (provided by grafana)
         if: ${{ always() && !cancelled() }}
         with:
           upload-report: false
