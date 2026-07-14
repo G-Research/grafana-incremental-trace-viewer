@@ -107,7 +107,7 @@ jobs:
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@304ed38a05911eda030608b10ff9ca59616e465c # e2e-version/v2 (provided by grafana; main HEAD broken per #228)
+        uses: grafana/plugin-actions/e2e-version@3ef49643a84470fd25bafeb96701fa0be3be6746 # e2e-version/v2 (provided by grafana; main HEAD broken per #228)
 
       # Grafana 13.0.2 (enterprise) ships a stray portal overlay (#grafana-portal-container)
       # that intercepts pointer events, so every click-based e2e test times out. 13.0.1 and
