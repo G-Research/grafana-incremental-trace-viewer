@@ -158,7 +158,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false DEVELOPMENT=false GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
 
       - name: Wait for grafana server
-        uses: grafana/plugin-actions/wait-for-grafana@43ee9bde2eafa313790bc5651c6717f8d529c9bd # main (provided by grafana)
+        uses: grafana/plugin-actions/wait-for-grafana@b2d42498af86999c092e974be98860757fd3cb10 # main (provided by grafana)
         with:
           url: http://localhost:3000/login
 
@@ -192,7 +192,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false DEVELOPMENT=false GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker compose -f ./local-tempo-docker-compose.yml up --build -d
 
       - name: Wait for grafana server (G-Research custom API)
-        uses: grafana/plugin-actions/wait-for-grafana@43ee9bde2eafa313790bc5651c6717f8d529c9bd # main (provided by grafana)
+        uses: grafana/plugin-actions/wait-for-grafana@b2d42498af86999c092e974be98860757fd3cb10 # main (provided by grafana)
         with:
           url: http://localhost:3000/login
 
